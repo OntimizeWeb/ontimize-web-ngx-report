@@ -17,7 +17,15 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ontimize-web-ngx-report": [
+        "dist/ontimize-web-ngx-report"
+      ],
+      "ontimize-web-ngx-report/*": [
+        "dist/ontimize-web-ngx-report/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
