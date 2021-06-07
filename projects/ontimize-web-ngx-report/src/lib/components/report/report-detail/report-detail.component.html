@@ -1,0 +1,21 @@
+<o-form attr="report" service-type="report" entity="getReport" keys="id" header-actions="R;I;U;D" show-header-navigation="no">
+  <o-row>
+    <o-text-input #id attr="id" enabled="no" fxFlex="90"></o-text-input>
+    <o-button type="RAISED" (click)="openFillReport()" label="{{ 'FILL_REPORT' | oTranslate }}"
+    icon="description" layout-padding color="accent" fxFlex></o-button>
+  </o-row>
+  <o-row>
+    <o-column title-label="REPORT_INFORMATION" fxFlex>
+      <o-row>
+        <o-text-input class="input-padding" attr="name" fxFlex="50" required="yes"></o-text-input>
+        <o-text-input class="input-padding" attr="type" fxFlex="50" required="yes"></o-text-input>
+      </o-row>
+      <o-row>
+        <o-text-input attr="mainReportFilename" required="yes" fxFlex></o-text-input>
+      </o-row>
+      <o-row>
+        <o-textarea-input attr="description" required="yes" fxFlex></o-textarea-input>
+      </o-row>
+    </o-column>
+  </o-row>
+</o-form>
