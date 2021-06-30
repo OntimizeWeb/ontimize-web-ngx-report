@@ -81,8 +81,8 @@ export class OReportButtonComponent extends OButtonComponent implements OnInit {
       },
       err => {
         if (this.dialogService) {
-          this.dialogService.error('Error!',
-              'Something went wrong.');
+          this.dialogService.error('ERROR',
+              'SERVER_ERROR_MESSAGE');
           }
           console.log(err);
       }

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MatProgressSpinner } from '@angular/material';
 import { DialogService, OFileInputComponent, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
 import { Subscription } from 'rxjs';
 import { AlertService } from '../alert.service';
@@ -23,8 +23,11 @@ export class ReportNewComponent implements OnInit {
   description: OTextInputComponent;
   @ViewChild('form', { static: true })
   form: OFormComponent;
+  @ViewChild('file', { static: true })
+  file: OFileInputComponent;
 
   subscription: Subscription;
+  loading: boolean = false;
 
   constructor(
     private alertService: AlertService,
@@ -44,6 +47,7 @@ export class ReportNewComponent implements OnInit {
   }
 
   onUploadFile(e: Event) {
+    this.loading = false;
     this.confirm();
     this.form.confirmExit = false;
     this.form.closeDetail();
@@ -51,13 +55,18 @@ export class ReportNewComponent implements OnInit {
 
   onError(e: Event) {
     if (this.dialogService) {
-      this.dialogService.error('Server Error',
-        'Sorry, something went wrong.');
+      this.dialogService.error('ERROR',
+        'SERVER_ERROR_MESSAGE');
     }
   }
 
   confirm() {
     this.alertService.announceAlert('alert');
+  }
+
+  onClickSave(e: Event) {
+    this.loading = true;
+    this.file.onClickUpload(e);
   }
 
 }

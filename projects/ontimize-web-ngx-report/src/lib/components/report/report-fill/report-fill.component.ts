@@ -45,8 +45,8 @@ export class ReportFillComponent implements OnInit {
 
     if (this.av.includes(undefined) || this.av.includes("")) {
       if (this.dialogService) {
-        this.dialogService.error('Error!',
-          'No parameter values provided.');
+        this.dialogService.error('ERROR',
+          'NO_PARAMETER_VALUE_MESSAGE');
       }
     } else {
       this.dialog.open(ReportViewerComponent, {
