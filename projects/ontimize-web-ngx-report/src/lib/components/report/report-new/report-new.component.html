@@ -1,0 +1,29 @@
+<o-form #form service-type="report" entity="addReport" keys="id" header-actions="R;I;U;D" show-header-navigation="no">
+  <div o-form-toolbar-buttons>
+    <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onClickSave($event)"
+      attr="fillreport">
+      <mat-icon>save</mat-icon>
+      <span>Save</span>
+    </button>
+  </div>
+  <o-row>
+    <o-column title-label="REPORT_INFORMATION" fxFlex>
+      <o-row>
+        <o-text-input #name class="input-padding" attr="name" fxFlex="60" required="yes"></o-text-input>
+        <o-text-input #type class="input-padding" attr="type" fxFlex="30" required="yes"></o-text-input>
+      </o-row>
+      <o-row>
+        <o-textarea-input #description attr="description" fxFlex required="yes"></o-textarea-input>
+      </o-row>
+      <o-row>
+        <o-file-input #file fxFlex attr="file" service="report" entity="addReport" label="File" show-info="yes" workspace-key="id"
+        required="yes" (onUploadFile)="onUploadFile($event)" [additional-data]="getFileData()" (onErrorFile)="onError($event)"></o-file-input>
+      </o-row>
+    </o-column>
+  </o-row>
+</o-form>
+<div class="loading" *ngIf="loading">
+  <div class="spinner">
+    <mat-spinner mode="indeterminate"></mat-spinner>
+  </div>
+</div>
