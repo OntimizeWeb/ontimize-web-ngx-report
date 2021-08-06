@@ -1,0 +1,24 @@
+.report-detail {
+  .vertical-margin-10 {
+    margin: 10px 0;
+  }
+
+  .form-field {
+    padding-bottom: 6px;
+  }
+}
+
+.o-column.vertical-margin-10.o-column {
+  margin: 10px 0;
+}
+
+.o-button {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+}
+
+.o-button.o-button {
+  height: 52px;
+  padding: 3px;
+}

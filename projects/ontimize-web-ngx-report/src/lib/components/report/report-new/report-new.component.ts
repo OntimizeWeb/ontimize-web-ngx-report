@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MatDialogRef, MatProgressSpinner } from '@angular/material';
 import { DialogService, OFileInputComponent, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
 import { Subscription } from 'rxjs';
 import { AlertService } from '../alert.service';
@@ -7,7 +6,7 @@ import { AlertService } from '../alert.service';
 @Component({
   selector: 'o-report-new',
   templateUrl: './report-new.component.html',
-  styleUrls: ['./report-new.component.css'],
+  styleUrls: ['./report-new.component.scss'],
   encapsulation: ViewEncapsulation.None,
   host:{
     '[class.app-report-store-new]' : 'true'

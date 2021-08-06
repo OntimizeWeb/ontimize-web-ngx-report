@@ -23,10 +23,10 @@ export class OReportButtonComponent extends OButtonComponent implements OnInit {
   public parameters: [];
   private av: string [];
   protected reportId: string;
-  protected parametersValues: Object;
+  protected parametersValues: object;
 
-  @ViewChild('id', { static: true })
-  id: OTextInputComponent;
+  // @ViewChild('id', { static: true })
+  // id: OTextInputComponent;
 
   constructor(
     private reportService: ReportService,

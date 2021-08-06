@@ -18,7 +18,7 @@ export class ReportService extends OntimizeEEService {
       page = Math.trunc(offset / 10) + 1;
     }
 
-    let url = 'http://localhost:33333/reportstore/' + entity + '/?format=json' + '&page=' + page;;
+    let url = this.urlBase + '/reportstore/' + entity + '/?format=json' + '&page=' + page;
 
     return this.doRequest({
       method: 'GET',
@@ -30,9 +30,9 @@ export class ReportService extends OntimizeEEService {
     const identifier = kv['id'];
     let url = '';
     if (Object.keys(kv).length === 0) {
-      url = 'http://localhost:33333/reportstore/' + entity;
+      url = 'http://localhost:8080/qsallcomponents-jee/reportstore/' + entity;
     } else {
-      url = 'http://localhost:33333/reportstore/' + entity + '/' + identifier;
+      url = 'http://localhost:8080/qsallcomponents-jee/reportstore/' + entity + '/' + identifier;
     }
 
     return this.doRequest({
@@ -42,7 +42,7 @@ export class ReportService extends OntimizeEEService {
   }
 
   public insert(av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any> {
-    let url = 'http://localhost:33333/reportstore/' + entity;
+    let url = 'http://localhost:8080/qsallcomponents-jee/reportstore/' + entity;
 
     return this.doRequest({
       method: 'POST',
@@ -50,15 +50,18 @@ export class ReportService extends OntimizeEEService {
     });
   }
 
-  public fillReport(av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any> {
+  public fillReport(av?: Array<string>, entity?: string, sqltypes?: Object, filter?: Object): Observable<any> {
     const identifier = av[0];
     let params = '';
+    // let exp = Object.keys(filter).length <= 0 ? '' : JSON.stringify(filter['filter']);
+
     for (let i = 1; i < av.length; i++)
       params = params + av[i].toString() + ',';
     let body = JSON.stringify({
-      params : params
+      params : params,
+      filter : filter
     })
-    let url = 'http://localhost:33333/reportstore/' + entity + '/' + identifier;
+    let url = 'http://localhost:8080/qsallcomponents-jee/reportstore/' + entity + '/' + identifier;
 
     return this.doRequest({
       method: 'POST',
@@ -69,7 +72,7 @@ export class ReportService extends OntimizeEEService {
 
   public delete(kv?: Object, entity?: string, sqltypes?: Object): Observable<any> {
     const identifier = kv.valueOf()[Object.keys(kv)[0]];
-    let url = 'http://localhost:33333/reportstore/removeReport/' + identifier;
+    let url = 'http://localhost:8080/qsallcomponents-jee/reportstore/removeReport/' + identifier;
 
     return this.doRequest({
       method: 'DELETE',
@@ -79,7 +82,7 @@ export class ReportService extends OntimizeEEService {
 
   public update(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any> {
     const identifier = kv.valueOf()[Object.keys(kv)[0]];
-    let url = 'http://localhost:33333/reportstore/updateReport/' + identifier;
+    let url = 'http://localhost:8080/qsallcomponents-jee/reportstore/updateReport/' + identifier;
 
     return this.doRequest({
       method: 'PUT',

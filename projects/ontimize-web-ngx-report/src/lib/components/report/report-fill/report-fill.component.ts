@@ -6,7 +6,7 @@ import { ReportViewerComponent } from '../report-viewer/report-viewer.component'
 @Component({
   selector: 'o-report-fill',
   templateUrl: './report-fill.component.html',
-  styleUrls: ['./report-fill.component.css']
+  styleUrls: ['./report-fill.component.scss']
 })
 export class ReportFillComponent implements OnInit {
 

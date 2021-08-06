@@ -4,9 +4,9 @@
       columns="id;name;description;type;mainReportFilename"
       visible-columns="name;description;type" query-rows="20"
       detail-mode="dblclick">
-      <o-table-column attr="name" title="name" orderable="yes" searchable="yes" class="o-table-column-centered"></o-table-column>
-      <o-table-column attr="description" title="description" orderable="yes" searchable="no" class="o-table-column-centered"></o-table-column>
-      <o-table-column attr="type" title="type" orderable="yes" searchable="no" class="o-table-column-centered"></o-table-column>
+      <o-table-column attr="name" title="{{'REPORT_NAME' | oTranslate }}" orderable="yes" searchable="yes" class="o-table-column-centered"></o-table-column>
+      <o-table-column attr="description" title="{{'REPORT_DESCRIPTION' | oTranslate }}" orderable="yes" searchable="no" class="o-table-column-centered"></o-table-column>
+      <o-table-column attr="type" title="{{'REPORT_TYPE' | oTranslate }}" orderable="yes" searchable="no" class="o-table-column-centered"></o-table-column>
     </o-table>
   </div>
 </o-form-layout-manager>
