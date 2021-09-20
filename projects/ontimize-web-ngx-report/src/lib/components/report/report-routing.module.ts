@@ -1,22 +1,18 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { ReportDetailComponent } from "./report-detail/report-detail.component";
-import { ReportFillComponent } from "./report-fill/report-fill.component";
 import { ReportNewComponent } from "./report-new/report-new.component";
-import { ReportComponent } from "./report.component";
+import { ReportHomeComponent } from "./report-home/report-home.component";
 
 const routes: Routes = [{
   path: '',
-  component: ReportComponent
+  component: ReportHomeComponent
 },{
   path: 'new',
   component: ReportNewComponent
 },{
   path: ':UUID',
   component: ReportDetailComponent
-},{
-  path: ':UUID/fill',
-  component: ReportFillComponent
 }];
 
 @NgModule({

@@ -6,15 +6,14 @@ import { OntimizeWebModule } from 'ontimize-web-ngx';
 import { OFileManagerModule } from 'ontimize-web-ngx-filemanager';
 import { AlertService } from './components/report/alert.service';
 import { FillService } from './components/report/fill.service';
-import { OReportButtonComponent } from './components/report/o-report-button/o-report-button.component';
 import { ReportDetailComponent } from './components/report/report-detail/report-detail.component';
-import { ReportFillComponent } from './components/report/report-fill/report-fill.component';
 import { ReportNewComponent } from './components/report/report-new/report-new.component';
 import { ReportRoutingModule } from './components/report/report-routing.module';
 import { ReportViewerComponent } from './components/report/report-viewer/report-viewer.component';
 import { ReportService } from './components/report/report.service';
 
-import { OREPORT_MODULES, ReportComponent } from './o-components';
+import { OREPORT_MODULES, ReportHomeComponent } from './o-components';
+// import { ReportHomeComponent } from './components/report/report-home/report-home.component';
 
 export * from './o-components';
 
@@ -24,12 +23,11 @@ export function reportServiceFactory(injector: Injector): ReportService {
 
 @NgModule({
   declarations: [
-    ReportComponent,
+    ReportHomeComponent,
     ReportNewComponent,
     ReportDetailComponent,
-    ReportFillComponent,
     ReportViewerComponent,
-    OReportButtonComponent],
+    ReportHomeComponent],
   imports: [
     OREPORT_MODULES,
     CommonModule,
@@ -41,13 +39,11 @@ export function reportServiceFactory(injector: Injector): ReportService {
   ],
   exports: [
     OREPORT_MODULES,
-    ReportComponent,
+    ReportHomeComponent,
     ReportNewComponent,
     ReportDetailComponent,
-    ReportFillComponent,
     ReportViewerComponent,
     ReportRoutingModule,
-    OReportButtonComponent
   ],
   providers: [{
     provide: 'report',
