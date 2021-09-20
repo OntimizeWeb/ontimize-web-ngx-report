@@ -12,10 +12,10 @@ const routes: Routes = [{
   path: 'new',
   component: ReportNewComponent
 },{
-  path: ':id',
+  path: ':UUID',
   component: ReportDetailComponent
 },{
-  path: ':id/fill',
+  path: ':UUID/fill',
   component: ReportFillComponent
 }];
 

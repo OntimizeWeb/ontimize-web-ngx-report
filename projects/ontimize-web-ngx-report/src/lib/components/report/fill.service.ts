@@ -17,22 +17,22 @@ export class FillService {
   openFillReport(reportId: string, parametersValues: object, filter: object) {
     this.reportService.configureService(this.reportService.getDefaultServiceConfiguration('reportstore'));
     this.reportService.configureAdapter();
-    let kv = {'id': reportId};
+    let kv = {'UUID': reportId};
     this.reportService.query(kv, null, 'getReport', {}).subscribe(
       res => {
         if (res && res.data.length && res.code === 0) {
-          let parameters = res.data[0].parameters;
+          let parameters = res.data[0].PARAMETERS;
           if (parameters.length > 0) {
-            if (!Util.isDefined(parametersValues)) {
-              this.dialog.open(ReportFillComponent, {
-                height: '520px',
-                width: '620px',
-                data: {
-                  'reportId': reportId,
-                  'parameters': parameters
-                }
-              });
-            } else {
+            // if (!Util.isDefined(parametersValues)) {
+            //   this.dialog.open(ReportFillComponent, {
+            //     height: '520px',
+            //     width: '620px',
+            //     data: {
+            //       'reportId': reportId,
+            //       'parameters': parameters
+            //     }
+            //   });
+            // } else {
               let av = [reportId];
               let values = Object.values(parametersValues);
               for (let i=0; i<values.length; i++) {
@@ -46,7 +46,7 @@ export class FillService {
                   'filter': filter
                 }
               });
-            }
+            // }
           } else {
             let av = [reportId];
             this.dialog.open(ReportViewerComponent, {

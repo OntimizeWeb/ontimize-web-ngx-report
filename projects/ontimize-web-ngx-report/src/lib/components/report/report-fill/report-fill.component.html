@@ -1,5 +1,5 @@
 <mat-dialog-content>
-  <o-form #form attr="report" service-type="reportstore" entity="fillReport" keys="id"
+  <o-form #form attr="report" service-type="reportstore" entity="fillReport" keys="UUID"
  header-mode="none" show-header="no" layout-direction="column">
     <ng-container *ngFor="let elem of parameters; let i = index">
       <ng-template [ngIf]="elem.description == 'null'" [ngIfElse]="default">

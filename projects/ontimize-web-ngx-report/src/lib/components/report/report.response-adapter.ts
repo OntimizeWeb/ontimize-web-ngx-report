@@ -17,13 +17,13 @@ export class ReportResponseAdapter implements ServiceResponseAdapter<BaseService
         data = resp.body.data;
         if (Util.isArray(data)){
           data.forEach(element => {
-            let id = element['id'];
-            let name = element['name'];
-            let description = element['description'];
-            let type = element['type'];
-            let mainReportFilename = element['mainReportFilename'];
-            let file = element['file'];
-            let parameters = element['parameters'];
+            let id = element['UUID'];
+            let name = element['NAME'];
+            let description = element['DESCRIPTION'];
+            let type = element['REPORT_TYPE'];
+            let mainReportFilename = element['MAIN_REPORT_FILENAME'];
+            let file = element['FILE'];
+            let parameters = element['PARAMETERS'];
           }
 
           );

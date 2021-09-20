@@ -27,7 +27,7 @@ export class ReportService extends OntimizeEEService {
   }
 
   public query(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any> {
-    const identifier = kv['id'];
+    const identifier = kv['UUID'];
     let url = '';
     if (Object.keys(kv).length === 0) {
       url = 'http://localhost:8080/qsallcomponents-jee/reportstore/' + entity;

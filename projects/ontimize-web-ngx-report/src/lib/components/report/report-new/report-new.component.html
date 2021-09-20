@@ -1,4 +1,4 @@
-<o-form #form service-type="report" entity="addReport" keys="id" header-actions="R;I;U;D" show-header-navigation="no">
+<o-form #form service-type="report" entity="addReport" keys="UUID" header-actions="R;I;U;D" show-header-navigation="no">
   <div o-form-toolbar-buttons>
     <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onClickSave($event)"
       attr="fillreport">
@@ -10,11 +10,11 @@
     <!-- <div fxLayout="column wrap" fxLayoutGap="14px" fxFill> -->
 
       <div fxLayout="row wrap" fxLayoutGap="14px" fxLayoutAlign="start start" fxFlex>
-        <o-text-input #name class="input-padding" attr="name" label="REPORT_NAME" fxFlex="50" required="yes"></o-text-input>
-        <o-text-input #type class="input-padding" attr="type" label="REPORT_TYPE" fxFlex required="yes"></o-text-input>
+        <o-text-input #name class="input-padding" attr="NAME" label="REPORT_NAME" fxFlex="50" required="yes"></o-text-input>
+        <o-text-input #type class="input-padding" attr="REPORT_TYPE" label="REPORT_TYPE" fxFlex required="yes"></o-text-input>
       </div>
       <!-- <o-row> -->
-        <o-textarea-input #description attr="description" label="REPORT_DESCRIPTION" fxFlex required="yes"></o-textarea-input>
+        <o-textarea-input #description attr="DESCRIPTION" label="REPORT_DESCRIPTION" fxFlex required="yes"></o-textarea-input>
       <!-- </o-row> -->
       <!-- <o-row> -->
         <o-file-input #file fxFlex attr="file" service="report" entity="addReport" label="REPORT_ZIPFOLDER" show-info="yes" workspace-key="id"

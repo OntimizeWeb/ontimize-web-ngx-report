@@ -14,12 +14,12 @@ export class ReportDetailComponent implements OnInit {
 
   @ViewChild('id', { static: true })
   id: OTextInputComponent;
-  @ViewChild('form', { static: false })
-  form: OFormComponent;
+  // @ViewChild('form', { static: false })
+  // form: OFormComponent;
   @ViewChild('paramForm', { static: false })
   paramForm: OFormComponent;
-  @ViewChild('params', { static: false })
-  params: OColumnComponent;
+  // @ViewChild('params', { static: false })
+  // params: OColumnComponent;
 
   private values: string [];
 
@@ -70,7 +70,7 @@ export class ReportDetailComponent implements OnInit {
   }
 
   onDataLoaded(e: object) {
-    this.parameters = e['parameters'];
+    this.parameters = e['PARAMETERS'];
     if (this.parameters.length > 0) {
       this.hasParams = true;
     }
