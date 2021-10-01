@@ -37,6 +37,41 @@
           }
         }
       }
+    },
+    "ontimize-web-ngx-report-on-demand": {
+      "projectType": "library",
+      "root": "projects/ontimize-web-ngx-report-on-demand",
+      "sourceRoot": "projects/ontimize-web-ngx-report-on-demand/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ontimize-web-ngx-report-on-demand/tsconfig.lib.json",
+            "project": "projects/ontimize-web-ngx-report-on-demand/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ontimize-web-ngx-report-on-demand/src/test.ts",
+            "tsConfig": "projects/ontimize-web-ngx-report-on-demand/tsconfig.spec.json",
+            "karmaConfig": "projects/ontimize-web-ngx-report-on-demand/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ontimize-web-ngx-report-on-demand/tsconfig.lib.json",
+              "projects/ontimize-web-ngx-report-on-demand/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }},
   "defaultProject": "ontimize-web-ngx-report"
 }

@@ -24,6 +24,12 @@
       ],
       "ontimize-web-ngx-report/*": [
         "dist/ontimize-web-ngx-report/*"
+      ],
+      "ontimize-web-ngx-report-on-demand": [
+        "dist/ontimize-web-ngx-report-on-demand"
+      ],
+      "ontimize-web-ngx-report-on-demand/*": [
+        "dist/ontimize-web-ngx-report-on-demand/*"
       ]
     }
   },
