@@ -48,7 +48,8 @@ export class ReportDetailComponent implements OnInit {
     this.av = [this.id.getValue()]
     if (this.parameters.length > 0) {
       this.getValues();
-      for (let i = 0; i<=this.values.length; i++)
+      let size = this.values.length;
+      for (let i = 0; i<size; i++)
         this.av.push(this.values.shift());
     }
 
