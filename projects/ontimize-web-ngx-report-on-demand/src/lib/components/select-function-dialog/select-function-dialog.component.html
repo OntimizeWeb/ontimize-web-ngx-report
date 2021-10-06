@@ -1,0 +1,8 @@
+<div style="width: 250px">
+  <mat-radio-group name="Function" [(ngModel)]="selectedFunction">
+  <mat-radio-button *ngFor="let f of functions" name="Functions" [value]="f" style="margin: 10px">
+    {{f}}
+  </mat-radio-button>
+  </mat-radio-group>
+  <button class="acept" mat-button (click)="confirmado()">Aceptar</button>
+</div>

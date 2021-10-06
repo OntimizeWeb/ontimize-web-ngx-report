@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>Configuración de columna</h1>
+<div mat-dialog-content>
+  <div>
+    <o-row>
+      <mat-form-field class="example-full-width">
+        <input [(ngModel)]="name" matInput placeholder="Nombre de la columna">
+      </mat-form-field>
+    </o-row>
+
+    <o-row>
+      <mat-form-field class="example-full-width">
+        <input [(ngModel)]="width" matInput placeholder="Ancho de columna">
+      </mat-form-field>
+    </o-row>
+  </div>
+  <mat-radio-group name="Alignment" [(ngModel)]="selectedAlignment">
+    <mat-radio-button *ngFor="let o of ordersDataAlignment" [value]="o.name" name="Alineación" style="margin: 10px">
+      <span class="material-icons">
+        {{o.icon}}
+      </span>
+    </mat-radio-button>
+  </mat-radio-group>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="confirmado()"><span class="material-icons">
+      check_circle
+    </span>Aceptar</button>
+  <button mat-button (click)="cerrarDialogo()" cdkFocusInitial><span class="material-icons">
+      cancel
+    </span>Cancelar</button>
+</div>

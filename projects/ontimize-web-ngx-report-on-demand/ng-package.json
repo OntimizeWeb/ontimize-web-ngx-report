@@ -3,5 +3,9 @@
   "dest": "../../dist/ontimize-web-ngx-report-on-demand",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "tslib",
+    "ngx-extended-pdf-viewer"
+  ]
 }

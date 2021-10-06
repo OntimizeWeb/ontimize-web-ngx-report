@@ -1,0 +1,18 @@
+<mat-selection-list dense #choices>
+  <mat-list-option checkboxPosition="before" *ngFor="let choice of ordersData"
+    (click)="onAreaListControlChanged(choices)" [value]="choice.value">
+    <div fxLayout="row">
+      <span fxFlex>
+        {{choice.viewValue}}
+      </span>
+    </div>
+  </mat-list-option>
+</mat-selection-list>
+<div mat-dialog-actions>
+  <button mat-button (click)="confirmado()"><span class="material-icons">
+      check_circle
+    </span>Aceptar</button>
+  <button mat-button (click)="cerrarDialogo()" cdkFocusInitial><span class="material-icons">
+      cancel
+    </span>Cancelar</button>
+</div>
