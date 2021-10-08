@@ -136,15 +136,7 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
         <button mat-button [matMenuTriggerFor]="menu">Seleccionar configuración</button>
-        <button mat-button (click)="showHideButton()" value="save">Guardar configuración</button>
-        <div *ngIf="showInput">
-          <mat-form-field class="example-full-width">
-            <input [(ngModel)]="name" matInput placeholder="Nombre configuración">
-          </mat-form-field>
-          <button mat-button (click)="savePreferences()" value="save">
-            Guardar
-          </button>
-        </div>
+        <button mat-button (click)="openSavePreferences()" value="save">Guardar configuración</button>
       </mat-expansion-panel>
     </mat-accordion>
   </div>

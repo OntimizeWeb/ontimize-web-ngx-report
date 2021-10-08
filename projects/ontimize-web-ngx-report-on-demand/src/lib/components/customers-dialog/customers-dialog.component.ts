@@ -3,7 +3,10 @@ import { Component, OnInit, Inject, Input } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogService, OTextInputComponent } from 'ontimize-web-ngx';
 import { CustomersService } from '../../services/customers.service';
+import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-preferences-dialog.component';
 import { SelectFunctionDialogComponent } from '../select-function-dialog/select-function-dialog.component';
+import { SortColumnsDialogComponent } from '../sort-columns-dialog/sort-columns-dialog.component';
+
 import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 
 @Component({
@@ -20,7 +23,7 @@ export class CustomersDialogComponent implements OnInit {
   @ViewChild('subtitle', { static: true })
   subtitle: OTextInputComponent;
   @ViewChild('name', { static: true })
-  name: OTextInputComponent;
+  name;
   public pdf: string;
   selectedOptions = [];
   selectedGroups = [];
@@ -82,9 +85,6 @@ export class CustomersDialogComponent implements OnInit {
   }
   onAreaSettingsListControlChanged(list) {
     this.selectedStyleFunctions = list.selectedOptions.selected.map(item => item.value);
-  }
-  showHideButton() {
-    this.showInput = this.showInput ? false : true;
   }
   savePreferences() {
     var vertical;
@@ -168,24 +168,24 @@ export class CustomersDialogComponent implements OnInit {
       });
   }
   sortColumns(): void {
-    // this.dialogo3
-    //   .open(SortColumnsDialogComponent, {
-    //     data: this.selectedOptions
-    //   })
-    //   .afterClosed()
-    //   .subscribe((data: []) => {
-    //     this.selectedOptions = data;
-    //   });
+    this.dialogo3
+      .open(SortColumnsDialogComponent, {
+        data: this.selectedOptions
+      })
+      .afterClosed()
+      .subscribe((data: []) => {
+        this.selectedOptions = data;
+      });
   }
   sortGroups(): void {
-    // this.dialogo3
-    //   .open(SortColumnsDialogComponent, {
-    //     data: this.selectedGroups
-    //   })
-    //   .afterClosed()
-    //   .subscribe((data: []) => {
-    //     this.selectedGroups = data;
-    //   });
+    this.dialogo3
+      .open(SortColumnsDialogComponent, {
+        data: this.selectedGroups
+      })
+      .afterClosed()
+      .subscribe((data: []) => {
+        this.selectedGroups = data;
+      });
   }
   selectFunction(functionName: String): void {
     if (functionName != 'TOTAL') {
@@ -198,6 +198,17 @@ export class CustomersDialogComponent implements OnInit {
           this.selectedFunctions.push(data)
         });
     }
+  }
+  openSavePreferences(): void {
+    this.dialogo3
+      .open(SavePreferencesDialogComponent, {
+      })
+      .afterClosed()
+      .subscribe((data: String) => {
+        this.name = data;
+        this.savePreferences();
+      });
+
   }
 
   arriba() {

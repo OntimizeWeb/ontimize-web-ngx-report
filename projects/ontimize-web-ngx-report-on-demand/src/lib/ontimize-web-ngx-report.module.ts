@@ -7,7 +7,7 @@ import { CustomersDialogComponent } from './components/customers-dialog/customer
 import { SelectFunctionDialogComponent } from './components/select-function-dialog/select-function-dialog.component';
 import { StyleDialogComponent } from './components/style-dialog/style-dialog.component';
 import { OntimizeWebModule } from 'ontimize-web-ngx';
-import { OREPORT_MODULES, SettingsDialogComponent } from './o-components';
+import { OREPORT_MODULES, SavePreferencesDialogComponent, SettingsDialogComponent, SortColumnsDialogComponent } from './o-components';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 export * from './o-components';
@@ -25,13 +25,17 @@ export * from './o-components';
     CustomersDialogComponent,
     StyleDialogComponent,
     SelectFunctionDialogComponent,
-    SettingsDialogComponent
+    SettingsDialogComponent,
+    SavePreferencesDialogComponent,
+    SortColumnsDialogComponent
   ],
   entryComponents: [
     CustomersDialogComponent,
     StyleDialogComponent,
     SelectFunctionDialogComponent,
-    SelectFunctionDialogComponent
+    SelectFunctionDialogComponent,
+    SavePreferencesDialogComponent,
+    SortColumnsDialogComponent
 
   ]
 })
