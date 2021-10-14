@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { ReportHomeComponent } from "./report-home.component";
+import { OReportHomeComponent } from "./o-report-home.component";
 
 describe('ReportComponent', () => {
-  let component: ReportHomeComponent;
-  let fixture: ComponentFixture<ReportHomeComponent>;
+  let component: OReportHomeComponent;
+  let fixture: ComponentFixture<OReportHomeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ReportHomeComponent ]
+      declarations: [ OReportHomeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReportHomeComponent);
+    fixture = TestBed.createComponent(OReportHomeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,18 +1,18 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DialogService, OFileInputComponent, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
 import { Subscription } from 'rxjs';
-import { AlertService } from '../alert.service';
+import { OAlertService } from '../o-alert.service';
 
 @Component({
   selector: 'o-report-new',
-  templateUrl: './report-new.component.html',
-  styleUrls: ['./report-new.component.scss'],
+  templateUrl: './o-report-new.component.html',
+  styleUrls: ['./o-report-new.component.scss'],
   encapsulation: ViewEncapsulation.None,
   host:{
     '[class.app-report-store-new]' : 'true'
   }
 })
-export class ReportNewComponent implements OnInit {
+export class OReportNewComponent implements OnInit {
 
   @ViewChild('name', { static: true })
   name: OTextInputComponent;
@@ -29,7 +29,7 @@ export class ReportNewComponent implements OnInit {
   loading: boolean = false;
 
   constructor(
-    private alertService: AlertService,
+    private alertService: OAlertService,
     private dialogService: DialogService
   ) { }
 

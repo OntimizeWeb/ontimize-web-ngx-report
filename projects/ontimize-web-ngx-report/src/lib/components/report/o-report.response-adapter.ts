@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { BaseServiceResponse, OntimizeServiceResponse, ServiceResponseAdapter, Util } from "ontimize-web-ngx";
 
 @Injectable({ providedIn: 'root' })
-export class ReportResponseAdapter implements ServiceResponseAdapter<BaseServiceResponse> {
+export class OReportResponseAdapter implements ServiceResponseAdapter<BaseServiceResponse> {
 
   adapt(resp: HttpResponse<any>): BaseServiceResponse {
     let code = 1;

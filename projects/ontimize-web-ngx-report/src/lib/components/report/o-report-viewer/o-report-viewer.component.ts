@@ -1,23 +1,22 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'ontimize-web-ngx';
-import { ReportService } from '../report.service';
+import { OReportService } from '../o-report.service';
 
 @Component({
   selector: 'o-report-viewer',
-  templateUrl: './report-viewer.component.html',
-  styleUrls: ['./report-viewer.component.scss'],
-  providers: [ReportService]
+  templateUrl: './o-report-viewer.component.html',
+  styleUrls: ['./o-report-viewer.component.scss']
 })
-export class ReportViewerComponent implements OnInit {
+export class OReportViewerComponent implements OnInit {
 
-  public pdf: any;
+  public pdf = '';
 
   constructor(
-    private reportService: ReportService,
+    @Inject('report') private reportService: OReportService,
     protected dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
-      this.reportService.configureService(this.reportService.getDefaultServiceConfiguration('reportstore'));
+      this.reportService.configureService(this.reportService.getDefaultServiceConfiguration());
       this.reportService.configureAdapter();
       this.reportService.fillReport(this.data['params'], 'fillReport', {}, this.data['filter']).subscribe(
       res => {

@@ -1,7 +1,7 @@
-import { ReportRoutingModule } from './components/report/report-routing.module';
+import { OReportRoutingModule } from './components/report/o-report-routing.module';
 
-export * from './components/report/report-home/report-home.component';
+export * from './components/report/o-report-home/o-report-home.component';
 
 export const OREPORT_MODULES: any = [
-  ReportRoutingModule
+  OReportRoutingModule
 ];

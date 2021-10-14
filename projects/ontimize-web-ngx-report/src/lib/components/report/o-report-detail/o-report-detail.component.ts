@@ -1,25 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { DialogService, OColumnComponent, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
-import { ReportViewerComponent } from '../report-viewer/report-viewer.component';
-import { ReportService } from '../report.service';
+import { OReportViewerComponent } from '../o-report-viewer/o-report-viewer.component';
+import { OReportService } from '../o-report.service';
 
 @Component({
   selector: 'o-report-detail',
-  templateUrl: './report-detail.component.html',
-  styleUrls: ['./report-detail.component.scss'],
-  providers: [ReportService]
+  templateUrl: './o-report-detail.component.html',
+  styleUrls: ['./o-report-detail.component.scss']
 })
-export class ReportDetailComponent implements OnInit {
+export class OReportDetailComponent implements OnInit {
 
   @ViewChild('id', { static: true })
   id: OTextInputComponent;
-  // @ViewChild('form', { static: false })
-  // form: OFormComponent;
   @ViewChild('paramForm', { static: false })
   paramForm: OFormComponent;
-  // @ViewChild('params', { static: false })
-  // params: OColumnComponent;
 
   private values: string [];
 
@@ -28,7 +23,6 @@ export class ReportDetailComponent implements OnInit {
   public hasParams: boolean = false;
 
   constructor(
-    private reportService: ReportService,
     protected dialogService: DialogService,
     protected dialog: MatDialog,
   ) { }
@@ -59,7 +53,7 @@ export class ReportDetailComponent implements OnInit {
           'NO_PARAMETER_VALUE_MESSAGE');
       }
     } else {
-      this.dialog.open(ReportViewerComponent, {
+      this.dialog.open(OReportViewerComponent, {
         height: '780px',
         width: '1240px',
         data: {

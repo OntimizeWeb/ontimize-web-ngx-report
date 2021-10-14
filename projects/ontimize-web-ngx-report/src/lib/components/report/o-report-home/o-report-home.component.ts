@@ -1,18 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { OTableComponent } from 'ontimize-web-ngx';
-import { AlertService } from '../alert.service';
+import { OAlertService } from '../o-alert.service';
 
 @Component({
   selector: 'o-report-home',
-  templateUrl: './report-home.component.html',
-  styleUrls: ['./report-home.component.scss']
+  templateUrl: './o-report-home.component.html',
+  styleUrls: ['./o-report-home.component.scss']
 })
-export class ReportHomeComponent implements OnInit {
+export class OReportHomeComponent implements OnInit {
 
   @ViewChild('table', { static: true })
   table: OTableComponent;
 
-  constructor(private alertService: AlertService) {
+  constructor(private alertService: OAlertService) {
     alertService.alert$.subscribe(
       res => {
         this.table.refresh();

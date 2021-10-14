@@ -12,7 +12,7 @@
 
   <div *ngIf="hasParams">
     <o-column #params title="PARAMETERS" icon="info" class="vertical-margin-10" layout-align="start stretch" appearance="outline">
-      <o-form #paramForm attr="report" service-type="reportstore" entity="fillReport" keys="id"
+      <o-form #paramForm attr="report" service-type="report" entity="fillReport" keys="id"
         header-mode="none" show-header="no" layout-direction="column">
         <ng-container *ngFor="let elem of parameters; let i = index">
           <o-row fxFlex>
