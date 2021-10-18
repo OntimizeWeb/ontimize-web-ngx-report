@@ -2,13 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
-import { OCustomMaterialModule } from 'ontimize-web-ngx';
-import { CustomersDialogComponent } from './components/customers-dialog/customers-dialog.component';
+import { OCustomMaterialModule, O_REPORT_ON_DEMAND_SERVICE } from 'ontimize-web-ngx';
+import { ReportOnDemandComponent } from './components/report-on-demand/report-on-demand.component';
 import { SelectFunctionDialogComponent } from './components/select-function-dialog/select-function-dialog.component';
 import { StyleDialogComponent } from './components/style-dialog/style-dialog.component';
 import { OntimizeWebModule } from 'ontimize-web-ngx';
-import { OREPORT_MODULES, SavePreferencesDialogComponent, SettingsDialogComponent, SortColumnsDialogComponent } from './o-components';
+import { OREPORT_MODULES, SavePreferencesDialogComponent, SettingsDialogComponent } from './o-components';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { OReportOnDemandService } from './services/reports-on-demand.service';
 
 export * from './o-components';
 
@@ -22,21 +23,22 @@ export * from './o-components';
     NgxExtendedPdfViewerModule],
   exports: OREPORT_MODULES,
   declarations: [
-    CustomersDialogComponent,
+    ReportOnDemandComponent,
     StyleDialogComponent,
     SelectFunctionDialogComponent,
     SettingsDialogComponent,
-    SavePreferencesDialogComponent,
-    SortColumnsDialogComponent
+    SavePreferencesDialogComponent
   ],
   entryComponents: [
-    CustomersDialogComponent,
+    ReportOnDemandComponent,
     StyleDialogComponent,
     SelectFunctionDialogComponent,
     SelectFunctionDialogComponent,
-    SavePreferencesDialogComponent,
-    SortColumnsDialogComponent
+    SavePreferencesDialogComponent
 
+  ],
+  providers: [
+    { provide: O_REPORT_ON_DEMAND_SERVICE, useClass: OReportOnDemandService }
   ]
 })
 export class OReportModule { }

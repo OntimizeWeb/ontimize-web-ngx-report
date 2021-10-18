@@ -2,9 +2,9 @@
   "name": "ontimize-web-ngx-report-on-demand",
   "version": "0.0.1",
   "dependencies": {
-    "ngx-extended-pdf-viewer": "^9.0.5"
+    "ngx-extended-pdf-viewer": "9.0.0-alpha.1"
   },
   "peerDependencies": {
-    "ontimize-web-ngx": "8.0.0"
+    "ontimize-web-ngx": "file:ontimize-web-ngx-8.5.1.tgz"
   }
 }
