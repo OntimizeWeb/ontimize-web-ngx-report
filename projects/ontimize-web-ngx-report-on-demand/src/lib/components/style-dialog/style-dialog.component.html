@@ -1,31 +1,25 @@
-<h1 mat-dialog-title>Configuración de columna</h1>
-<div mat-dialog-content>
-  <div>
-    <o-row>
-      <mat-form-field class="example-full-width">
-        <input [(ngModel)]="name" matInput placeholder="Nombre de la columna">
-      </mat-form-field>
-    </o-row>
-
-    <o-row>
-      <mat-form-field class="example-full-width">
-        <input [(ngModel)]="width" matInput placeholder="Ancho de columna">
-      </mat-form-field>
-    </o-row>
-  </div>
-  <mat-radio-group name="Alignment" [(ngModel)]="selectedAlignment">
-    <mat-radio-button *ngFor="let o of ordersDataAlignment" [value]="o.name" name="Alineación" style="margin: 10px">
-      <span class="material-icons">
-        {{o.icon}}
-      </span>
-    </mat-radio-button>
-  </mat-radio-group>
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="confirmado()"><span class="material-icons">
-      check_circle
-    </span>Aceptar</button>
-  <button mat-button (click)="cerrarDialogo()" cdkFocusInitial><span class="material-icons">
-      cancel
-    </span>Cancelar</button>
-</div>
+<span mat-dialog-title>{{ 'COLUMN_CONFIGURATION' | oTranslate }}</span>
+<mat-dialog-content>
+  <div mat-subheader>{{ 'SAVE_COLUMN_CONFIGURATION' | oTranslate }}</div>
+  <form #form fxLayout="column">
+    <mat-form-field class="example-full-width">
+      <input [(ngModel)]="name" matInput placeholder="Nombre de la columna">
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <input [(ngModel)]="width" matInput placeholder="Ancho de columna">
+    </mat-form-field>
+    <mat-radio-group name="Alignment" [(ngModel)]="selectedAlignment">
+      <mat-radio-button *ngFor="let o of ordersDataAlignment" [value]="o.name" name="Alineación" style="margin: 10px">
+        <span class="material-icons">
+          {{o.icon}}
+        </span>
+      </mat-radio-button>
+    </mat-radio-group>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false" class="o-button-default">
+    {{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button class="mat-primary" (click)="confirmado()" [mat-dialog-close]="true">{{
+    'SAVE' | oTranslate }}</button>
+</mat-dialog-actions>

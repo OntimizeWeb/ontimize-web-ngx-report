@@ -1,4 +1,5 @@
 import { Component, OnInit, Inject, Optional, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OTextInputComponent } from 'ontimize-web-ngx';
 @Component({

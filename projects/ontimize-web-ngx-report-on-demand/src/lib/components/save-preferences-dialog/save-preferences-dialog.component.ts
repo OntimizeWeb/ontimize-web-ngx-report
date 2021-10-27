@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
@@ -7,18 +8,19 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   styleUrls: ['./save-preferences-dialog.component.css']
 })
 export class SavePreferencesDialogComponent implements OnInit {
-  name: String;
   constructor(
     public dialogo: MatDialogRef<SavePreferencesDialogComponent>) { }
-
+  name: String;
+  description: String;
   ngOnInit() {
   }
   confirmado(): void {
-    if (this.name.length == 0) {
-      alert();
-    }
-    else {
-      this.dialogo.close(this.name);
-    }
+    this.dialogo.close({ "name": this.name, "description": this.description });
   }
+  public formGroup: FormGroup = new FormGroup({
+    name: new FormControl('', [
+      Validators.required
+    ]),
+    description: new FormControl('')
+  });
 }

@@ -14,8 +14,11 @@ export class OReportOnDemandService implements IReportOnDemandService {
 
   openReportOnDemand(data, service, entity) {
     this.dialog.open(ReportOnDemandComponent, {
-      height: '800px',
-      width: '1100px',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: '90%',
+      width: '70%',
+      panelClass: ['o-dialog-class', 'o-table-dialog', 'report-on-demand'],
       data: { columns: data, service: service, entity: entity }
     });
   }

@@ -2,7 +2,7 @@ import { Injectable, Injector } from "@angular/core";
 import { Observable, OntimizeEEService, Util } from 'ontimize-web-ngx';
 
 @Injectable()
-export class CustomersService extends OntimizeEEService {
+export class ReportsService extends OntimizeEEService {
 
   constructor(protected injector: Injector) {
     super(injector);
@@ -24,7 +24,7 @@ export class CustomersService extends OntimizeEEService {
       body: body
     });
   }
-  public savePreferences(preferencesparams?: object): Observable<any> {
+  public saveAsPreferences(preferencesparams?: object): Observable<any> {
     let params = preferencesparams;
 
     let body = JSON.stringify(
@@ -34,6 +34,20 @@ export class CustomersService extends OntimizeEEService {
 
     return this.doRequest({
       method: 'POST',
+      url: url,
+      body: body
+    });
+  }
+  public savePreferences(id:number, preferencesparams?: object): Observable<any> {
+    let params = preferencesparams;
+
+    let body = JSON.stringify(
+      preferencesparams
+    )
+    let url = 'http://localhost:8080/qsallcomponents-jee/preferences/update/'+id;
+
+    return this.doRequest({
+      method: 'PUT',
       url: url,
       body: body
     });
@@ -62,5 +76,16 @@ export class CustomersService extends OntimizeEEService {
       body: body
     });
   }
+
+  public deletePreferences(id?: number): Observable<any> {
+
+    let url = 'http://localhost:8080/qsallcomponents-jee/preferences/remove/' + id;
+
+    return this.doRequest({
+      method: 'DELETE',
+      url: url
+    });
+  }
+
 
 }

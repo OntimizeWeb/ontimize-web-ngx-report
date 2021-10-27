@@ -1,8 +1,19 @@
-<div style="width: 250px">
-  <mat-radio-group name="Function" [(ngModel)]="selectedFunction">
-  <mat-radio-button *ngFor="let f of functions" name="Functions" [value]="f" style="margin: 10px">
-    {{f}}
-  </mat-radio-button>
-  </mat-radio-group>
-  <button class="acept" mat-button (click)="confirmado()">Aceptar</button>
-</div>
+<span mat-dialog-title>{{ 'SELECT_FUNCTION' | oTranslate }}</span>
+
+<mat-dialog-content>
+  <div mat-subheader>{{ 'DIALOG.SELECT_FUNCTION' | oTranslate }}</div>
+  <form #form fxLayout="column">
+    <mat-radio-group name="Function" [(ngModel)]="selectedFunction">
+      <mat-radio-button *ngFor="let f of functions" name="Functions" [value]="f" style="margin: 10px">
+        {{f}}
+      </mat-radio-button>
+    </mat-radio-group>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false" class="o-button-default">
+    {{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button class="mat-primary" (click)="confirmado()" [mat-dialog-close]="true">{{
+    'SAVE' | oTranslate }}</button>
+</mat-dialog-actions>

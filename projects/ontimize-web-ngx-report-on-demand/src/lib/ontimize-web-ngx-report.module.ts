@@ -7,9 +7,11 @@ import { ReportOnDemandComponent } from './components/report-on-demand/report-on
 import { SelectFunctionDialogComponent } from './components/select-function-dialog/select-function-dialog.component';
 import { StyleDialogComponent } from './components/style-dialog/style-dialog.component';
 import { OntimizeWebModule } from 'ontimize-web-ngx';
-import { OREPORT_MODULES, SavePreferencesDialogComponent, SettingsDialogComponent } from './o-components';
+import { ApplyConfigurationDialogComponent, OREPORT_MODULES, SavePreferencesDialogComponent } from './o-components';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { OReportOnDemandService } from './services/reports-on-demand.service';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { OReportsTranslatePipe } from './util/o-reports-translate.pipe';
 
 export * from './o-components';
 
@@ -20,21 +22,24 @@ export * from './o-components';
     OCustomMaterialModule,
     FlexLayoutModule,
     OntimizeWebModule,
-    NgxExtendedPdfViewerModule],
+    NgxExtendedPdfViewerModule,
+    DragDropModule],
   exports: OREPORT_MODULES,
   declarations: [
     ReportOnDemandComponent,
     StyleDialogComponent,
     SelectFunctionDialogComponent,
-    SettingsDialogComponent,
-    SavePreferencesDialogComponent
+    SavePreferencesDialogComponent,
+    ApplyConfigurationDialogComponent,
+    OReportsTranslatePipe
   ],
   entryComponents: [
     ReportOnDemandComponent,
     StyleDialogComponent,
     SelectFunctionDialogComponent,
     SelectFunctionDialogComponent,
-    SavePreferencesDialogComponent
+    SavePreferencesDialogComponent,
+    ApplyConfigurationDialogComponent
 
   ],
   providers: [
