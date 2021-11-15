@@ -7,8 +7,7 @@
     <button mat-icon-button class="close" aria-label="fullscreen dialog" (click)="setFullscreenDialog()">
       <mat-icon [ngClass]="{'active' : fullscreen}">fullscreen</mat-icon>
     </button>
-    <button mat-icon-button class="close" #configurationMenuButton [matMenuTriggerFor]="configurationMenu"><span
-        class="material-icons">
+    <button mat-icon-button class="close" #configurationMenuButton [matMenuTriggerFor]="configurationMenu"><span class="material-icons">
         settings
       </span></button>
     <mat-menu #configurationMenu="matMenu">
@@ -25,53 +24,43 @@
 <div #dialog mat-dialog-content class="dialog-container">
   <mat-sidenav-container class="mat-sidenav-container" fxFill>
     <mat-sidenav #sidenav [(opened)]="opened" mode="side" class="mat-sidenav-graphic-gui">
-
-      <o-column class="column">
-        <o-row>
-          <o-button (click)="(opened=!opened)&& (showButton=true)" [icon]="(sidenav.opened? 'dehaze':'dehaze')"
-            type="ICON" label="" [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
+      <div fxLayout="column" class="flex-container">
+        <div fxLayout="column" class="flex-item">
+          <o-button (click)="(opened=!opened)&& (showButton=true)" [icon]="(sidenav.opened? 'dehaze':'dehaze')" type="ICON" label=""
+            [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
           </o-button>
-        </o-row>
-        <o-row>
           <mat-form-field class="example-full-width">
             <input [(ngModel)]="title" matInput placeholder="{{ 'TITLE' | oReportsTranslate }}">
           </mat-form-field>
-        </o-row>
-        <o-row>
           <mat-form-field class="example-full-width">
             <input [(ngModel)]="subtitle" matInput placeholder="{{ 'SUBTITLE' | oReportsTranslate }}">
           </mat-form-field>
-        </o-row>
-        <o-row>
+        </div>
+        <div class="flex-item">
           <mat-accordion>
-            <mat-expansion-panel class="acordions">
+            <mat-expansion-panel class="acordions" [expanded]="indexExpanded == 1" (open)="togglePanels(1)">
               <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
                 <mat-panel-title>
                   {{ 'ORIENTATION' | oReportsTranslate }}
                 </mat-panel-title>
               </mat-expansion-panel-header>
-              <div fxLayout=row>
-                <mat-radio-group name="Orientation" [(ngModel)]="selectedOrientation">
-                  <mat-radio-button *ngFor="let o of orientation" name="Orientation" [value]="o" style="margin: 10px">
-                    {{o}}
-                  </mat-radio-button>
-                </mat-radio-group>
-              </div>
+              <mat-radio-group name="Orientation" [(ngModel)]="selectedOrientation">
+                <mat-radio-button *ngFor="let o of orientation" name="Orientation" [value]="o" style="margin: 10px">
+                  {{o}}
+                </mat-radio-button>
+              </mat-radio-group>
             </mat-expansion-panel>
           </mat-accordion>
-        </o-row>
-        <o-row>
           <mat-accordion>
-            <mat-expansion-panel class="acordions">
+            <mat-expansion-panel class="acordions" [expanded]="indexExpanded == 2" (open)="togglePanels(2)">
               <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
                 <mat-panel-title>
                   {{ 'STYLE' | oReportsTranslate }}
                 </mat-panel-title>
               </mat-expansion-panel-header>
-              <mat-selection-list dense #settings>
-                <mat-list-option checkboxPosition="before" *ngFor="let choice of dataArray"
-                  (click)="onAreaSettingsListControlChanged(settings)"
-                  [selected]="selectedStyleFunctions.includes(choice.value)" [value]="choice.value">
+              <mat-selection-list dense #settings [(ngModel)]="selectedStyleFunctions">
+                <mat-list-option checkboxPosition="before" *ngFor="let choice of dataArray" [selected]="selectedStyleFunctions.includes(choice.value)"
+                  [value]="choice.value">
                   <div fxLayout="row">
                     <span fxFlex>
                       {{choice.viewValue|oReportsTranslate}}
@@ -81,97 +70,88 @@
               </mat-selection-list>
             </mat-expansion-panel>
           </mat-accordion>
-        </o-row>
-        <mat-accordion>
-          <mat-expansion-panel class="acordions" [expanded]="true">
-            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
-              <mat-panel-title>
-                {{ 'COLUMNS' | oReportsTranslate }}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <mat-selection-list dense #choices cdkDropList (cdkDropListDropped)="drop($event,choices)">
-              <mat-list-option checkboxPosition="before" *ngFor="let choice of ordersData"
-                (click)="onAreaListControlChanged(choices)" [selected]="selectedOptions.includes(choice)"
-                [value]="choice" cdkDrag>
-                <div fxLayout="row">
-                  <span fxFlex>
-                    {{choice|oTranslate}}
-                  </span>
-                  <button *ngIf="selectedOptions.includes(choice)" class="edit" mat-icon-button
-                    (click)="mostrarDialogo(choice)"><span class="material-icons">
-                      edit
-                    </span></button>
-                  <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
-                  <ng-template cdkDragPreview>
-                    <div class="order-preview">
-                      {{choice}}
-                    </div>
-                  </ng-template>
-                </div>
-              </mat-list-option>
-            </mat-selection-list>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <mat-accordion>
-          <mat-expansion-panel class="acordions">
-            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
-              <mat-panel-title>
-                {{ 'GROUPS' | oReportsTranslate }}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <mat-selection-list dense #choices2 cdkDropList (cdkDropListDropped)="drop2($event)">
-              <mat-list-option checkboxPosition="before" *ngFor="let choice of ordersData2"
-                (click)="onAreaListControlChanged2(choices2)" [selected]="selectedGroups.includes(choice)"
-                [value]="choice" cdkDrag>
-                <div fxLayout="row">
-                  <span fxFlex>
-                    {{choice|oTranslate}}
-                  </span>
-                  <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
-                  <ng-template cdkDragPreview>
-                    <div class="order-preview">
-                      {{choice}}
-                    </div>
-                  </ng-template>
-                </div>
-              </mat-list-option>
-            </mat-selection-list>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <mat-accordion>
-          <mat-expansion-panel class="acordions">
-            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
-              <mat-panel-title>
-                {{ 'FUNCTIONS' | oReportsTranslate }}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <mat-selection-list dense #functions>
-              <mat-list-option checkboxPosition="before" *ngFor="let function of ordersDataFunctions"
-                (click)="onAreaListControlChangedFunctions(functions)" [selected]="selectedOptions.includes(function)"
-                [value]="function">
-                <div fxLayout="row">
-                  <span fxFlex>
-                    {{function|oTranslate}}
-                  </span>
-                  <button *ngIf="selectedFunctions.includes(function)" class="select" mat-icon-button
-                    (click)="selectFunction(function)"><span class="material-icons">
-                      edit
-                    </span></button>
-                </div>
-              </mat-list-option>
-            </mat-selection-list>
-          </mat-expansion-panel>
-        </mat-accordion>
-        <mat-dialog-actions align=center>
-          <button type="button" mat-stroked-button class="mat-primary" (click)="confirmado()">{{
-            'PREVIEW' | oReportsTranslate }}</button>
-        </mat-dialog-actions>
-      </o-column>
+          <mat-accordion>
+            <mat-expansion-panel class="acordions" [expanded]="indexExpanded == 3" (open)="togglePanels(3)">
+              <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+                <mat-panel-title>
+                  {{ 'COLUMNS' | oReportsTranslate }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-selection-list dense #choices class="columns" cdkDropList (cdkDropListDropped)="drop($event)" [(ngModel)]="selectedOptions">
+                <mat-list-option checkboxPosition="before" *ngFor="let choice of ordersData" [selected]="selectedOptions.includes(choice)"
+                  [value]="choice" cdkDrag>
+                  <div fxLayout="row">
+                    <span fxFlex>
+                      {{choice|oTranslate}}
+                    </span>
+                    <button *ngIf="selectedOptions.includes(choice)" class="edit" mat-icon-button (click)="mostrarDialogo(choice)"><span
+                        class="material-icons">
+                        edit
+                      </span></button>
+                    <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
+                    <ng-template cdkDragPreview>
+                    </ng-template>
+                  </div>
+                </mat-list-option>
+              </mat-selection-list>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <mat-accordion>
+            <mat-expansion-panel class="acordions" [expanded]="indexExpanded == 4" (open)="togglePanels(4)">
+              <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+                <mat-panel-title>
+                  {{ 'GROUPS' | oReportsTranslate }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-selection-list dense #choices2 class="columns" cdkDropList (cdkDropListDropped)="drop2($event)" [(ngModel)]="selectedGroups">
+                <mat-list-option checkboxPosition="before" *ngFor="let choice of ordersData2" [selected]="selectedGroups.includes(choice)"
+                  [value]="choice" cdkDrag>
+                  <div fxLayout="row">
+                    <span fxFlex>
+                      {{choice|oTranslate}}
+                    </span>
+                    <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
+                    <ng-template cdkDragPreview>
+                    </ng-template>
+                  </div>
+                </mat-list-option>
+              </mat-selection-list>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <mat-accordion>
+            <mat-expansion-panel class="acordions" [expanded]="indexExpanded == 5" (open)="togglePanels(5)">
+              <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+                <mat-panel-title>
+                  {{ 'FUNCTIONS' | oReportsTranslate }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-selection-list dense #functions [(ngModel)]="selectedFunctions">
+                <mat-list-option checkboxPosition="before" *ngFor="let function of ordersDataFunctions"
+                  [selected]="selectedFunctions.includes(function)" [value]="function">
+                  <div fxLayout="row">
+                    <span fxFlex>
+                      {{function|oTranslate}}
+                    </span>
+                    <button *ngIf="selectedFunctions.includes(function)" class="select" mat-icon-button (click)="selectFunction(function)"><span
+                        class="material-icons">
+                        edit
+                      </span></button>
+                  </div>
+                </mat-list-option>
+              </mat-selection-list>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <mat-dialog-actions align=center>
+            <button type="button" mat-stroked-button class="mat-primary" (click)="confirmado()">{{
+              'PREVIEW' | oReportsTranslate }}</button>
+          </mat-dialog-actions>
+        </div>
+      </div>
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="sidenav-container-content">
-        <ngx-extended-pdf-viewer #pdfViewer [base64Src]="pdf" useBrowserLocale="true" delayFirstView="1000" width
-          [textLayer]="true"></ngx-extended-pdf-viewer>
+        <ngx-extended-pdf-viewer #pdfViewer [base64Src]="pdf" useBrowserLocale="true" delayFirstView="1000" width [textLayer]="true">
+        </ngx-extended-pdf-viewer>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>

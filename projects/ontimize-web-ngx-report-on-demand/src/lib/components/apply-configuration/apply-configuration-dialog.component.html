@@ -5,8 +5,8 @@
   <mat-selection-list #configurationList dense class="apply-configuration-dialog-list">
     <mat-list-option (click)="onAreaListControlChanged(configuration)" checkboxPosition="before"
       *ngFor="let configuration of ordersDataPreferences; let i = index" [value]="configuration">
-      <span matLine>{{ configuration.NAME }}</span>
-      <span matLine>{{ configuration.DESCRIPTION }}</span>
+      <span matLine>{{ configuration.name }}</span>
+      <span matLine>{{ configuration.description }}</span>
     </mat-list-option>
   </mat-selection-list>
 </mat-dialog-content>

@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ViewChild } from '@angular/core';
+import { ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject, Input } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogService, OTextInputComponent } from 'ontimize-web-ngx';
@@ -25,7 +25,7 @@ export class ReportOnDemandComponent implements OnInit {
   subtitle: OTextInputComponent;
   @ViewChild('name', { static: true })
   name: String = '';
-  public pdf = '';
+  public pdf: String = '';
   selectedOptions = [];
   selectedGroups = [];
   selectedFunctions = [];
@@ -35,10 +35,6 @@ export class ReportOnDemandComponent implements OnInit {
   ordersData = this.data.columns.split(";");
   ordersData2 = this.data.columns.split(";");
   orientation = ["vertical", "horizontal"];
-  obj;
-  indice;
-  proVal;
-  proTex;
   selectedOrientation: String = "vertical";
   ordersDataFunctions = this.getFunctions();
   dataArray = [{ value: 'grid', viewValue: 'GRID' }, { value: 'rowNumber', viewValue: 'ROW_NUMBER' },
@@ -53,6 +49,9 @@ export class ReportOnDemandComponent implements OnInit {
   showButton: boolean = true;
   description: String = "";
   fullscreen: boolean = false;
+  indexExpanded: number = 3;
+
+
   constructor(private reportsService: ReportsService, public dialogo2: MatDialog, public dialogo3: MatDialog,
     public dialogo: MatDialogRef<ReportOnDemandComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, protected dialogService: DialogService) {
@@ -66,7 +65,6 @@ export class ReportOnDemandComponent implements OnInit {
   }
   confirmado(): void {
     this.openReport();
-    //this.dialogo.close(true);
   }
 
   ngOnInit() {
@@ -85,21 +83,7 @@ export class ReportOnDemandComponent implements OnInit {
       }
     });
   }
-  onAreaListControlChanged(list) {
-    this.selectedOptions = list.selectedOptions.selected.map(item => item.value);
-  }
-  onAreaListControlChanged2(list) {
-    this.selectedGroups = list.selectedOptions.selected.map(item => item.value);
-  }
-  onAreaListControlChangedFunctions(list) {
-    this.selectedFunctions = list.selectedOptions.selected.map(item => item.value);
-  }
-  onAreaOrientationControlChanged(list) {
-    this.selectedOrientation = list;
-  }
-  onAreaSettingsListControlChanged(list) {
-    this.selectedStyleFunctions = list.selectedOptions.selected.map(item => item.value);
-  }
+
   saveAsPreferences() {
     var vertical;
     if (this.selectedOrientation == "vertical") { vertical = 1 }
@@ -132,22 +116,25 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   changePreferences() {
-    this.selectedOptions = this.selectedPreferences.COLUMNS.toString().replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
-    this.selectedGroups = this.selectedPreferences.GROUPS.toString().replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
-    this.selectedFunctions = this.selectedPreferences.FUNCTIONS.toString().replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
-    this.selectedStyleFunctions = this.selectedPreferences.STYLEFUNCTIONS.toString().replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
-    this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
+    this.selectedOptions = this.selectedPreferences.columns.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
+    if (this.selectedPreferences.groups != []) {
+      this.selectedGroups = this.selectedPreferences.groups.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
+    } if (this.selectedPreferences.functions != []) {
+      this.selectedFunctions = this.selectedPreferences.functions.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
+    } if (this.selectedPreferences.styleFunctions != []) {
+      this.selectedStyleFunctions = this.selectedPreferences.stylefunctions.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
+    } this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
     this.reportsService.configureAdapter();
     var reportOrientation;
-    if (this.selectedPreferences.VERTICAL) {
+    if (this.selectedPreferences.vertical) {
       reportOrientation = "vertical";
     }
     else {
       reportOrientation = "horizontal";
     }
     this.reportsService.createReport({
-      "title": this.selectedPreferences.TITLE, "columns": this.selectedOptions, "groups": this.selectedGroups, "entity": "customer",
-      "service": "Customer", "orientation": reportOrientation, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.selectedPreferences.SUBTITLE
+      "title": this.selectedPreferences.title, "columns": this.selectedOptions, "groups": this.selectedGroups, "entity": "customer",
+      "service": "Customer", "orientation": reportOrientation, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.selectedPreferences.subtitle
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.pdf = res.data[0].file;
@@ -199,8 +186,8 @@ export class ReportOnDemandComponent implements OnInit {
       });
 
   }
-  drop(event: CdkDragDrop<string[]>, list) {
-    moveItemInArray(this.ordersData, event.previousIndex, event.currentIndex)
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.ordersData, event.previousIndex, event.currentIndex);
   }
   drop2(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.ordersData2, event.previousIndex, event.currentIndex)
@@ -254,5 +241,8 @@ export class ReportOnDemandComponent implements OnInit {
       this.dialogo.updateSize("90%", "80%");
     }
     this.fullscreen = !this.fullscreen;
+  }
+  togglePanels(index: number) {
+    this.indexExpanded = index == this.indexExpanded ? 3 : index;
   }
 }
