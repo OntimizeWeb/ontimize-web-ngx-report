@@ -3,6 +3,7 @@ import { ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject, Input } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogService, OTextInputComponent } from 'ontimize-web-ngx';
+import { DEFAULT_HEIGHT_DIALOG, DEFAULT_WIDTH_DIALOG } from '../../services/reports-on-demand.service';
 import { ReportsService } from '../../services/reports.service';
 import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
 import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-preferences-dialog.component';
@@ -14,6 +15,7 @@ import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
   selector: 'app-customers-dialog',
   templateUrl: './report-on-demand.component.html',
   styleUrls: ['./report-on-demand.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   providers: [ReportsService]
 })
 
@@ -60,9 +62,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.service = this.data.service;
   }
 
-  cerrarDialogo(): void {
-    this.dialogo.close(false);
-  }
+
   confirmado(): void {
     this.openReport();
   }
@@ -234,15 +234,18 @@ export class ReportOnDemandComponent implements OnInit {
       }
     });
   }
+
   setFullscreenDialog(): void {
     if (!this.fullscreen) {
       this.dialogo.updateSize("100%", "100%");
     } else {
-      this.dialogo.updateSize("90%", "80%");
+      this.dialogo.updateSize(DEFAULT_WIDTH_DIALOG, DEFAULT_HEIGHT_DIALOG);
     }
     this.fullscreen = !this.fullscreen;
   }
+
   togglePanels(index: number) {
+    console.log("toggle", index);
     this.indexExpanded = index == this.indexExpanded ? 3 : index;
   }
 }

@@ -1,232 +1,58 @@
-.report-on-demand {
-  .mat-dialog-container {
-    overflow: hidden;
-  }
-}
-
-div {
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-}
-
-.mat-radio-button {
-  justify-content: center;
-  align-items: center;
-}
-
-.cdk-overlay-pane.my-dialog {
-  position: relative;
-}
-
-.close.mat-icon-button {
-  top: 0;
-  float: right;
-  right: 0;
-  line-height: 14px;
-  min-width: auto;
-}
-
-.mat-list-base[dense] .mat-list-item,
-.mat-list-base[dense] .mat-list-option {
-  display: block;
-  height: 30px;
-  -webkit-tap-highlight-color: transparent;
-  width: 100%;
-  padding: 0;
-  font-size: 12px;
-  text-align: left;
-}
-
-.aceptar.mat-button-toggle {
-  width: 200px;
-}
-
-.settings.mat-button-toggle {
-  position: fixed;
-  border: none;
-}
-
-.acordions {
-  width: 280px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  background-color: darkgrey;
-  box-shadow: none;
-}
-
-.configurationButtons {
-  margin-bottom: 10px;
-}
-
-span {
-  text-align: left;
-}
-
-.mat-form-field.example-full-width {
-  width: 260px;
-  margin-left: 10px;
-}
-
-.mat-sidenav-container {
-  background-color: #ffffff;
-  animation: all 1s ease-out;
-}
-
-.mat-sidenav-graphic-gui {
-  background-color: #ffffff;
-  border-radius: 4px;
-  border: 1px solid #dddddd;
-  box-shadow: 0 2px 4px #00000029;
-}
-
-.sidenav-container-content {
-  background-color: #ffffff;
-  border-radius: 4px;
-  border: 1px solid #dddddd;
-  box-shadow: 0 2px 4px #00000029;
+.o-dialog-class .mat-dialog-container .mat-dialog-content {
+  max-height: calc(100% - 82px);
   height: 100%;
-  margin-left: 24px;
+  overflow: hidden;
 
-  &.opened {
-    margin-left: 24px;
-  }
-}
-
-.mat-sidenav {
-  min-width: 10%;
-  left: 10px;
-  top: 8px;
-  visibility: visible !important;
-  //z-index: 999;
-  border: 0;
-
-  .o-form {
-    display: none;
-
-    // .section-title {
-    //   margin-top: 24px;
-    //   font-weight: bold;
-    //   text-transform: uppercase;
-    //   font-size: 12px;
-    // }
-
-    // .radio-selection {
-    //   overflow: hidden;
-    // }
-  }
-
-  &.mat-drawer-side {
+  .mat-sidenav {
+    visibility: visible !important;
     transform: none;
-  }
-
-  &.mat-drawer-opened {
-    border: 1px solid #DEE1E6;
-    border-radius: 4px;
     top: 0;
     left: 0;
     padding: 8px 16px;
+    border: 1px solid transparent;
 
-    .o-form {
-      display: block;
-    }
-  }
-}
+    .mat-accordion {
+      .acordions.mat-expansion-panel {
+        border-radius: 0;
+        box-shadow: none;
 
-.mat-sidenav-content {
-  margin-left: 20px;
-  z-index: 9;
-  height: calc(100% - 82px);
-}
+        .mat-expansion-panel-body {
+          padding: 0 0 0 16px;
+        }
+      }
 
-.dialog-title {
-  position: relative;
-  border-bottom: 1px solid #1464a5;
+      .mat-list-option {
+        .button-edit {
+          cursor: pointer;
+        }
 
-  h2 {
-    font-size: 16px;
-    text-align: left;
-  }
+        &.cdk-drag {
+          cursor: move;
+        }
+      }
 
-  .main-menu {
-    position: absolute;
-    top: -5px;
-    right: 0;
-
-    button {
-      margin-left: 18px;
-      height: 19px;
-      width: 19px;
-      line-height: 19px;
     }
 
-    .active {
-      color: #1464a5;
+    &.mat-drawer-opened {
+      border: 1px solid #DEE1E6;
+      border-radius: 4px;
     }
   }
-}
-
-.mat-dialog-content {
-  height: 100%;
-  max-height: calc(100% - 82px);
-  overflow: hidden;
 
   .mat-sidenav-container {
-    flex: none;
-    overflow: hidden;
-    max-height: calc(100% - 77px);
+    background-color: transparent;
 
-    svg {
-      margin: 24px;
-      width: calc(100% - 48px);
-      height: calc(100% - 48px);
-      max-width: 750px;
-      position: relative;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    &.opened {
+      .sidenav-container-content {
+        margin-left: 24px;
+      }
     }
-  }
-
-  .mat-sidenav {
-    overflow: hidden;
   }
 
   .mat-sidenav-content {
-    max-height: calc(100% - 77px);
+    .sidenav-container-content {
+      margin-left: 66px;
+    }
+
   }
-}
-
-.mat-drawer-inner-container {
-  overflow: hidden;
-}
-
-.columns {
-  height: calc(100%-350px);
-}
-
-.mat-expansion-panel {
-  background: #f3f3f3;
-}
-
-.flex-container {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-content: flex-end;
-  align-items: center;
-}
-
-.flex-item:nth-child(1) {
-  order: 0;
-  flex: 0 1 auto;
-  align-self: auto;
-}
-
-.flex-item:nth-child(2) {
-  order: 0;
-  flex: 1 1 auto;
-  align-self: auto;
 }
