@@ -31,18 +31,19 @@
         <o-button (click)="(opened=!opened) && (showButton=true)" icon="dehaze" type="ICON" label=""
           [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
         </o-button>
-        <div fxLayout="column" *ngIf="opened" fxLayoutGap="24px">
-          <div fxLayout="column">
-            <mat-form-field>
-              <input [(ngModel)]="title" matInput placeholder="{{ 'TITLE' | oReportsTranslate }}">
-            </mat-form-field>
-            <mat-form-field>
-              <input [(ngModel)]="subtitle" matInput placeholder="{{ 'SUBTITLE' | oReportsTranslate }}">
-            </mat-form-field>
-          </div>
-          <div fxLayout="column" fxLayoutGap="8px">
-            <mat-accordion>
-              <mat-expansion-panel class="acordions" [expanded]="indexExpanded == 1" (open)="togglePanels(1)">
+        <div>
+          <div fxLayout="column" fxLayoutGap="24px" *ngIf="opened"  [@.disabled]="true">
+            <div fxLayout="column">
+              <mat-form-field>
+                <input [(ngModel)]="title" matInput placeholder="{{ 'TITLE' | oReportsTranslate }}">
+              </mat-form-field>
+              <mat-form-field>
+                <input [(ngModel)]="subtitle" matInput placeholder="{{ 'SUBTITLE' | oReportsTranslate }}">
+              </mat-form-field>
+            </div>
+
+            <mat-accordion multi="true" displayMode="flat">
+              <mat-expansion-panel class="acordions">
                 <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
                   <mat-panel-title>
                     {{ 'ORIENTATION' | oReportsTranslate }}
@@ -54,9 +55,8 @@
                   </mat-radio-button>
                 </mat-radio-group>
               </mat-expansion-panel>
-            </mat-accordion>
-            <mat-accordion>
-              <mat-expansion-panel class="acordions" [expanded]="indexExpanded == 2" (open)="togglePanels(2)">
+
+              <mat-expansion-panel class="acordions">
                 <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
                   <mat-panel-title>
                     {{ 'STYLE' | oReportsTranslate }}
@@ -73,9 +73,8 @@
                   </mat-list-option>
                 </mat-selection-list>
               </mat-expansion-panel>
-            </mat-accordion>
-            <mat-accordion>
-              <mat-expansion-panel class="acordions" [expanded]="indexExpanded == 3" (open)="togglePanels(3)">
+
+              <mat-expansion-panel class="acordions" expanded="true">
                 <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
                   <mat-panel-title>
                     {{ 'COLUMNS' | oReportsTranslate }}
@@ -97,9 +96,8 @@
                   </mat-list-option>
                 </mat-selection-list>
               </mat-expansion-panel>
-            </mat-accordion>
-            <mat-accordion>
-              <mat-expansion-panel class="acordions" [expanded]="indexExpanded == 4" (open)="togglePanels(4)">
+
+              <mat-expansion-panel class="acordions">
                 <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
                   <mat-panel-title>
                     {{ 'GROUPS' | oReportsTranslate }}
@@ -117,9 +115,8 @@
                   </mat-list-option>
                 </mat-selection-list>
               </mat-expansion-panel>
-            </mat-accordion>
-            <mat-accordion>
-              <mat-expansion-panel class="acordions" [expanded]="indexExpanded == 5" (open)="togglePanels(5)">
+
+              <mat-expansion-panel class="acordions">
                 <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
                   <mat-panel-title>
                     {{ 'FUNCTIONS' | oReportsTranslate }}
@@ -142,8 +139,8 @@
               </mat-expansion-panel>
             </mat-accordion>
             <mat-dialog-actions align=center>
-              <button type="button" mat-stroked-button class="mat-primary" (click)="confirmado()">{{
-                'PREVIEW' | oReportsTranslate }}</button>
+              <button type="button" mat-stroked-button class="mat-primary" (click)="confirmado()">
+                {{'PREVIEW' | oReportsTranslate }}</button>
             </mat-dialog-actions>
           </div>
         </div>

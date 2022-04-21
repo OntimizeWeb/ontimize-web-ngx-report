@@ -51,7 +51,6 @@ export class ReportOnDemandComponent implements OnInit {
   showButton: boolean = true;
   description: String = "";
   fullscreen: boolean = false;
-  indexExpanded: number = 3;
 
 
   constructor(private reportsService: ReportsService, public dialogo2: MatDialog, public dialogo3: MatDialog,
@@ -244,8 +243,4 @@ export class ReportOnDemandComponent implements OnInit {
     this.fullscreen = !this.fullscreen;
   }
 
-  togglePanels(index: number) {
-    console.log("toggle", index);
-    this.indexExpanded = index == this.indexExpanded ? 3 : index;
-  }
 }
