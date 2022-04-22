@@ -26,7 +26,7 @@
 </div>
 <div #dialog mat-dialog-content class="dialog-container">
   <mat-sidenav-container class="mat-sidenav-container" [class.opened]="opened" fxFill>
-    <mat-sidenav #sidenav [(opened)]="opened" mode="side" class="mat-sidenav-graphic-gui">
+    <mat-sidenav #sidenav [(opened)]="opened" mode="side" class="report-on-demand-sidenav">
       <div fxLayout="column" fxFill>
         <o-button (click)="(opened=!opened) && (showButton=true)" icon="dehaze" type="ICON" label=""
           [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
