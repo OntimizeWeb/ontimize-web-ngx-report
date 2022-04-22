@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { DialogService, IReportOnDemandService } from 'ontimize-web-ngx';
-import { ReportOnDemandComponent } from '../components/report-on-demand/report-on-demand.component';
+import { DEFAULT_HEIGHT_DIALOG, DEFAULT_WIDTH_DIALOG, ReportOnDemandComponent } from '../components/report-on-demand/report-on-demand.component';
 
-
-export const DEFAULT_WIDTH_DIALOG = '70%';
-export const DEFAULT_HEIGHT_DIALOG = '90%';
 @Injectable()
 export class OReportOnDemandService implements IReportOnDemandService {
 

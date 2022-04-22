@@ -1,5 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
-import { Observable, OntimizeEEService, Util } from 'ontimize-web-ngx';
+import { Observable, OntimizeEEService } from 'ontimize-web-ngx';
 
 @Injectable()
 export class ReportsService extends OntimizeEEService {
@@ -38,13 +38,13 @@ export class ReportsService extends OntimizeEEService {
       body: body
     });
   }
-  public savePreferences(id:number, preferencesparams?: object): Observable<any> {
+  public savePreferences(id: number, preferencesparams?: object): Observable<any> {
     let params = preferencesparams;
 
     let body = JSON.stringify(
       preferencesparams
     )
-    let url = 'http://localhost:8080/qsallcomponents-jee/preferences/update/'+id;
+    let url = 'http://localhost:8080/qsallcomponents-jee/preferences/update/' + id;
 
     return this.doRequest({
       method: 'PUT',

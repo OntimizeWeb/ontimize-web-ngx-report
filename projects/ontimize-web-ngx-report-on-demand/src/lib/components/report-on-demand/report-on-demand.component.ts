@@ -3,7 +3,7 @@ import { ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject, Input } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogService, OTextInputComponent } from 'ontimize-web-ngx';
-import { DEFAULT_HEIGHT_DIALOG, DEFAULT_WIDTH_DIALOG } from '../../services/reports-on-demand.service';
+
 import { ReportsService } from '../../services/reports.service';
 import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
 import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-preferences-dialog.component';
@@ -11,6 +11,8 @@ import { SelectFunctionDialogComponent } from '../select-function-dialog/select-
 
 import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 
+export const DEFAULT_WIDTH_DIALOG = '70%';
+export const DEFAULT_HEIGHT_DIALOG = '90%';
 @Component({
   selector: 'app-customers-dialog',
   templateUrl: './report-on-demand.component.html',
