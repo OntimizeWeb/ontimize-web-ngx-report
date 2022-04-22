@@ -101,7 +101,6 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   getFunctions() {
-
     this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
     this.reportsService.configureAdapter();
     this.reportsService.getFunctions({
@@ -140,13 +139,6 @@ export class ReportOnDemandComponent implements OnInit {
       }
     });
   }
-  changeStyle(event: []) {
-    this.selectedStyleFunctions = [];
-    event.forEach(element => {
-      this.selectedStyleFunctions.push(element);
-
-    });
-  }
 
   mostrarDialogo(id): void {
     this.dialogo2
@@ -159,6 +151,7 @@ export class ReportOnDemandComponent implements OnInit {
         this.columnStyleData.push(data);
       });
   }
+
   selectFunction(functionName: String): void {
     if (functionName != 'TOTAL') {
       this.dialogo3
@@ -218,6 +211,7 @@ export class ReportOnDemandComponent implements OnInit {
       });
 
   }
+
   savePreferences() {
     var vertical;
     if (this.selectedOrientation == "vertical") { vertical = 1 }

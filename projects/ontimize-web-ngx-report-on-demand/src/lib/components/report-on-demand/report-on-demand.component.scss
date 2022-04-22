@@ -11,14 +11,32 @@
     padding: 8px 16px;
     border: 1px solid transparent;
 
+    .mat-drawer-inner-container {
+      overflow: hidden;
+    }
+
+    .container-title {
+      margin-bottom: 20px;
+    }
+
+    .mat-dialog-actions{
+      min-height: auto;
+    }
+
     .mat-accordion {
+      overflow-y: scroll;
+
       .acordions.mat-expansion-panel {
         border-radius: 0;
         box-shadow: none;
         margin-bottom: 8px;
 
+        .mat-expansion-panel-header {
+          padding: 0 8px;
+        }
+
         .mat-expansion-panel-body {
-          padding: 0 0 0 16px;
+          padding: 0;
         }
       }
 
@@ -30,6 +48,14 @@
         &.cdk-drag {
           cursor: move;
         }
+
+        .mat-list-item-content {
+          padding: 0 0 0 8px;
+
+          .mat-list-text {
+            padding-right: 8px;
+          }
+        }
       }
 
     }
@@ -37,6 +63,7 @@
     &.mat-drawer-opened {
       border: 1px solid #DEE1E6;
       border-radius: 4px;
+      width: 256px;
     }
   }
 
