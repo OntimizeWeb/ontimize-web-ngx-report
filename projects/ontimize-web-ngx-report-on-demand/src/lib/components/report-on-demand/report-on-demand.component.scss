@@ -74,8 +74,10 @@
   }
 
   .mat-sidenav-content {
+    overflow: hidden;
     .sidenav-container-content {
       margin-left: 66px;
+      height: 100%;
     }
 
   }
