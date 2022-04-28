@@ -106,8 +106,8 @@ export class ReportOnDemandComponent implements OnInit {
     this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
     this.reportsService.configureAdapter();
     this.reportsService.getFunctions({
-      "columns": this.data.columns.split(";"), "entity": "customer",
-      "service": "Customer"
+      "columns": this.data.columns.split(";"), "entity": this.entity,
+      "service": "Customer", "language": "es"
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.ordersDataFunctions = res.data[0].list;
