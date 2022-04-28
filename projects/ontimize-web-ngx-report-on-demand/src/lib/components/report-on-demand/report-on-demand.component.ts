@@ -1,8 +1,8 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ViewChild, ViewEncapsulation } from '@angular/core';
-import { Component, OnInit, Inject, Input } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogService, OTextInputComponent } from 'ontimize-web-ngx';
+import { DialogService } from 'ontimize-web-ngx';
 
 import { ReportsService } from '../../services/reports.service';
 import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
@@ -22,41 +22,46 @@ export const DEFAULT_HEIGHT_DIALOG = '90%';
 })
 
 export class ReportOnDemandComponent implements OnInit {
-  showInput: Boolean = false;
+
   @ViewChild('title', { static: true })
-  title: OTextInputComponent;
+  title: string;
   @ViewChild('subtitle', { static: true })
-  subtitle: OTextInputComponent;
+  subtitle: string;
   @ViewChild('name', { static: true })
-  name: String = '';
-  public pdf: String = '';
-  selectedOptions = [];
-  selectedGroups = [];
-  selectedFunctions = [];
-  selectedStyleFunctions = [];
-  selectedPreferences;
-  expanded = "columns";
-  ordersData = this.data.columns.split(";");
-  ordersData2 = this.data.columns.split(";");
-  orientation = ["vertical", "horizontal"];
-  selectedOrientation: String = "vertical";
-  ordersDataFunctions = this.getFunctions();
-  dataArray = [{ value: 'grid', viewValue: 'GRID' }, { value: 'rowNumber', viewValue: 'ROW_NUMBER' },
-  { value: 'columnName', viewValue: 'COLUMNS_NAMES' }, { value: 'hideGroupDetails', viewValue: 'GROUP_DETAILS' }, { value: 'groupNewPage', viewValue: 'GROUP_PAGE' },
-  { value: 'firstGroupNewPage', viewValue: 'FIRST_GROUP_PAGE' }];
-  dataFunctions = [{ value: 'max', viewValue: 'Máximo' }, { value: 'min', viewValue: 'Mínimo' },
-  { value: 'sum', viewValue: 'Suma' }, { value: 'med', viewValue: 'Media' }];
-  columnStyleData = [];
-  entity;
-  service;
-  opened: boolean = true;
-  showButton: boolean = true;
+  name: string = '';
+
+  public pdf: string = '';
+  public selectedOrientation = "vertical";
+  public orientations = ["vertical", "horizontal"];
+  public functionsData = [
+    { value: 'max', viewValue: 'Máximo' }, { value: 'min', viewValue: 'Mínimo' },
+    { value: 'sum', viewValue: 'Suma' }, { value: 'med', viewValue: 'Media' }
+  ];
+  public columnsData: any;
+  public columnsToGroupData: any;
+  public selectedPreferences;
+  public opened: boolean = true;
+
+  public selectedOptions = [];
+  public selectedGroups = [];
+  public selectedFunctions = [];
+  public selectedStyleFunctions = [];
+  public dataArray: { value: string; viewValue: string; }[];
+
+  public columnStyleData = [];
+
   description: String = "";
-  fullscreen: boolean = false;
+  public fullscreen: boolean = false;
+
+  protected entity: string;
+  protected service: string;
 
 
-  constructor(private reportsService: ReportsService, public dialogo2: MatDialog, public dialogo3: MatDialog,
-    public dialogo: MatDialogRef<ReportOnDemandComponent>,
+
+
+  constructor(private reportsService: ReportsService,
+    public dialog: MatDialog,
+    public dialogRef: MatDialogRef<ReportOnDemandComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, protected dialogService: DialogService) {
     this.selectedStyleFunctions = [];
     this.entity = this.data.entity;
@@ -64,13 +69,26 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
 
-  confirmado(): void {
+  public previewReport(): void {
     this.openReport();
   }
 
   ngOnInit() {
+    this.initialize();
   }
-  public openReport() {
+
+  protected initialize() {
+    this.columnsData = this.data.columns.split(";");
+    this.columnsToGroupData = this.data.columns.split(";");
+    this.getFunctions();
+    this.dataArray = [{ value: 'grid', viewValue: 'GRID' }, { value: 'rowNumber', viewValue: 'ROW_NUMBER' },
+    { value: 'columnName', viewValue: 'COLUMNS_NAMES' }, { value: 'hideGroupDetails', viewValue: 'GROUP_DETAILS' }, { value: 'groupNewPage', viewValue: 'GROUP_PAGE' },
+    { value: 'firstGroupNewPage', viewValue: 'FIRST_GROUP_PAGE' }];
+
+
+  }
+
+  protected openReport() {
     console.log(this.entity);
     console.log(this.service);
     this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
@@ -86,10 +104,8 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   saveAsPreferences() {
-    var vertical;
-    if (this.selectedOrientation == "vertical") { vertical = 1 }
-    else { vertical = 0 }
-    this.showInput = false;
+    let vertical = 0;
+    if (this.selectedOrientation == "vertical") { vertical = 1 };
     this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
     this.reportsService.configureAdapter();
     this.reportsService.saveAsPreferences({
@@ -110,7 +126,7 @@ export class ReportOnDemandComponent implements OnInit {
       "service": "Customer", "language": "es"
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
-        this.ordersDataFunctions = res.data[0].list;
+        this.functionsData = res.data[0].list;
       }
     });
   }
@@ -143,7 +159,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   mostrarDialogo(id): void {
-    this.dialogo2
+    this.dialog
       .open(StyleDialogComponent, {
         data: id,
         panelClass: ['o-dialog-class', 'o-table-dialog']
@@ -156,7 +172,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   selectFunction(functionName: String): void {
     if (functionName != 'TOTAL') {
-      this.dialogo3
+      this.dialog
         .open(SelectFunctionDialogComponent, {
           data: functionName,
           panelClass: ['o-dialog-class', 'o-table-dialog']
@@ -168,7 +184,7 @@ export class ReportOnDemandComponent implements OnInit {
     }
   }
   openSaveAsPreferences(): void {
-    this.dialogo3
+    this.dialog
       .open(SavePreferencesDialogComponent, {
         panelClass: ['o-dialog-class', 'o-table-dialog']
       })
@@ -181,13 +197,13 @@ export class ReportOnDemandComponent implements OnInit {
 
   }
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.ordersData, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.columnsData, event.previousIndex, event.currentIndex);
   }
   drop2(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.ordersData2, event.previousIndex, event.currentIndex)
+    moveItemInArray(this.columnsToGroupData, event.previousIndex, event.currentIndex)
   }
   public onApplyConfigurationClicked(): void {
-    const dialogRef = this.dialogo2.open(ApplyConfigurationDialogComponent, {
+    this.dialog.open(ApplyConfigurationDialogComponent, {
       width: 'calc((75em - 100%) * 1000)',
       maxWidth: '65vw',
       minWidth: '30vw',
@@ -201,7 +217,7 @@ export class ReportOnDemandComponent implements OnInit {
       });
   }
   openSavePreferences(): void {
-    this.dialogo3
+    this.dialog
       .open(SavePreferencesDialogComponent, {
         panelClass: ['o-dialog-class', 'o-table-dialog']
       })
@@ -215,10 +231,8 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   savePreferences() {
-    var vertical;
+    let vertical = 0;
     if (this.selectedOrientation == "vertical") { vertical = 1 }
-    else { vertical = 0 }
-    this.showInput = false;
     this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
     this.reportsService.configureAdapter();
     this.reportsService.savePreferences(this.selectedPreferences.ID, {
@@ -232,9 +246,9 @@ export class ReportOnDemandComponent implements OnInit {
 
   setFullscreenDialog(): void {
     if (!this.fullscreen) {
-      this.dialogo.updateSize("100%", "100%");
+      this.dialogRef.updateSize("100%", "100%");
     } else {
-      this.dialogo.updateSize(DEFAULT_WIDTH_DIALOG, DEFAULT_HEIGHT_DIALOG);
+      this.dialogRef.updateSize(DEFAULT_WIDTH_DIALOG, DEFAULT_HEIGHT_DIALOG);
     }
     this.fullscreen = !this.fullscreen;
   }

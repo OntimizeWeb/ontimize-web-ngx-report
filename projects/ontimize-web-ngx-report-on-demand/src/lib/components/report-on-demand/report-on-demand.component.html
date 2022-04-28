@@ -27,8 +27,8 @@
 <div #dialog mat-dialog-content class="dialog-container">
   <mat-sidenav-container class="mat-sidenav-container" [class.opened]="opened" fxFill>
     <mat-sidenav #sidenav [(opened)]="opened" mode="side" class="report-on-demand-sidenav">
-      <div fxLayout="column" fxFill>
-        <o-button (click)="(opened=!opened) && (showButton=true)" icon="dehaze" type="ICON" label=""
+      <div fxLayout="column" fxFill fxLayoutGap="20px">
+        <o-button (click)="opened=!opened" icon="dehaze" type="ICON" label=""
           [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
         </o-button>
 
@@ -49,8 +49,8 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-radio-group name="Orientation" [(ngModel)]="selectedOrientation" fxLayout="column">
-              <mat-radio-button *ngFor="let o of orientation" name="Orientation" [value]="o" style="margin: 10px">
-                {{o | oReportsTranslate}}
+              <mat-radio-button *ngFor="let orientation of orientations" name="Orientation" [value]="orientation" style="margin: 10px">
+                {{ orientation | oReportsTranslate}}
               </mat-radio-button>
             </mat-radio-group>
           </mat-expansion-panel>
@@ -80,13 +80,13 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-selection-list dense #choices class="columns" cdkDropList (cdkDropListDropped)="drop($event)" [(ngModel)]="selectedOptions">
-              <mat-list-option checkboxPosition="before" *ngFor="let choice of ordersData" [selected]="selectedOptions.includes(choice)"
-                [value]="choice" cdkDrag>
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [selected]="selectedOptions.includes(column)"
+                [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
-                    {{choice | oTranslate}}
+                    {{column | oTranslate}}
                   </span>
-                  <mat-icon mat-list-icon *ngIf="selectedOptions.includes(choice)" (click)="mostrarDialogo(choice)" class="button-edit">
+                  <mat-icon mat-list-icon *ngIf="selectedOptions.includes(column)" (click)="mostrarDialogo(column)" class="button-edit">
                     edit
                   </mat-icon>
                   <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
@@ -101,12 +101,12 @@
                 {{ 'GROUPS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #choices2 class="columns" cdkDropList (cdkDropListDropped)="drop2($event)" [(ngModel)]="selectedGroups">
-              <mat-list-option checkboxPosition="before" *ngFor="let choice of ordersData2" [selected]="selectedGroups.includes(choice)"
-                [value]="choice" cdkDrag>
+            <mat-selection-list dense #choices2 cdkDropList (cdkDropListDropped)="drop2($event)" [(ngModel)]="selectedGroups">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsToGroupData" [selected]="selectedGroups.includes(column)"
+                [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
-                    {{choice|oTranslate}}
+                    {{column | oTranslate}}
                   </span>
                   <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
                 </div>
@@ -121,8 +121,8 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-selection-list dense #functions [(ngModel)]="selectedFunctions">
-              <mat-list-option checkboxPosition="before" *ngFor="let function of ordersDataFunctions"
-                [selected]="selectedFunctions.includes(function)" [value]="function">
+              <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData" [selected]="selectedFunctions.includes(function)"
+                [value]="function">
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     {{ function |oTranslate }}
@@ -140,7 +140,7 @@
 
         <!-- </div> -->
         <mat-dialog-actions align=center *ngIf="opened">
-          <button type="button" mat-stroked-button class="mat-primary" (click)="confirmado()">
+          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()">
             {{'PREVIEW' | oReportsTranslate }}</button>
         </mat-dialog-actions>
 
