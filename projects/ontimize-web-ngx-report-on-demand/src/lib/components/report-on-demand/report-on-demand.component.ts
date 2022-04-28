@@ -158,7 +158,8 @@ export class ReportOnDemandComponent implements OnInit {
     });
   }
 
-  mostrarDialogo(id): void {
+  showColumnStyleDialog(event, id): void {
+    event.stopPropagation();
     this.dialog
       .open(StyleDialogComponent, {
         data: id,
@@ -170,7 +171,8 @@ export class ReportOnDemandComponent implements OnInit {
       });
   }
 
-  selectFunction(functionName: String): void {
+  selectFunction(event, functionName: String): void {
+    event.stopPropagation();
     if (functionName != 'TOTAL') {
       this.dialog
         .open(SelectFunctionDialogComponent, {
