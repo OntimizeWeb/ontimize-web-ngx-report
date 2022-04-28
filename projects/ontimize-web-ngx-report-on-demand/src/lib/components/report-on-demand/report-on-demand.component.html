@@ -79,14 +79,14 @@
                 {{ 'COLUMNS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #choices class="columns" cdkDropList (cdkDropListDropped)="drop($event)" [(ngModel)]="selectedOptions">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [selected]="selectedOptions.includes(column)"
+            <mat-selection-list dense #choices class="columns" cdkDropList (cdkDropListDropped)="drop($event)" [(ngModel)]="selectedColumns">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [selected]="selectedColumns.includes(column)"
                 [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     {{column | oTranslate}}
                   </span>
-                  <mat-icon mat-list-icon *ngIf="selectedOptions.includes(column)" (click)="showColumnStyleDialog($event, column)"
+                  <mat-icon mat-list-icon *ngIf="selectedColumns.includes(column)" (click)="showColumnStyleDialog($event, column)"
                     class="button-edit">
                     edit
                   </mat-icon>
@@ -128,10 +128,10 @@
                   <span mat-line fxFlex>
                     {{ function |oTranslate }}
                   </span>
-                  <button *ngIf="selectedFunctions.includes(function) && function!=='TOTAL'" class="select" mat-icon-button (click)="selectFunction($event, function)"><span
-                      class="material-icons">
-                      edit
-                    </span></button>
+                  <button *ngIf="selectedFunctions.includes(function) && function!=='TOTAL'" class="select" mat-icon-button
+                    (click)="selectFunction($event, function)">
+                    <span class="material-icons">edit</span>
+                  </button>
                 </div>
               </mat-list-option>
             </mat-selection-list>
@@ -139,7 +139,7 @@
         </mat-accordion>
 
         <mat-dialog-actions align=center *ngIf="opened">
-          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()">
+          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="selectedColumns.length===0">
             {{'PREVIEW' | oReportsTranslate }}</button>
         </mat-dialog-actions>
 

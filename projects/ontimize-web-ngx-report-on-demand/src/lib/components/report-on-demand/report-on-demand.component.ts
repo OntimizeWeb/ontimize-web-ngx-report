@@ -37,16 +37,24 @@ export class ReportOnDemandComponent implements OnInit {
     { value: 'max', viewValue: 'Máximo' }, { value: 'min', viewValue: 'Mínimo' },
     { value: 'sum', viewValue: 'Suma' }, { value: 'med', viewValue: 'Media' }
   ];
+  public dataArray = [
+    { value: 'grid', viewValue: 'GRID' },
+    { value: 'rowNumber', viewValue: 'ROW_NUMBER' },
+    { value: 'columnName', viewValue: 'COLUMNS_NAMES' },
+    { value: 'hideGroupDetails', viewValue: 'GROUP_DETAILS' },
+    { value: 'groupNewPage', viewValue: 'GROUP_PAGE' },
+    { value: 'firstGroupNewPage', viewValue: 'FIRST_GROUP_PAGE' }
+  ];
   public columnsData: any;
   public columnsToGroupData: any;
   public selectedPreferences;
   public opened: boolean = true;
 
-  public selectedOptions = [];
+  public selectedColumns = [];
   public selectedGroups = [];
   public selectedFunctions = [];
   public selectedStyleFunctions = [];
-  public dataArray: { value: string; viewValue: string; }[];
+
 
   public columnStyleData = [];
 
@@ -81,11 +89,6 @@ export class ReportOnDemandComponent implements OnInit {
     this.columnsData = this.data.columns.split(";");
     this.columnsToGroupData = this.data.columns.split(";");
     this.getFunctions();
-    this.dataArray = [{ value: 'grid', viewValue: 'GRID' }, { value: 'rowNumber', viewValue: 'ROW_NUMBER' },
-    { value: 'columnName', viewValue: 'COLUMNS_NAMES' }, { value: 'hideGroupDetails', viewValue: 'GROUP_DETAILS' }, { value: 'groupNewPage', viewValue: 'GROUP_PAGE' },
-    { value: 'firstGroupNewPage', viewValue: 'FIRST_GROUP_PAGE' }];
-
-
   }
 
   protected openReport() {
@@ -94,7 +97,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
     this.reportsService.configureAdapter();
     this.reportsService.createReport({
-      "title": this.title, "columns": this.selectedOptions, "groups": this.selectedGroups, "entity": this.entity,
+      "title": this.title, "columns": this.selectedColumns, "groups": this.selectedGroups, "entity": this.entity,
       "service": "Customer", "orientation": this.selectedOrientation, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.subtitle, "columnStyle": this.columnStyleData
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
@@ -109,7 +112,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
     this.reportsService.configureAdapter();
     this.reportsService.saveAsPreferences({
-      "entity": this.entity, "title": this.title, "columns": this.selectedOptions, "groups": this.selectedGroups,
+      "entity": this.entity, "title": this.title, "columns": this.selectedColumns, "groups": this.selectedGroups,
       "vertical": vertical, "name": this.name, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.subtitle, "description": this.description
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
@@ -132,7 +135,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   changePreferences() {
-    this.selectedOptions = this.selectedPreferences.columns.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
+    this.selectedColumns = this.selectedPreferences.columns.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
     if (this.selectedPreferences.groups != []) {
       this.selectedGroups = this.selectedPreferences.groups.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
     } if (this.selectedPreferences.functions != []) {
@@ -149,7 +152,7 @@ export class ReportOnDemandComponent implements OnInit {
       reportOrientation = "horizontal";
     }
     this.reportsService.createReport({
-      "title": this.selectedPreferences.title, "columns": this.selectedOptions, "groups": this.selectedGroups, "entity": "customer",
+      "title": this.selectedPreferences.title, "columns": this.selectedColumns, "groups": this.selectedGroups, "entity": "customer",
       "service": "Customer", "orientation": reportOrientation, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.selectedPreferences.subtitle
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
@@ -204,6 +207,7 @@ export class ReportOnDemandComponent implements OnInit {
   drop2(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.columnsToGroupData, event.previousIndex, event.currentIndex)
   }
+
   public onApplyConfigurationClicked(): void {
     this.dialog.open(ApplyConfigurationDialogComponent, {
       width: 'calc((75em - 100%) * 1000)',
@@ -238,7 +242,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
     this.reportsService.configureAdapter();
     this.reportsService.savePreferences(this.selectedPreferences.ID, {
-      "entity": this.entity, "title": this.title, "columns": this.selectedOptions, "groups": this.selectedGroups,
+      "entity": this.entity, "title": this.title, "columns": this.selectedColumns, "groups": this.selectedGroups,
       "vertical": vertical, "name": this.name, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.subtitle, "description": this.description
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
