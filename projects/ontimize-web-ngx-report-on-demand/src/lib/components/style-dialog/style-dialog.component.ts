@@ -12,24 +12,25 @@ export class StyleDialogComponent implements OnInit {
   constructor(
     public dialogo: MatDialogRef<StyleDialogComponent>,
     @Optional()
-    @Inject(MAT_DIALOG_DATA) public mensaje: string) { }
-  @ViewChild('name', { static: true })
-  name: OTextInputComponent;
-  @ViewChild('width', { static: true })
-  width: OTextInputComponent;
+    @Inject(MAT_DIALOG_DATA) public data: string) { this.name = this.data }
+  nameInput: string;
+  width: number;
+  name: string;
   ordersDataAlignment = [
     { "name": "left", "icon": "format_align_left" },
     { "name": "center", "icon": "format_align_center" },
     { "name": "right", "icon": "format_align_right" }
   ]
   selectedAlignment: "center";
-  cerrarDialogo(): void {
-    this.dialogo.close(false);
+  confirm(): void {
+    this.dialogo.close({ "id": this.data, "name": this.nameInput, "width": this.width, "alignment": this.selectedAlignment });
   }
-  confirmado(): void {
-    this.dialogo.close({ "id": this.mensaje, "name": this.name, "width": this.width, "alignment": this.selectedAlignment });
+  nameChanged(event) {
+    this.nameInput = event;
   }
-
+  widthChanged(event) {
+    this.width = event;
+  }
   ngOnInit() {
   }
 

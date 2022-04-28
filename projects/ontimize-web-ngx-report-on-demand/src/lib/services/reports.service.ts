@@ -16,7 +16,7 @@ export class ReportsService extends OntimizeEEService {
     let body = JSON.stringify(
       reportparams
     )
-    let url = 'http://localhost:8080/qsallcomponents-jee/dynamicjasper/report';
+    let url = this.urlBase + '/dynamicjasper/report';
 
     return this.doRequest({
       method: 'POST',
@@ -30,7 +30,7 @@ export class ReportsService extends OntimizeEEService {
     let body = JSON.stringify(
       preferencesparams
     )
-    let url = 'http://localhost:8080/qsallcomponents-jee/preferences/save';
+    let url = this.urlBase + '/preferences/save';
 
     return this.doRequest({
       method: 'POST',
@@ -44,7 +44,7 @@ export class ReportsService extends OntimizeEEService {
     let body = JSON.stringify(
       preferencesparams
     )
-    let url = 'http://localhost:8080/qsallcomponents-jee/preferences/update/' + id;
+    let url = this.urlBase + '/preferences/update/' + id;
 
     return this.doRequest({
       method: 'PUT',
@@ -54,7 +54,7 @@ export class ReportsService extends OntimizeEEService {
   }
   public getPreferences(): Observable<any> {
 
-    let url = 'http://localhost:8080/qsallcomponents-jee/preferences/preferences';
+    let url = this.urlBase + '/preferences/preferences';
 
     return this.doRequest({
       method: 'GET',
@@ -68,7 +68,7 @@ export class ReportsService extends OntimizeEEService {
     let body = JSON.stringify(
       functionparams
     )
-    let url = 'http://localhost:8080/qsallcomponents-jee/dynamicjasper/functionsName';
+    let url = this.urlBase + '/dynamicjasper/functionsName';
 
     return this.doRequest({
       method: 'POST',
@@ -79,7 +79,7 @@ export class ReportsService extends OntimizeEEService {
 
   public deletePreferences(id?: number): Observable<any> {
 
-    let url = 'http://localhost:8080/qsallcomponents-jee/preferences/remove/' + id;
+    let url = this.urlBase + '/preferences/remove/' + id;
 
     return this.doRequest({
       method: 'DELETE',

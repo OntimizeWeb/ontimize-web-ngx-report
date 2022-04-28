@@ -92,10 +92,6 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   protected openReport() {
-    console.log(this.entity);
-    console.log(this.service);
-    this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
-    this.reportsService.configureAdapter();
     this.reportsService.createReport({
       "title": this.title, "columns": this.selectedColumns, "groups": this.selectedGroups, "entity": this.entity,
       "service": "Customer", "orientation": this.selectedOrientation, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.subtitle, "columnStyle": this.columnStyleData

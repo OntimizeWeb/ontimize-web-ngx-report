@@ -1,13 +1,9 @@
 <span mat-dialog-title>{{ 'COLUMN_CONFIGURATION' | oReportsTranslate }}</span>
 <mat-dialog-content>
   <div mat-subheader>{{ 'SAVE_COLUMN_CONFIGURATION' | oReportsTranslate }}</div>
-  <form #form fxLayout="column">
-    <mat-form-field class="example-full-width">
-      <input [(ngModel)]="name" matInput placeholder="Nombre de la columna">
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <input [(ngModel)]="width" matInput placeholder="Ancho de columna">
-    </mat-form-field>
+  <o-form #form fxLayout="column" show-header="false" show-header-actions="false">
+    <o-text-input attr="{{ 'COLUMN_NAME' | oReportsTranslate }}" [data]="name" (onChange)="nameChanged($event)"></o-text-input>
+    <o-integer-input attr="{{ 'COLUMN_WIDTH' | oReportsTranslate }}" [data]="85" (onChange)="widthChanged($event)"></o-integer-input>
     <mat-radio-group name="Alignment" [(ngModel)]="selectedAlignment">
       <mat-radio-button *ngFor="let o of ordersDataAlignment" [value]="o.name" name="Alineación" style="margin: 10px">
         <span class="material-icons">
@@ -15,11 +11,11 @@
         </span>
       </mat-radio-button>
     </mat-radio-group>
-  </form>
+  </o-form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false" class="o-button-default">
     {{ 'CANCEL' | oTranslate }}</button>
-  <button type="button" mat-stroked-button class="mat-primary" (click)="confirmado()" [mat-dialog-close]="true">{{
+  <button type="button" mat-stroked-button class="mat-primary" (click)="confirm()" [mat-dialog-close]="true">{{
     'SAVE' | oTranslate }}</button>
 </mat-dialog-actions>

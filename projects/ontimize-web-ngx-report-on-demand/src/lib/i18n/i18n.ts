@@ -25,6 +25,9 @@ export var MAP = {
     'GROUP_PAGE': 'Group in page',
     'FIRST_GROUP_PAGE': 'First group in page',
     'SELECT_FUNCTION': 'Select function',
+    'DIALOG.SELECT_FUNCTION': 'Select one of the following functions',
+    'COLUMN_NAME': 'Column name',
+    'COLUMN_WIDTH': 'Column width'
   },
 
   // Spanish
@@ -51,7 +54,10 @@ export var MAP = {
     'GROUP_DETAILS': 'Ocultar detalles grupo',
     'GROUP_PAGE': 'Grupo en página',
     'FIRST_GROUP_PAGE': 'Primer grupo en página',
-    'SELECT_FUNCTION': 'Seleccionar funcción',
+    'SELECT_FUNCTION': 'Seleccionar función',
+    'DIALOG.SELECT_FUNCTION': 'Seleccione una de las siguientes funciones',
+    'COLUMN_NAME': 'Nombre de la columna',
+    'COLUMN_WIDTH': 'Ancho de la columna'
   }
 
 };
