@@ -6,17 +6,15 @@ export class ReportsService extends OntimizeEEService {
 
   constructor(protected injector: Injector) {
     super(injector);
+    super.configureService(this.getDefaultServiceConfiguration());
   }
-
-
 
   public createReport(reportparams?: object): Observable<any> {
-    let params = reportparams;
 
-    let body = JSON.stringify(
+    const body = JSON.stringify(
       reportparams
     )
-    let url = this.urlBase + '/dynamicjasper/report';
+    const url = this.urlBase + '/dynamicjasper/report';
 
     return this.doRequest({
       method: 'POST',
@@ -24,13 +22,12 @@ export class ReportsService extends OntimizeEEService {
       body: body
     });
   }
+
   public saveAsPreferences(preferencesparams?: object): Observable<any> {
-    let params = preferencesparams;
-
-    let body = JSON.stringify(
+    const body = JSON.stringify(
       preferencesparams
     )
-    let url = this.urlBase + '/preferences/save';
+    const url = this.urlBase + '/preferences/save';
 
     return this.doRequest({
       method: 'POST',
@@ -38,13 +35,12 @@ export class ReportsService extends OntimizeEEService {
       body: body
     });
   }
-  public savePreferences(id: number, preferencesparams?: object): Observable<any> {
-    let params = preferencesparams;
 
-    let body = JSON.stringify(
+  public savePreferences(id: number, preferencesparams?: object): Observable<any> {
+    const body = JSON.stringify(
       preferencesparams
     )
-    let url = this.urlBase + '/preferences/update/' + id;
+    const url = this.urlBase + '/preferences/update/' + id;
 
     return this.doRequest({
       method: 'PUT',
@@ -52,9 +48,10 @@ export class ReportsService extends OntimizeEEService {
       body: body
     });
   }
+
   public getPreferences(): Observable<any> {
 
-    let url = this.urlBase + '/preferences/preferences';
+    const url = this.urlBase + '/preferences/preferences';
 
     return this.doRequest({
       method: 'GET',
@@ -63,12 +60,11 @@ export class ReportsService extends OntimizeEEService {
 
   }
   public getFunctions(functionparams?: object): Observable<any> {
-    let params = functionparams;
 
-    let body = JSON.stringify(
+    const body = JSON.stringify(
       functionparams
     )
-    let url = this.urlBase + '/dynamicjasper/functionsName';
+    const url = this.urlBase + '/dynamicjasper/functionsName';
 
     return this.doRequest({
       method: 'POST',
@@ -79,7 +75,7 @@ export class ReportsService extends OntimizeEEService {
 
   public deletePreferences(id?: number): Observable<any> {
 
-    let url = this.urlBase + '/preferences/remove/' + id;
+    const url = this.urlBase + '/preferences/remove/' + id;
 
     return this.doRequest({
       method: 'DELETE',

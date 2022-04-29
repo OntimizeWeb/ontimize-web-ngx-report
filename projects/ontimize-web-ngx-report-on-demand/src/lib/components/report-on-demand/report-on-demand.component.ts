@@ -105,8 +105,6 @@ export class ReportOnDemandComponent implements OnInit {
   saveAsPreferences() {
     let vertical = 0;
     if (this.selectedOrientation == "vertical") { vertical = 1 };
-    this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
-    this.reportsService.configureAdapter();
     this.reportsService.saveAsPreferences({
       "entity": this.entity, "title": this.title, "columns": this.selectedColumns, "groups": this.selectedGroups,
       "vertical": vertical, "name": this.name, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.subtitle, "description": this.description
@@ -118,8 +116,6 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   getFunctions() {
-    this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
-    this.reportsService.configureAdapter();
     this.reportsService.getFunctions({
       "columns": this.data.columns.split(";"), "entity": this.entity,
       "service": "Customer", "language": "es"
@@ -138,8 +134,8 @@ export class ReportOnDemandComponent implements OnInit {
       this.selectedFunctions = this.selectedPreferences.functions.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
     } if (this.selectedPreferences.styleFunctions != []) {
       this.selectedStyleFunctions = this.selectedPreferences.stylefunctions.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
-    } this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
-    this.reportsService.configureAdapter();
+    }
+
     var reportOrientation;
     if (this.selectedPreferences.vertical) {
       reportOrientation = "vertical";
@@ -235,8 +231,6 @@ export class ReportOnDemandComponent implements OnInit {
   savePreferences() {
     let vertical = 0;
     if (this.selectedOrientation == "vertical") { vertical = 1 }
-    this.reportsService.configureService(this.reportsService.getDefaultServiceConfiguration('bankmanager-jee'));
-    this.reportsService.configureAdapter();
     this.reportsService.savePreferences(this.selectedPreferences.ID, {
       "entity": this.entity, "title": this.title, "columns": this.selectedColumns, "groups": this.selectedGroups,
       "vertical": vertical, "name": this.name, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.subtitle, "description": this.description
