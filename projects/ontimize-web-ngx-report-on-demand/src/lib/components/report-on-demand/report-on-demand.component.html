@@ -128,10 +128,8 @@
                   <span mat-line fxFlex>
                     {{ function |oTranslate }}
                   </span>
-                  <button *ngIf="selectedFunctions.includes(function) && function!=='TOTAL'" class="select" mat-icon-button
-                    (click)="selectFunction($event, function)">
-                    <span class="material-icons">edit</span>
-                  </button>
+                  <mat-icon *ngIf="selectedFunctions.includes(function) && function!=='TOTAL'" mat-icon-button
+                    (click)="selectFunction($event, function)">edit</mat-icon>
                 </div>
               </mat-list-option>
             </mat-selection-list>

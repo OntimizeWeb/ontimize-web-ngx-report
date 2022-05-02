@@ -2,14 +2,14 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogService } from 'ontimize-web-ngx';
+import { DialogService, Util } from 'ontimize-web-ngx';
 
 import { ReportsService } from '../../services/reports.service';
 import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
 import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-preferences-dialog.component';
 import { SelectFunctionDialogComponent } from '../select-function-dialog/select-function-dialog.component';
 
-import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
+import { ColumnStyleConfiguration, StyleDialogComponent } from '../style-dialog/style-dialog.component';
 
 export const DEFAULT_WIDTH_DIALOG = '70%';
 export const DEFAULT_HEIGHT_DIALOG = '90%';
@@ -56,7 +56,7 @@ export class ReportOnDemandComponent implements OnInit {
   public selectedStyleFunctions = [];
 
 
-  public columnStyleData = [];
+  public columnStyleData: ColumnStyleConfiguration[] = [];
 
   description: String = "";
   public fullscreen: boolean = false;
@@ -102,18 +102,7 @@ export class ReportOnDemandComponent implements OnInit {
     });
   }
 
-  saveAsPreferences() {
-    let vertical = 0;
-    if (this.selectedOrientation == "vertical") { vertical = 1 };
-    this.reportsService.saveAsPreferences({
-      "entity": this.entity, "title": this.title, "columns": this.selectedColumns, "groups": this.selectedGroups,
-      "vertical": vertical, "name": this.name, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.subtitle, "description": this.description
-    }).subscribe(res => {
-      if (res && res.data.length && res.code === 0) {
-      }
-    });
 
-  }
 
   getFunctions() {
     this.reportsService.getFunctions({
@@ -155,15 +144,27 @@ export class ReportOnDemandComponent implements OnInit {
 
   showColumnStyleDialog(event, id): void {
     event.stopPropagation();
+    const columnStyleData: ColumnStyleConfiguration = this.columnStyleData.find(x => x.id === id);
     this.dialog
       .open(StyleDialogComponent, {
-        data: id,
+        data: columnStyleData ? columnStyleData : id,
         panelClass: ['o-dialog-class', 'o-table-dialog']
       })
       .afterClosed()
-      .subscribe((data: {}) => {
-        this.columnStyleData.push(data);
+      .subscribe((data: ColumnStyleConfiguration) => {
+        if (Util.isDefined(data) && data) {
+          this.updateColumnStylesData(data);
+        }
       });
+  }
+
+  updateColumnStylesData(data: ColumnStyleConfiguration) {
+    const indexColumnStyleData = this.columnStyleData.findIndex(x => x.id === data.id);
+    if (indexColumnStyleData > -1) {
+      this.columnStyleData[indexColumnStyleData] = data;
+    } else {
+      this.columnStyleData.push(data);
+    }
   }
 
   selectFunction(event, functionName: String): void {
@@ -187,9 +188,11 @@ export class ReportOnDemandComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((data: { name: string, description: string }) => {
-        this.name = data.name;
-        this.description = data.description;
-        this.saveAsPreferences();
+        if (Util.isDefined(data)) {
+          this.name = data.name;
+          this.description = data.description;
+          this.saveAsPreferences();
+        }
       });
 
   }
@@ -210,8 +213,10 @@ export class ReportOnDemandComponent implements OnInit {
       data: this.entity
     }).afterClosed()
       .subscribe((data: {}) => {
-        this.selectedPreferences = data;
-        this.changePreferences();
+        if (Util.isDefined(data)) {
+          this.selectedPreferences = data;
+          this.changePreferences();
+        }
       });
   }
   openSavePreferences(): void {
@@ -221,9 +226,11 @@ export class ReportOnDemandComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((data: { name: string, description: string }) => {
-        this.name = data.name;
-        this.description = data.description;
-        this.savePreferences();
+        if (Util.isDefined(data)) {
+          this.name = data.name;
+          this.description = data.description;
+          this.savePreferences();
+        }
       });
 
   }
@@ -238,6 +245,19 @@ export class ReportOnDemandComponent implements OnInit {
       if (res && res.data.length && res.code === 0) {
       }
     });
+  }
+
+  saveAsPreferences() {
+    let vertical = 0;
+    if (this.selectedOrientation == "vertical") { vertical = 1 };
+    this.reportsService.saveAsPreferences({
+      "entity": this.entity, "title": this.title, "columns": this.selectedColumns, "groups": this.selectedGroups,
+      "vertical": vertical, "name": this.name, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.subtitle, "description": this.description
+    }).subscribe(res => {
+      if (res && res.data.length && res.code === 0) {
+      }
+    });
+
   }
 
   setFullscreenDialog(): void {

@@ -1,37 +1,47 @@
-import { Component, OnInit, Inject, Optional, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, Inject, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { OTextInputComponent } from 'ontimize-web-ngx';
+import { OTranslateService, Util } from 'ontimize-web-ngx';
+
+export type ColumnStyleConfiguration = {
+  id: string,
+  name: string,
+  width: number,
+  alignment: 'left' | 'right' | 'center'
+};
+
 @Component({
   selector: 'app-style-dialog',
-  templateUrl: './style-dialog.component.html',
-  styleUrls: ['./style-dialog.component.css']
+  templateUrl: './style-dialog.component.html'
 })
-export class StyleDialogComponent implements OnInit {
+export class StyleDialogComponent {
 
-  constructor(
-    public dialogo: MatDialogRef<StyleDialogComponent>,
-    @Optional()
-    @Inject(MAT_DIALOG_DATA) public data: string) { this.name = this.data }
-  nameInput: string;
-  width: number;
-  name: string;
-  ordersDataAlignment = [
+  public columnStyle: ColumnStyleConfiguration;
+
+  public dataAlignment = [
     { "name": "left", "icon": "format_align_left" },
     { "name": "center", "icon": "format_align_center" },
     { "name": "right", "icon": "format_align_right" }
   ]
-  selectedAlignment: "center";
+
+  constructor(
+    public dialogo: MatDialogRef<StyleDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
+    private oTranslate: OTranslateService) {
+    this.initializeDefaultInputsValues(data);
+  }
+
+  initializeDefaultInputsValues(data: any) {
+    if (Util.isObject(data)) {
+      this.columnStyle = data
+    } else {
+      this.columnStyle = {
+        id: data, name: this.oTranslate.get(data), width: 85, alignment: 'left'
+      };
+    }
+  }
+
   confirm(): void {
-    this.dialogo.close({ "id": this.data, "name": this.nameInput, "width": this.width, "alignment": this.selectedAlignment });
-  }
-  nameChanged(event) {
-    this.nameInput = event;
-  }
-  widthChanged(event) {
-    this.width = event;
-  }
-  ngOnInit() {
+    this.dialogo.close(this.columnStyle);
   }
 
 }
