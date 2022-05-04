@@ -1,26 +1,31 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-save-preferences-dialog',
-  templateUrl: './save-preferences-dialog.component.html',
-  styleUrls: ['./save-preferences-dialog.component.css']
+  templateUrl: './save-preferences-dialog.component.html'
 })
-export class SavePreferencesDialogComponent implements OnInit {
+export class SavePreferencesDialogComponent {
+  public formGroup: FormGroup
+  public name: string;
+  public description: string;
+
   constructor(
-    public dialogo: MatDialogRef<SavePreferencesDialogComponent>) { }
-  name: String;
-  description: String;
-  ngOnInit() {
+    public dialogo: MatDialogRef<SavePreferencesDialogComponent>) {
+    this.initialize();
   }
-  confirmado(): void {
+
+  initialize() {
+    this.formGroup = new FormGroup({
+      name: new FormControl('', [
+        Validators.required
+      ]),
+      description: new FormControl('')
+    });
+  }
+
+  save(): void {
     this.dialogo.close({ "name": this.name, "description": this.description });
   }
-  public formGroup: FormGroup = new FormGroup({
-    name: new FormControl('', [
-      Validators.required
-    ]),
-    description: new FormControl('')
-  });
 }
