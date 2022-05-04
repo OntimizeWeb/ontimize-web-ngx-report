@@ -24,10 +24,14 @@ export var MAP = {
     'GROUP_DETAILS': 'Hide group details',
     'GROUP_PAGE': 'Group in page',
     'FIRST_GROUP_PAGE': 'First group in page',
-    'SELECT_FUNCTION': 'Select function',
-    'DIALOG.SELECT_FUNCTION': 'Select one of the following functions',
+    'DIALOG.SELECT_FUNCTION.TITLE': 'Select function',
+    'DIALOG.SELECT_FUNCTION.DESCRIPTION': 'Select one of the following functions',
     'COLUMN_NAME': 'Column name',
-    'COLUMN_WIDTH': 'Column width'
+    'COLUMN_WIDTH': 'Column width',
+    'DIALOG.SELECT_FUNCTION.MIN': 'Minumun',
+    'DIALOG.SELECT_FUNCTION.MAX': 'Maximun',
+    'DIALOG.SELECT_FUNCTION.AVG': 'Average',
+    'DIALOG.SELECT_FUNCTION.SUM': 'Sum'
   },
 
   // Spanish
@@ -54,10 +58,14 @@ export var MAP = {
     'GROUP_DETAILS': 'Ocultar detalles grupo',
     'GROUP_PAGE': 'Grupo en página',
     'FIRST_GROUP_PAGE': 'Primer grupo en página',
-    'SELECT_FUNCTION': 'Seleccionar función',
-    'DIALOG.SELECT_FUNCTION': 'Seleccione una de las siguientes funciones',
+    'DIALOG.SELECT_FUNCTION.TITLE': 'Seleccionar función',
+    'DIALOG.SELECT_FUNCTION.DESCRIPTION': 'Seleccione una de las siguientes funciones',
     'COLUMN_NAME': 'Nombre de la columna',
-    'COLUMN_WIDTH': 'Ancho de la columna'
+    'COLUMN_WIDTH': 'Ancho de la columna',
+    'DIALOG.SELECT_FUNCTION.MIN': 'Mínimo',
+    'DIALOG.SELECT_FUNCTION.MAX': 'Máximo',
+    'DIALOG.SELECT_FUNCTION.AVG': 'Media',
+    'DIALOG.SELECT_FUNCTION.SUM': 'Suma'
   }
 
 };

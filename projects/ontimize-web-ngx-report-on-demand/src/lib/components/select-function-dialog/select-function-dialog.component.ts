@@ -3,11 +3,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-select-function-dialog',
-  templateUrl: './select-function-dialog.component.html'
+  templateUrl: './select-function-dialog.component.html',
+  styleUrls: ['./select-function-dialog.component.scss'],
 })
 export class SelectFunctionDialogComponent {
   public selectedFunction: String;
-  public functions = ['SUM', 'AVG', 'MAX', 'MIN'];
+  public functions = ['DIALOG.SELECT_FUNCTION.SUM', 'DIALOG.SELECT_FUNCTION.AVG', 'DIALOG.SELECT_FUNCTION.MAX', 'DIALOG.SELECT_FUNCTION.MIN'];
   constructor(
     public dialogo: MatDialogRef<SelectFunctionDialogComponent>,
     @Optional()
