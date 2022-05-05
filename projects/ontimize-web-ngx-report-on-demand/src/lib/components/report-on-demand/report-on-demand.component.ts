@@ -1,42 +1,34 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ViewChild, ViewEncapsulation } from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogService, Util } from 'ontimize-web-ngx';
+import { DialogService, OTranslateService, Util } from 'ontimize-web-ngx';
 
 import { ReportsService } from '../../services/reports.service';
+import { OReportColumnsStyle } from '../../types/report-column-style.type';
+import { OReportConfiguration } from '../../types/report-configuration.type';
+import { OReportPreferences } from '../../types/report-preferences.type';
 import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
 import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-preferences-dialog.component';
 import { SelectFunctionDialogComponent } from '../select-function-dialog/select-function-dialog.component';
 
-import { ColumnStyleConfiguration, StyleDialogComponent } from '../style-dialog/style-dialog.component';
+import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 
 export const DEFAULT_WIDTH_DIALOG = '70%';
 export const DEFAULT_HEIGHT_DIALOG = '90%';
+
 @Component({
   selector: 'app-customers-dialog',
   templateUrl: './report-on-demand.component.html',
   styleUrls: ['./report-on-demand.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  providers: [ReportsService]
+  encapsulation: ViewEncapsulation.None
 })
 
 export class ReportOnDemandComponent implements OnInit {
 
-  @ViewChild('title', { static: true })
-  title: string;
-  @ViewChild('subtitle', { static: true })
-  subtitle: string;
-  @ViewChild('name', { static: true })
-  name: string = '';
-
   public pdf: string = '';
-  public selectedOrientation = "vertical";
-  public orientations = ["vertical", "horizontal"];
-  public functionsData = [
-    { value: 'max', viewValue: 'Máximo' }, { value: 'min', viewValue: 'Mínimo' },
-    { value: 'sum', viewValue: 'Suma' }, { value: 'med', viewValue: 'Media' }
-  ];
+  public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
+  public functionsData = [];
   public dataArray = [
     { value: 'grid', viewValue: 'GRID' },
     { value: 'rowNumber', viewValue: 'ROW_NUMBER' },
@@ -45,56 +37,57 @@ export class ReportOnDemandComponent implements OnInit {
     { value: 'groupNewPage', viewValue: 'GROUP_PAGE' },
     { value: 'firstGroupNewPage', viewValue: 'FIRST_GROUP_PAGE' }
   ];
+
   public columnsData: any;
   public columnsToGroupData: any;
-  public selectedPreferences;
   public opened: boolean = true;
-
-  public selectedColumns = [];
-  public selectedGroups = [];
-  public selectedFunctions = [];
-  public selectedStyleFunctions = [];
-
-
-  public columnStyleData: ColumnStyleConfiguration[] = [];
-
-  description: String = "";
   public fullscreen: boolean = false;
 
-  protected entity: string;
   protected service: string;
 
-
+  public currentPreference: OReportPreferences;
+  public currentConfiguration: OReportConfiguration;
 
 
   constructor(private reportsService: ReportsService,
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, protected dialogService: DialogService) {
-    this.selectedStyleFunctions = [];
-    this.entity = this.data.entity;
-    this.service = this.data.service;
-  }
-
-
-  public previewReport(): void {
-    this.openReport();
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    protected dialogService: DialogService,
+    public translateService: OTranslateService) {
   }
 
   ngOnInit() {
     this.initialize();
   }
 
+  public previewReport(): void {
+    this.openReport();
+  }
+
   protected initialize() {
-    this.columnsData = this.data.columns.split(";");
-    this.columnsToGroupData = this.data.columns.split(";");
+    this.service = this.data.service;
+    const columnsData = this.data.columns.split(';');
+    this.columnsData = this.parseColumnsStyle(columnsData);
+    this.columnsToGroupData = columnsData;
+    this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], styleFunctions: [], columnsStyle: [] };
+    this.currentConfiguration = { ENTITY: this.data.entity }
+
     this.getFunctions();
   }
 
+  protected parseColumnsStyle(columns: any[]): OReportColumnsStyle[] {
+    return columns.map(column => {
+      return { id: column, name: this.translateService.get(column), width: 85, alignment: 'left' }
+    });
+  }
+
   protected openReport() {
+    let columns = this.currentPreference.columnsStyle.map(x => x.id);
     this.reportsService.createReport({
-      "title": this.title, "columns": this.selectedColumns, "groups": this.selectedGroups, "entity": this.entity,
-      "service": "Customer", "orientation": this.selectedOrientation, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.subtitle, "columnStyle": this.columnStyleData
+      "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups, "entity": this.currentConfiguration.ENTITY,
+      "service": "Customer", "orientation": this.currentPreference.vertical, "functions": this.currentPreference.functions,
+      "styleFunctions": this.currentPreference.styleFunctions, "subtitle": this.currentPreference.subtitle, "columnStyle": this.currentPreference.columnsStyle
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.pdf = res.data[0].file;
@@ -103,11 +96,10 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
 
-
   getFunctions() {
     this.reportsService.getFunctions({
-      "columns": this.data.columns.split(";"), "entity": this.entity,
-      "service": "Customer", "language": "es"
+      "columns": this.data.columns.split(";"), "entity": this.currentConfiguration.ENTITY,
+      "service": "Customer", "language": this.translateService.getCurrentLang()
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.functionsData = res.data[0].list;
@@ -115,55 +107,43 @@ export class ReportOnDemandComponent implements OnInit {
     });
   }
 
-  changePreferences() {
-    this.selectedColumns = this.selectedPreferences.columns.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
-    if (this.selectedPreferences.groups != []) {
-      this.selectedGroups = this.selectedPreferences.groups.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
-    } if (this.selectedPreferences.functions != []) {
-      this.selectedFunctions = this.selectedPreferences.functions.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
-    } if (this.selectedPreferences.styleFunctions != []) {
-      this.selectedStyleFunctions = this.selectedPreferences.stylefunctions.replace("[", "").replace("]", "").replaceAll(" ", "").split(",");
-    }
 
-    var reportOrientation;
-    if (this.selectedPreferences.vertical) {
-      reportOrientation = "vertical";
-    }
-    else {
-      reportOrientation = "horizontal";
-    }
-    this.reportsService.createReport({
-      "title": this.selectedPreferences.title, "columns": this.selectedColumns, "groups": this.selectedGroups, "entity": "customer",
-      "service": "Customer", "orientation": reportOrientation, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.selectedPreferences.subtitle
-    }).subscribe(res => {
-      if (res && res.data.length && res.code === 0) {
-        this.pdf = res.data[0].file;
-      }
-    });
+  applyConfiguration(configuration: any) {
+    this.currentConfiguration = configuration;
+    let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
+    this.currentPreference = {
+      title: preference.title,
+      subtitle: preference.subtitle,
+      vertical: preference.vertical,
+      columns: this.parseStringToArray(preference.columns),
+      functions: this.parseStringToArray(preference.functions),
+      groups: this.parseStringToArray(preference.groups),
+      styleFunctions: this.parseStringToArray(preference.styleFunctions),
+      columnsStyle: this.parseColumnsStyle(this.parseStringToArray(preference.columns))
+    };
+
   }
 
   showColumnStyleDialog(event, id): void {
     event.stopPropagation();
-    const columnStyleData: ColumnStyleConfiguration = this.columnStyleData.find(x => x.id === id);
+    const columnStyleData: OReportColumnsStyle = this.currentPreference.columnsStyle.find((x: OReportColumnsStyle) => x.id === id);
     this.dialog
       .open(StyleDialogComponent, {
         data: columnStyleData ? columnStyleData : id,
         panelClass: ['o-dialog-class', 'o-table-dialog']
       })
       .afterClosed()
-      .subscribe((data: ColumnStyleConfiguration) => {
+      .subscribe((data: OReportColumnsStyle) => {
         if (Util.isDefined(data) && data) {
           this.updateColumnStylesData(data);
         }
       });
   }
 
-  updateColumnStylesData(data: ColumnStyleConfiguration) {
-    const indexColumnStyleData = this.columnStyleData.findIndex(x => x.id === data.id);
+  updateColumnStylesData(data: OReportColumnsStyle) {
+    const indexColumnStyleData = this.currentPreference.columnsStyle.findIndex(x => x.id === data.id);
     if (indexColumnStyleData > -1) {
-      this.columnStyleData[indexColumnStyleData] = data;
-    } else {
-      this.columnStyleData.push(data);
+      this.currentPreference.columnsStyle[indexColumnStyleData] = data;
     }
   }
 
@@ -176,11 +156,13 @@ export class ReportOnDemandComponent implements OnInit {
           panelClass: ['o-dialog-class', 'o-table-dialog']
         })
         .afterClosed()
-        .subscribe((data: String) => {
-          this.selectedFunctions.push(data)
+        .subscribe((data: string) => {
+          //TODO update functions not allways push data
+          this.currentPreference.functions.push(data)
         });
     }
   }
+
   openSaveAsPreferences(): void {
     this.dialog
       .open(SavePreferencesDialogComponent, {
@@ -188,17 +170,17 @@ export class ReportOnDemandComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((data: { name: string, description: string }) => {
-        if (Util.isDefined(data)) {
-          this.name = data.name;
-          this.description = data.description;
-          this.saveAsPreferences();
+        if (Util.isDefined(data) && data) {
+          this.saveAsPreferences(data);
         }
       });
 
   }
+
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.columnsData, event.previousIndex, event.currentIndex);
   }
+
   drop2(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.columnsToGroupData, event.previousIndex, event.currentIndex)
   }
@@ -210,55 +192,63 @@ export class ReportOnDemandComponent implements OnInit {
       minWidth: '30vw',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog'],
-      data: this.entity
+      data: this,
     }).afterClosed()
-      .subscribe((data: {}) => {
-        if (Util.isDefined(data)) {
-          this.selectedPreferences = data;
-          this.changePreferences();
+      .subscribe((data: OReportConfiguration) => {
+        if (Util.isDefined(data) && data) {
+          this.applyConfiguration(data);
         }
       });
   }
+
   openSavePreferences(): void {
-    this.dialog
-      .open(SavePreferencesDialogComponent, {
-        panelClass: ['o-dialog-class', 'o-table-dialog']
-      })
-      .afterClosed()
-      .subscribe((data: { name: string, description: string }) => {
-        if (Util.isDefined(data)) {
-          this.name = data.name;
-          this.description = data.description;
-          this.savePreferences();
-        }
-      });
+    if (Util.isDefined(this.currentConfiguration.ID)) {
+      this.savePreferences({ name: this.currentConfiguration.NAME, description: this.currentConfiguration.NAME });
+    } else {
+      this.dialog
+        .open(SavePreferencesDialogComponent, {
+          panelClass: ['o-dialog-class', 'o-table-dialog']
+        })
+        .afterClosed()
+        .subscribe((data: { name: string, description: string }) => {
+          if (Util.isDefined(data) && data) {
+            this.savePreferences(data);
+          }
+        });
+    }
 
   }
 
-  savePreferences() {
-    let vertical = 0;
-    if (this.selectedOrientation == "vertical") { vertical = 1 }
-    this.reportsService.savePreferences(this.selectedPreferences.ID, {
-      "entity": this.entity, "title": this.title, "columns": this.selectedColumns, "groups": this.selectedGroups,
-      "vertical": vertical, "name": this.name, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.subtitle, "description": this.description
-    }).subscribe(res => {
+  savePreferences(data: any) {
+    let columns = this.currentPreference.columnsStyle.map(x => x.id);
+    let preference = {
+      "name": data.name, "description": data.description,
+      "entity": this.currentConfiguration.ENTITY, "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups,
+      "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions, "styleFunctions": this.currentPreference.styleFunctions,
+      "subtitle": this.currentPreference.subtitle
+    }
+    this.reportsService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
       }
     });
   }
 
-  saveAsPreferences() {
-    let vertical = 0;
-    if (this.selectedOrientation == "vertical") { vertical = 1 };
-    this.reportsService.saveAsPreferences({
-      "entity": this.entity, "title": this.title, "columns": this.selectedColumns, "groups": this.selectedGroups,
-      "vertical": vertical, "name": this.name, "functions": this.selectedFunctions, "styleFunctions": this.selectedStyleFunctions, "subtitle": this.subtitle, "description": this.description
-    }).subscribe(res => {
+  saveAsPreferences(data) {
+    let columns = this.currentPreference.columnsStyle.map(x => x.id);
+    let preference = {
+      "name": data.name, "description": data.description,
+      "entity": this.currentConfiguration.ENTITY, "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups,
+      "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions, "styleFunctions": this.currentPreference.styleFunctions,
+      "subtitle": this.currentPreference.subtitle
+    }
+    this.reportsService.saveAsPreferences(preference).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
+        //this.currentPreference = res.data;
       }
     });
 
   }
+
 
   setFullscreenDialog(): void {
     if (!this.fullscreen) {
@@ -267,6 +257,11 @@ export class ReportOnDemandComponent implements OnInit {
       this.dialogRef.updateSize(DEFAULT_WIDTH_DIALOG, DEFAULT_HEIGHT_DIALOG);
     }
     this.fullscreen = !this.fullscreen;
+  }
+
+
+  private parseStringToArray(data): string[] {
+    return data.replace("[", "").replace("]", "").split(',');
   }
 
 }

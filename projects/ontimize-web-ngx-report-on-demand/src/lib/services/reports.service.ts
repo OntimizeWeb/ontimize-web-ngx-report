@@ -1,7 +1,7 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable, OntimizeEEService } from 'ontimize-web-ngx';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ReportsService extends OntimizeEEService {
 
   constructor(protected injector: Injector) {

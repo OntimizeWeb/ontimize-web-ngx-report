@@ -34,10 +34,10 @@
 
         <div fxLayout="column" *ngIf="opened" class="container-title">
           <mat-form-field>
-            <input [(ngModel)]="title" matInput placeholder="{{ 'TITLE' | oReportsTranslate }}">
+            <input [(ngModel)]="currentPreference.title" matInput placeholder="{{ 'TITLE' | oReportsTranslate }}">
           </mat-form-field>
           <mat-form-field>
-            <input [(ngModel)]="subtitle" matInput placeholder="{{ 'SUBTITLE' | oReportsTranslate }}">
+            <input [(ngModel)]="currentPreference.subtitle" matInput placeholder="{{ 'SUBTITLE' | oReportsTranslate }}">
           </mat-form-field>
         </div>
 
@@ -48,9 +48,10 @@
                 {{ 'ORIENTATION' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-radio-group name="Orientation" [(ngModel)]="selectedOrientation" fxLayout="column">
-              <mat-radio-button *ngFor="let orientation of orientations" name="Orientation" [value]="orientation" style="margin: 10px">
-                {{ orientation | oReportsTranslate}}
+            <mat-radio-group name="Orientation" [(ngModel)]="currentPreference.vertical" fxLayout="column" fxLayoutGap="12px">
+              <mat-radio-button *ngFor="let orientation of orientations" name="Orientation" [value]="orientation.value"
+                [checked]="currentPreference.vertical === orientation.value">
+                {{ orientation.text | oReportsTranslate}}
               </mat-radio-button>
             </mat-radio-group>
           </mat-expansion-panel>
@@ -61,9 +62,9 @@
                 {{ 'STYLE' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #settings [(ngModel)]="selectedStyleFunctions">
-              <mat-list-option checkboxPosition="before" *ngFor="let choice of dataArray" [selected]="selectedStyleFunctions.includes(choice.value)"
-                [value]="choice.value">
+            <mat-selection-list dense #settings [(ngModel)]="currentPreference.styleFunctions">
+              <mat-list-option checkboxPosition="before" *ngFor="let choice of dataArray"
+                [selected]="currentPreference.styleFunctions.includes(choice.value)" [value]="choice.value">
                 <div fxLayout="row">
                   <span fxFlex>
                     {{choice.viewValue | oReportsTranslate}}
@@ -79,14 +80,15 @@
                 {{ 'COLUMNS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #choices class="columns" cdkDropList (cdkDropListDropped)="drop($event)" [(ngModel)]="selectedColumns">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [selected]="selectedColumns.includes(column)"
-                [value]="column" cdkDrag>
+            <mat-selection-list dense #choices class="columns" cdkDropList (cdkDropListDropped)="drop($event)"
+              [(ngModel)]="currentPreference.columnsStyle">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData"
+                [selected]="currentPreference.columnsStyle.includes(column)" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
-                    {{column | oTranslate}}
+                    {{column.name}}
                   </span>
-                  <mat-icon mat-list-icon *ngIf="selectedColumns.includes(column)" (click)="showColumnStyleDialog($event, column)"
+                  <mat-icon mat-list-icon *ngIf="currentPreference.columnsStyle.includes(column)" (click)="showColumnStyleDialog($event, column)"
                     class="button-edit">
                     edit
                   </mat-icon>
@@ -102,12 +104,12 @@
                 {{ 'GROUPS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #choices2 cdkDropList (cdkDropListDropped)="drop2($event)" [(ngModel)]="selectedGroups">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsToGroupData" [selected]="selectedGroups.includes(column)"
-                [value]="column" cdkDrag>
+            <mat-selection-list dense #choices2 cdkDropList (cdkDropListDropped)="drop2($event)" [(ngModel)]="currentPreference.groups" >
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsToGroupData"
+                [selected]="currentPreference.groups.includes(column)" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
-                    {{column | oTranslate}}
+                    {{ column | oTranslate }}
                   </span>
                   <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
                 </div>
@@ -121,14 +123,14 @@
                 {{ 'FUNCTIONS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #functions [(ngModel)]="selectedFunctions">
-              <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData" [selected]="selectedFunctions.includes(function)"
-                [value]="function">
+            <mat-selection-list dense #functions [(ngModel)]="currentPreference.functions">
+              <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData"
+                [selected]="currentPreference.functions.includes(function)" [value]="function">
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     {{ function |oTranslate }}
                   </span>
-                  <mat-icon *ngIf="selectedFunctions.includes(function) && function!=='TOTAL'" mat-icon-button
+                  <mat-icon *ngIf="currentPreference.functions.includes(function) && function!=='TOTAL'" mat-icon-button
                     (click)="selectFunction($event, function)">edit</mat-icon>
                 </div>
               </mat-list-option>
@@ -137,7 +139,8 @@
         </mat-accordion>
 
         <mat-dialog-actions align=center *ngIf="opened">
-          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="selectedColumns.length===0">
+          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()"
+            [disabled]="currentPreference.columnsStyle.length===0">
             {{'PREVIEW' | oReportsTranslate }}</button>
         </mat-dialog-actions>
 

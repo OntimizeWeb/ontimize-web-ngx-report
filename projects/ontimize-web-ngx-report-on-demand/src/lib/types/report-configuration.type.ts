@@ -1,7 +1,7 @@
 export type OReportConfiguration = {
-  ID: number,
+  ID?: number,
   ENTITY: string,
-  DESCRIPTION: string,
-  NAME: string,
-  PREFERENCES: string;
+  DESCRIPTION?: string,
+  NAME?: string,
+  PREFERENCES?: string;
 }

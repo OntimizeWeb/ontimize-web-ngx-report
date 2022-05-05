@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material';
 import { DialogService, IReportOnDemandService } from 'ontimize-web-ngx';
 import { DEFAULT_HEIGHT_DIALOG, DEFAULT_WIDTH_DIALOG, ReportOnDemandComponent } from '../components/report-on-demand/report-on-demand.component';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class OReportOnDemandService implements IReportOnDemandService {
 
   constructor(

@@ -15,8 +15,12 @@
       overflow: hidden;
     }
 
-    .mat-dialog-actions{
+    .mat-dialog-actions {
       min-height: auto;
+    }
+
+    .mat-radio-group {
+      margin: 0 12px;
     }
 
     .mat-accordion {
@@ -75,6 +79,7 @@
 
   .mat-sidenav-content {
     overflow: hidden;
+
     .sidenav-container-content {
       margin-left: 66px;
       height: 100%;

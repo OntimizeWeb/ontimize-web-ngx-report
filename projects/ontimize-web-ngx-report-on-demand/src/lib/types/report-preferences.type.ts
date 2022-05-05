@@ -1,3 +1,5 @@
+import { OReportColumnsStyle } from "./report-column-style.type"
+
 export type OReportPreferences = {
   columns: Array<string>,
   functions: Array<string>,
@@ -5,5 +7,6 @@ export type OReportPreferences = {
   title: string
   subtitle: string,
   styleFunctions: Array<string>,
-  vertical: number
+  columnsStyle?: Array<OReportColumnsStyle>,
+  vertical: boolean
 }
