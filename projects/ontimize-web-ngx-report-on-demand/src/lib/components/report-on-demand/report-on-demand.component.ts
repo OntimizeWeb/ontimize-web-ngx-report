@@ -1,6 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ViewEncapsulation } from '@angular/core';
+import { ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
+import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogService, OTranslateService, Util } from 'ontimize-web-ngx';
 
@@ -26,6 +27,7 @@ export const DEFAULT_HEIGHT_DIALOG = '90%';
 
 export class ReportOnDemandComponent implements OnInit {
 
+  @ViewChild('columnsList', { static: true }) columnsList: MatSelectionList;
   public pdf: string = '';
   public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
   public functionsData = [];
@@ -257,6 +259,21 @@ export class ReportOnDemandComponent implements OnInit {
       this.dialogRef.updateSize(DEFAULT_WIDTH_DIALOG, DEFAULT_HEIGHT_DIALOG);
     }
     this.fullscreen = !this.fullscreen;
+  }
+
+  onSelectionChangeGroups(event: MatSelectionListChange) {
+
+    let columnSelectedToGroup = event.option.value;
+    let columnStyleSelected: OReportColumnsStyle = { id: columnSelectedToGroup, name: this.translateService.get(columnSelectedToGroup), width: 85, alignment: 'left' };
+    if (event.option.selected) {
+      if (!this.currentPreference.columns.includes(columnSelectedToGroup)) {
+        this.currentPreference.columnsStyle.push(columnStyleSelected);
+      }
+    }
+  }
+
+  isCheckedColumn(column) {
+    return this.currentPreference.columnsStyle.length > 0 ? this.currentPreference.columnsStyle.filter(x => x.id === column.id).length > 0 : false;
   }
 
 
