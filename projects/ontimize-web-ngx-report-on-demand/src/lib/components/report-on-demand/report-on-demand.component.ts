@@ -86,9 +86,10 @@ export class ReportOnDemandComponent implements OnInit {
 
   protected openReport() {
     let columns = this.currentPreference.columnsStyle.map(x => x.id);
+    let orientation = this.currentPreference.vertical ? 'vertical' : 'horizontal';
     this.reportsService.createReport({
       "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups, "entity": this.currentConfiguration.ENTITY,
-      "service": "Customer", "orientation": this.currentPreference.vertical, "functions": this.currentPreference.functions,
+      "service": "Customer", "orientation": orientation, "functions": this.currentPreference.functions,
       "styleFunctions": this.currentPreference.styleFunctions, "subtitle": this.currentPreference.subtitle, "columnStyle": this.currentPreference.columnsStyle
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
@@ -160,7 +161,13 @@ export class ReportOnDemandComponent implements OnInit {
         .afterClosed()
         .subscribe((data: string) => {
           //TODO update functions not allways push data
-          this.currentPreference.functions.push(data)
+          this.currentPreference.functions.push(data);
+          this.currentPreference.functions.forEach((x, index) => {
+            if (x !== 'TOTAL') {
+              this.currentPreference.functions[index] = x;
+            }
+
+          })
         });
     }
   }
