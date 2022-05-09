@@ -80,10 +80,10 @@
                 {{ 'COLUMNS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #columnsList class="columns" cdkDropList (cdkDropListDropped)="drop($event)"
+            <mat-selection-list dense #columnsList class="columns" cdkDropList (cdkDropListDropped)="dropColumns($event)"
               [(ngModel)]="currentPreference.columnsStyle">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData"
-                [selected]="isCheckedColumn(column)" [value]="column" cdkDrag>
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [selected]="isCheckedColumn(column)" [value]="column"
+                cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     {{column.name}}
@@ -104,7 +104,7 @@
                 {{ 'GROUPS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #choices2 cdkDropList (cdkDropListDropped)="drop2($event)" [(ngModel)]="currentPreference.groups"
+            <mat-selection-list dense cdkDropList (cdkDropListDropped)="dropGroups($event)" [(ngModel)]="currentPreference.groups"
               (selectionChange)="onSelectionChangeGroups($event)">
               <mat-list-option checkboxPosition="before" *ngFor="let column of columnsToGroupData"
                 [selected]="currentPreference.groups.includes(column)" [value]="column" cdkDrag>
