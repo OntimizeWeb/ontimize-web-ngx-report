@@ -40,8 +40,8 @@ export class ReportOnDemandComponent implements OnInit {
     { value: 'firstGroupNewPage', viewValue: 'FIRST_GROUP_PAGE' }
   ];
 
-  public columnsData: any;
-  public columnsToGroupData: any;
+  public columnsData: any[];
+  public columnsToGroupData: any[];
   public opened: boolean = true;
   public fullscreen: boolean = false;
 
@@ -114,6 +114,7 @@ export class ReportOnDemandComponent implements OnInit {
   applyConfiguration(configuration: any) {
     this.currentConfiguration = configuration;
     let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
+
     this.currentPreference = {
       title: preference.title,
       subtitle: preference.subtitle,
@@ -161,13 +162,14 @@ export class ReportOnDemandComponent implements OnInit {
         .afterClosed()
         .subscribe((data: string) => {
           //TODO update functions not allways push data
-          this.currentPreference.functions.push(data);
-          this.currentPreference.functions.forEach((x, index) => {
-            if (x !== 'TOTAL') {
-              this.currentPreference.functions[index] = x;
-            }
+          let exits = this.currentPreference.functions.findIndex(x => x !== 'TOTAL');
+          if (exits === -1) {
+            this.currentPreference.functions.push(data);
+          } else {
+            this.currentPreference.functions[exits] = data;
 
-          })
+          }
+
         });
     }
   }
@@ -186,12 +188,33 @@ export class ReportOnDemandComponent implements OnInit {
 
   }
 
-  drop(event: CdkDragDrop<string[]>) {
+  dropColumns(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.columnsData, event.previousIndex, event.currentIndex);
+    this.updateColumnStyleSort();
+
   }
 
-  drop2(event: CdkDragDrop<string[]>) {
+  updateColumnStyleSort() {
+    this.currentPreference.columnsStyle.sort((a: OReportColumnsStyle, b: OReportColumnsStyle) => {
+      let indexA = this.columnsData.findIndex(x => x.id === a.id);
+      let indexB = this.columnsData.findIndex(x => x.id === b.id);
+      return indexA - indexB;
+    });
+    console.log(this.currentPreference.columnsStyle);
+  }
+
+  updateColumnToGroupSort() {
+    this.currentPreference.groups.sort((a:string, b: string) => {
+      let indexA = this.columnsToGroupData.findIndex(x => x === a);
+      let indexB = this.columnsToGroupData.findIndex(x => x === b);
+      return indexA - indexB;
+    });
+    console.log(this.currentPreference.groups);
+  }
+
+  dropGroups(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.columnsToGroupData, event.previousIndex, event.currentIndex)
+    this.updateColumnToGroupSort();
   }
 
   public onApplyConfigurationClicked(): void {
