@@ -28,7 +28,7 @@ export const DEFAULT_HEIGHT_DIALOG = '90%';
 export class ReportOnDemandComponent implements OnInit {
 
   @ViewChild('columnsList', { static: true }) columnsList: MatSelectionList;
-  public pdf: string = '';
+  public pdf: string = 'JVBERi0xLjYKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0ZURlY29kZT4+CnN0cmVhbQp4nDPQM1Qo5ypUMFAw0DMwslAwtTTVMzI3VbAwMdSzMDNUKErlCtdSyOMKVAAAtxIIrgplbmRzdHJlYW0KZW5kb2JqCgozIDAgb2JqCjUwCmVuZG9iagoKNSAwIG9iago8PAo+PgplbmRvYmoKCjYgMCBvYmoKPDwvRm9udCA1IDAgUgovUHJvY1NldFsvUERGL1RleHRdCj4+CmVuZG9iagoKMSAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDQgMCBSL1Jlc291cmNlcyA2IDAgUi9NZWRpYUJveFswIDAgNTk1LjMwMzkzNzAwNzg3NCA4NDEuODg5NzYzNzc5NTI4XS9Hcm91cDw8L1MvVHJhbnNwYXJlbmN5L0NTL0RldmljZVJHQi9JIHRydWU+Pi9Db250ZW50cyAyIDAgUj4+CmVuZG9iagoKNCAwIG9iago8PC9UeXBlL1BhZ2VzCi9SZXNvdXJjZXMgNiAwIFIKL01lZGlhQm94WyAwIDAgNTk1IDg0MSBdCi9LaWRzWyAxIDAgUiBdCi9Db3VudCAxPj4KZW5kb2JqCgo3IDAgb2JqCjw8L1R5cGUvQ2F0YWxvZy9QYWdlcyA0IDAgUgovT3BlbkFjdGlvblsxIDAgUiAvWFlaIG51bGwgbnVsbCAwXQovTGFuZyhlcy1FUykKPj4KZW5kb2JqCgo4IDAgb2JqCjw8L0F1dGhvcjxGRUZGMDA1MDAwNjEwMDc0MDA3MjAwNjkwMDYzMDA2OTAwNjEwMDIwMDA0RDAwNjEwMDcyMDA3NDAwRUQwMDZFMDA2NTAwN0EwMDIwMDA1NDAwNjkwMDZDMDA3NjAwNjU+Ci9DcmVhdG9yPEZFRkYwMDU3MDA3MjAwNjkwMDc0MDA2NTAwNzI+Ci9Qcm9kdWNlcjxGRUZGMDA0QzAwNjkwMDYyMDA3MjAwNjUwMDRGMDA2NjAwNjYwMDY5MDA2MzAwNjUwMDIwMDAzNzAwMkUwMDMxPgovQ3JlYXRpb25EYXRlKEQ6MjAyMjA1MTAxNDUyMDYrMDInMDAnKT4+CmVuZG9iagoKeHJlZgowIDkKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMjM0IDAwMDAwIG4gCjAwMDAwMDAwMTkgMDAwMDAgbiAKMDAwMDAwMDE0MCAwMDAwMCBuIAowMDAwMDAwNDAyIDAwMDAwIG4gCjAwMDAwMDAxNTkgMDAwMDAgbiAKMDAwMDAwMDE4MSAwMDAwMCBuIAowMDAwMDAwNTAwIDAwMDAwIG4gCjAwMDAwMDA1OTYgMDAwMDAgbiAKdHJhaWxlcgo8PC9TaXplIDkvUm9vdCA3IDAgUgovSW5mbyA4IDAgUgovSUQgWyA8RDdBODhCRTRFREFDRkU1RDFGMTIwMzNFMDUyN0JERkU+CjxEN0E4OEJFNEVEQUNGRTVEMUYxMjAzM0UwNTI3QkRGRT4gXQovRG9jQ2hlY2tzdW0gLzgwNTA5NDU4QjgyN0RCRDQ2QzlEODdBMjY4NjdCNEFDCj4+CnN0YXJ0eHJlZgo4NzYKJSVFT0YK';
   public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
   public functionsData = [];
   public dataArray = [
@@ -42,7 +42,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   public columnsData: any[];
   public columnsToGroupData: any[];
-  public opened: boolean = true;
+  public openedSidenav: boolean = true;
   public fullscreen: boolean = false;
 
   protected service: string;
@@ -89,7 +89,7 @@ export class ReportOnDemandComponent implements OnInit {
     let orientation = this.currentPreference.vertical ? 'vertical' : 'horizontal';
     this.reportsService.createReport({
       "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups, "entity": this.currentConfiguration.ENTITY,
-      "service": "Customer", "orientation": orientation, "functions": this.currentPreference.functions,
+      "service": this.service, "orientation": orientation, "functions": this.currentPreference.functions,
       "styleFunctions": this.currentPreference.styleFunctions, "subtitle": this.currentPreference.subtitle, "columnStyle": this.currentPreference.columnsStyle
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
@@ -167,9 +167,7 @@ export class ReportOnDemandComponent implements OnInit {
             this.currentPreference.functions.push(data);
           } else {
             this.currentPreference.functions[exits] = data;
-
           }
-
         });
     }
   }
@@ -191,7 +189,11 @@ export class ReportOnDemandComponent implements OnInit {
   dropColumns(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.columnsData, event.previousIndex, event.currentIndex);
     this.updateColumnStyleSort();
+  }
 
+  dropGroups(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.columnsToGroupData, event.previousIndex, event.currentIndex)
+    this.updateColumnToGroupSort();
   }
 
   updateColumnStyleSort() {
@@ -200,21 +202,14 @@ export class ReportOnDemandComponent implements OnInit {
       let indexB = this.columnsData.findIndex(x => x.id === b.id);
       return indexA - indexB;
     });
-    console.log(this.currentPreference.columnsStyle);
   }
 
   updateColumnToGroupSort() {
-    this.currentPreference.groups.sort((a:string, b: string) => {
+    this.currentPreference.groups.sort((a: string, b: string) => {
       let indexA = this.columnsToGroupData.findIndex(x => x === a);
       let indexB = this.columnsToGroupData.findIndex(x => x === b);
       return indexA - indexB;
     });
-    console.log(this.currentPreference.groups);
-  }
-
-  dropGroups(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.columnsToGroupData, event.previousIndex, event.currentIndex)
-    this.updateColumnToGroupSort();
   }
 
   public onApplyConfigurationClicked(): void {
@@ -292,13 +287,13 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   onSelectionChangeGroups(event: MatSelectionListChange) {
-
+    if (!event.option.selected) return;
     let columnSelectedToGroup = event.option.value;
     let columnStyleSelected: OReportColumnsStyle = { id: columnSelectedToGroup, name: this.translateService.get(columnSelectedToGroup), width: 85, alignment: 'left' };
-    if (event.option.selected) {
-      if (!this.currentPreference.columns.includes(columnSelectedToGroup)) {
-        this.currentPreference.columnsStyle.push(columnStyleSelected);
-      }
+
+    if (event.option.selected &&
+      this.currentPreference.columnsStyle.findIndex(x => x.id === columnSelectedToGroup) === -1) {
+      this.currentPreference.columnsStyle.push(columnStyleSelected);
     }
   }
 
