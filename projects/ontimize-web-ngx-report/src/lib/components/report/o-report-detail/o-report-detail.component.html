@@ -1,19 +1,19 @@
 <o-form #form attr="report" service-type="report" entity="getReport" keys="UUID" header-actions="R;I;U;D" show-header="yes"
   show-header-navigation="yes" fxLayout="column" (onDataLoaded)="onDataLoaded($event)">
   <o-column attr="row1" title="REPORT_DATA" icon="description" layout-gap="14px" fxFill>
-      <o-text-input #id attr="UUID" label="REPORT_ID" enabled="no" fxFlex="100"></o-text-input>
-      <div fxLayout="row wrap" fxLayoutGap="14px" fxLayoutAlign="start start" fxFlex>
-        <o-text-input attr="NAME" label="REPORT_NAME" required="yes" fxFlex="50"></o-text-input>
-        <o-text-input attr="REPORT_TYPE" label="REPORT_TYPE" required="yes" fxFlex></o-text-input>
-      </div>
-      <o-text-input class="form-field" attr="MAIN_REPORT_FILENAME" label="REPORT_FILENAME" required="yes" fxFlex></o-text-input>
-      <o-textarea-input class="form-field" attr="DESCRIPTION" label="REPORT_DESCRIPTION" required="yes" fxFlex></o-textarea-input>
+    <o-text-input #id attr="UUID" label="REPORT_ID" enabled="no" fxFlex="100"></o-text-input>
+    <div fxLayout="row wrap" fxLayoutGap="14px" fxLayoutAlign="start start" fxFlex>
+      <o-text-input attr="NAME" label="REPORT_NAME" required="yes" fxFlex="50"></o-text-input>
+      <o-text-input attr="REPORT_TYPE" label="REPORT_TYPE" required="yes" fxFlex></o-text-input>
+    </div>
+    <o-text-input class="form-field" attr="MAIN_REPORT_FILENAME" label="REPORT_FILENAME" required="yes" fxFlex></o-text-input>
+    <o-textarea-input class="form-field" attr="DESCRIPTION" label="REPORT_DESCRIPTION" required="yes" fxFlex></o-textarea-input>
   </o-column>
 
   <div *ngIf="hasParams">
     <o-column #params title="PARAMETERS" icon="info" class="vertical-margin-10" layout-align="start stretch" appearance="outline">
-      <o-form #paramForm attr="report" service-type="report" entity="fillReport" keys="id"
-        header-mode="none" show-header="no" layout-direction="column">
+      <o-form #paramForm attr="report" service-type="report" entity="fillReport" keys="id" header-mode="none" show-header="no"
+        layout-direction="column">
         <ng-container *ngFor="let elem of parameters; let i = index">
           <o-row fxFlex>
             <ng-template [ngIf]="elem.valueClass == 'java.sql.Date' || elem.valueClass == 'java.sql.Timestamp'" [ngIfElse]="textInput">
@@ -27,6 +27,6 @@
       </o-form>
     </o-column>
   </div>
-  <o-button type="RAISED" (click)="fillReport()" label="{{ 'FILL_REPORT' | oTranslate }}"
-    icon="download" layout-padding color="accent"></o-button>
+  <o-button type="RAISED" (click)="fillReport()" label="{{ 'FILL_REPORT' | oTranslate }}" icon="download" layout-padding color="accent"
+    [enabled]="form.formGroup?.valid && paramForm?.formGroup?.valid"></o-button>
 </o-form>

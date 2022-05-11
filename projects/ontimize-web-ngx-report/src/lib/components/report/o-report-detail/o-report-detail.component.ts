@@ -1,25 +1,26 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { DialogService, OColumnComponent, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
+import { DialogService, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
 import { OReportViewerComponent } from '../o-report-viewer/o-report-viewer.component';
-import { OReportService } from '../o-report.service';
 
+export const DEFAULT_WIDTH_DIALOG = '70%';
+export const DEFAULT_HEIGHT_DIALOG = '90%';
 @Component({
   selector: 'o-report-detail',
   templateUrl: './o-report-detail.component.html',
   styleUrls: ['./o-report-detail.component.scss']
 })
-export class OReportDetailComponent implements OnInit {
+export class OReportDetailComponent {
 
   @ViewChild('id', { static: true })
   id: OTextInputComponent;
   @ViewChild('paramForm', { static: false })
   paramForm: OFormComponent;
 
-  private values: string [];
+  private values: string[];
 
   public parameters: [];
-  private av: string [];
+  private av: string[];
   public hasParams: boolean = false;
 
   constructor(
@@ -27,11 +28,9 @@ export class OReportDetailComponent implements OnInit {
     protected dialog: MatDialog,
   ) { }
 
-  ngOnInit() {
-  }
 
   private getValues() {
-    for (let i = 0; i<this.parameters.length; i++) {
+    for (let i = 0; i < this.parameters.length; i++) {
       let v = this.paramForm.getFieldValue('value' + i);
       this.values.push(v);
     }
@@ -43,25 +42,20 @@ export class OReportDetailComponent implements OnInit {
     if (this.parameters.length > 0) {
       this.getValues();
       let size = this.values.length;
-      for (let i = 0; i<size; i++)
+      for (let i = 0; i < size; i++)
         this.av.push(this.values.shift());
     }
 
-    if (this.av.includes(undefined) || this.av.includes("")) {
-      if (this.dialogService) {
-        this.dialogService.error('ERROR',
-          'NO_PARAMETER_VALUE_MESSAGE');
+
+    this.dialog.open(OReportViewerComponent, {
+      height: DEFAULT_HEIGHT_DIALOG,
+      width: DEFAULT_HEIGHT_DIALOG,
+      data: {
+        'params': this.av,
+        'filter': {}
       }
-    } else {
-      this.dialog.open(OReportViewerComponent, {
-        height: '780px',
-        width: '1240px',
-        data: {
-          'params': this.av,
-          'filter': {}
-        }
-      });
-    }
+
+    });
   }
 
   onDataLoaded(e: object) {
