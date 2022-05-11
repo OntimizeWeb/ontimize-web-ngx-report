@@ -13,7 +13,6 @@ import { OReportViewerComponent } from './components/report/o-report-viewer/o-re
 import { OReportService } from './components/report/o-report.service';
 
 import { OREPORT_MODULES, OReportHomeComponent } from './o-components';
-// import { ReportHomeComponent } from './components/report/report-home/report-home.component';
 
 export * from './o-components';
 
