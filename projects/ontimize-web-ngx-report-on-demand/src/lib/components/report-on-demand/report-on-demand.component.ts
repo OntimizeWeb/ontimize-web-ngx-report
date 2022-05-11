@@ -105,9 +105,18 @@ export class ReportOnDemandComponent implements OnInit {
       "service": "Customer", "language": this.translateService.getCurrentLang()
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
-        this.functionsData = res.data[0].list;
+        this.parseFunctionsData(res.data[0].list);
+        //this.functionsData = res.data[0].list;
       }
     });
+  }
+  parseFunctionsData(list: any[]) {
+    this.functionsData = list.map(column => {
+      if (column !== 'TOTAL') {
+        column = column + '-SUM';
+      }
+      return column;
+    })
   }
 
 
@@ -162,7 +171,7 @@ export class ReportOnDemandComponent implements OnInit {
         .afterClosed()
         .subscribe((data: string) => {
           //TODO update functions not allways push data
-          let exits = this.currentPreference.functions.findIndex(x => x !== 'TOTAL');
+          let exits = this.currentPreference.functions.findIndex(x => x.column !== 'TOTAL');
           if (exits === -1) {
             this.currentPreference.functions.push(data);
           } else {
@@ -252,7 +261,7 @@ export class ReportOnDemandComponent implements OnInit {
       "name": data.name, "description": data.description,
       "entity": this.currentConfiguration.ENTITY, "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups,
       "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions, "styleFunctions": this.currentPreference.styleFunctions,
-      "subtitle": this.currentPreference.subtitle
+      "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle
     }
     this.reportsService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
@@ -266,7 +275,7 @@ export class ReportOnDemandComponent implements OnInit {
       "name": data.name, "description": data.description,
       "entity": this.currentConfiguration.ENTITY, "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups,
       "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions, "styleFunctions": this.currentPreference.styleFunctions,
-      "subtitle": this.currentPreference.subtitle
+      "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle
     }
     this.reportsService.saveAsPreferences(preference).subscribe(res => {
       if (res && res.data.length && res.code === 0) {

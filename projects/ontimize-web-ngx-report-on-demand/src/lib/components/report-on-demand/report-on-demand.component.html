@@ -129,7 +129,7 @@
                 [selected]="currentPreference.functions.includes(function)" [value]="function">
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
-                    {{ function |oTranslate }}
+                    {{ function | oTranslate }}
                   </span>
                   <mat-icon *ngIf="currentPreference.functions.includes(function) && function!=='TOTAL'" mat-icon-button
                     (click)="selectFunction($event, function)">edit</mat-icon>
