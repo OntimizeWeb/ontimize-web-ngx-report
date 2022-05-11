@@ -1,7 +1,7 @@
-import { DummyModule } from './components/dummy/dummy.module';
+import { OReportRoutingModule } from './components/report/o-report-routing.module';
 
-export * from './components/dummy/dummy.component';
+export * from './components/report/o-report-home/o-report-home.component';
 
-export const ODUMMY_MODULES: any = [
-  DummyModule
+export const OREPORT_MODULES: any = [
+  OReportRoutingModule
 ];
