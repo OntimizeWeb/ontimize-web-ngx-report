@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "main": "./bundles/ontimize-web-ngx-report.umd.js",
   "peerDependencies": {
-    "ontimize-web-ngx": "~8.5.1"
+    "ontimize-web-ngx": "8.7.0"
   },
   "dependencies": {
     "ngx-extended-pdf-viewer": "9.0.0-alpha.1"
