@@ -1,5 +1,6 @@
 import { Component, Inject, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ReportFunction } from '../../../types/report-function.type';
 
 @Component({
   selector: 'app-select-function-dialog',
@@ -7,16 +8,18 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   styleUrls: ['./select-function-dialog.component.scss'],
 })
 export class SelectFunctionDialogComponent {
-  public selectedFunction: any;
+  public selectedFunction: string;
   public functions = [];
   constructor(
     public dialogo: MatDialogRef<SelectFunctionDialogComponent>,
     @Optional()
-    @Inject(MAT_DIALOG_DATA) public mensaje: String) {
-    this.functions.push({ id: this.mensaje + '-SUM', value: 'DIALOG.SELECT_FUNCTION.SUM' });
-    this.functions.push({ id: this.mensaje + '-AVERAGE', value: 'DIALOG.SELECT_FUNCTION.AVG' });
-    this.functions.push({ id: this.mensaje + '-MAX', value: 'DIALOG.SELECT_FUNCTION.MAX' });
-    this.functions.push({ id: this.mensaje + '-MIN', value: 'DIALOG.SELECT_FUNCTION.MIN' });
+    @Inject(MAT_DIALOG_DATA) public reportFunction: ReportFunction) {
+
+    this.functions.push({ id: reportFunction.columnName + '-SUM', value: 'DIALOG.SELECT_FUNCTION.SUM' });
+    this.functions.push({ id: reportFunction.columnName + '-AVERAGE', value: 'DIALOG.SELECT_FUNCTION.AVG' });
+    this.functions.push({ id: reportFunction.columnName + '-MAX', value: 'DIALOG.SELECT_FUNCTION.MAX' });
+    this.functions.push({ id: reportFunction.columnName + '-MIN', value: 'DIALOG.SELECT_FUNCTION.MIN' });
+    this.selectedFunction = reportFunction.columnName + '-' + reportFunction.functionName;
   }
 
 

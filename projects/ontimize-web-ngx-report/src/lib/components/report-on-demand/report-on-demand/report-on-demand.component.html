@@ -124,15 +124,21 @@
                 {{ 'FUNCTIONS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #functions [(ngModel)]="currentPreference.functions">
-              <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData"
-                [selected]="currentPreference.functions.includes(function)" [value]="function">
+            <mat-selection-list dense #functionsList [(ngModel)]="currentPreference.functions" (selectionChange)="onSelectionChangeFunctions($event)">
+              <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData" [value]="function">
+                <!--  -->
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
-                    {{ function | oTranslate }}
+                    <ng-container *ngIf="function.columnName==='TOTAL'; else functionColumnTemplate">
+                      {{function.functionName}}
+                    </ng-container>
                   </span>
-                  <mat-icon *ngIf="currentPreference.functions.includes(function) && function!=='TOTAL'" mat-icon-button
-                    (click)="selectFunction($event, function)">edit</mat-icon>
+                  <ng-template #functionColumnTemplate>
+                    {{function.functionName | oReportsTranslate }}({{function.columnName | oReportsTranslate }})
+                  </ng-template>
+
+                  <mat-icon *ngIf="currentPreference.functions.includes(function) && function.functionName!=='TOTAL'" mat-list-icon
+                    (click)="selectFunction($event, function)" class="button-edit">edit</mat-icon>
                 </div>
               </mat-list-option>
             </mat-selection-list>
