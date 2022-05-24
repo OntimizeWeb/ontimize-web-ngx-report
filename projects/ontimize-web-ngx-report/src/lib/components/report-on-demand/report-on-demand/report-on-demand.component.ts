@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -274,7 +274,7 @@ export class ReportOnDemandComponent implements OnInit {
         .afterClosed()
         .subscribe((data: { name: string, description: string }) => {
           if (Util.isDefined(data) && data) {
-            this.savePreferences(data);
+            this.saveAsPreferences(data);
           }
         });
     }
@@ -293,6 +293,7 @@ export class ReportOnDemandComponent implements OnInit {
       "vertical": this.currentPreference.vertical, "functions": functions, "styleFunctions": this.currentPreference.styleFunctions,
       "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle
     }
+
     this.reportsService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
       }
@@ -308,9 +309,10 @@ export class ReportOnDemandComponent implements OnInit {
       "vertical": this.currentPreference.vertical, "functions": functions, "styleFunctions": this.currentPreference.styleFunctions,
       "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle
     }
+
     this.reportsService.saveAsPreferences(preference).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
-        //this.currentPreference = res.data;
+        // this.currentPreference = preference;
       }
     });
 
@@ -336,10 +338,10 @@ export class ReportOnDemandComponent implements OnInit {
 
   onSelectionChangeGroups(event: MatSelectionListChange) {
     if (!event.option.selected || event.option.value.columnName === 'TOTAL') return;
-    let functionSelected: ReportFunction = event.option.value;
+    let functionSelected: string = event.option.value;
     if (event.option.selected &&
-      this.currentPreference.columnsStyle.findIndex(x => x.id === functionSelected.columnName) === -1) {
-      const columnStyleSelected: OReportColumnsStyle = { id: functionSelected.columnName, name: this.translateService.get(functionSelected.columnName), width: 85, alignment: 'left' };
+      this.currentPreference.columnsStyle.findIndex(x => x.id === functionSelected) === -1) {
+      const columnStyleSelected: OReportColumnsStyle = { id: functionSelected, name: this.translateService.get(functionSelected), width: 85, alignment: 'left' };
       this.currentPreference.columnsStyle.push(columnStyleSelected);
     }
   }
@@ -357,12 +359,14 @@ export class ReportOnDemandComponent implements OnInit {
 
 
   isCheckedColumn(column) {
-    return this.currentPreference.columnsStyle.length > 0 ? this.currentPreference.columnsStyle.filter(x => x.id === column.id).length > 0 : false;
+    const isCheckedColumn = this.currentPreference.columnsStyle.length > 0 ? this.currentPreference.columnsStyle.filter(x => x.id === column.id).length > 0 : false;
+    return isCheckedColumn;
   }
 
 
   private parseStringToArray(data): string[] {
-    return data.replace("[", "").replace("]", "").split(',');
+    const stringParsed = data.replace("[", "").replace("]", "").replace(/ /g, "");
+    return stringParsed.length === 0 ? [] : stringParsed.split(',');
   }
 
 

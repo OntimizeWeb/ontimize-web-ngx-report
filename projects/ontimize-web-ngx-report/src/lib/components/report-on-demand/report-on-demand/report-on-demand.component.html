@@ -32,7 +32,7 @@
           [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
         </o-button>
 
-        <div fxLayout="column" *ngIf="openedSidenav" class="container-title">
+        <div fxLayout="column" *ngIf="openedSidenav" class="container-title" fxLayoutGap="10px">
           <mat-form-field>
             <input [(ngModel)]="currentPreference.title" matInput placeholder="{{ 'TITLE' | oReportsTranslate }}">
           </mat-form-field>
@@ -82,13 +82,14 @@
             </mat-expansion-panel-header>
             <mat-selection-list dense #columnsList class="columns" cdkDropList (cdkDropListDropped)="dropColumns($event)"
               [(ngModel)]="currentPreference.columnsStyle">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [selected]="isCheckedColumn(column)" [value]="column"
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData"
+               [selected]="isCheckedColumn(column)" [value]="column"
                 cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     {{column.name}}
                   </span>
-                  <mat-icon mat-list-icon *ngIf="currentPreference.columnsStyle.includes(column)" (click)="showColumnStyleDialog($event, column)"
+                  <mat-icon mat-list-icon *ngIf="isCheckedColumn(column)" (click)="showColumnStyleDialog($event, column)"
                     class="button-edit">
                     edit
                   </mat-icon>
