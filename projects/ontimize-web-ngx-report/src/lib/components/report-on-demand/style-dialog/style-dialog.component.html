@@ -1,0 +1,34 @@
+<span mat-dialog-title>{{ 'COLUMN_CONFIGURATION' | oReportsTranslate }}</span>
+<mat-dialog-content>
+  <div mat-subheader>{{ 'SAVE_COLUMN_CONFIGURATION' | oReportsTranslate }}</div>
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="12px">
+    <form #form>
+      <mat-form-field fxFill>
+        <mat-label>{{ 'COLUMN_NAME' | oReportsTranslate }}</mat-label>
+        <input id="columnNameInput" name="columnNameInput" matInput placeholder="{{ 'COLUMN_NAME' | oReportsTranslate }}" required
+          [(ngModel)]="columnStyle.name" #columnNameInput="ngModel" [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
+      <mat-form-field fxFill>
+        <input id="widthColumnInput" name="widthColumnInput" matInput type="number" placeholder="{{ 'COLUMN_WIDTH' | oReportsTranslate }}" required
+          [(ngModel)]="columnStyle.width" #widthColumnInput="ngModel" [ngModelOptions]="{standalone: true}">
+        <span matSuffix>px</span>
+        <mat-hint></mat-hint>
+      </mat-form-field>
+      <mat-radio-group [(ngModel)]="columnStyle.alignment" fxFill fxLayout="row" fxLayoutAlign="space-between center"
+        [ngModelOptions]="{standalone: true}">
+        <mat-radio-button *ngFor="let aligmentItem of dataAlignment" [value]="aligmentItem.name" [checked]="columnStyle.alignment === aligmentItem">
+          <mat-icon fxFlex>
+            {{ aligmentItem.icon }}
+          </mat-icon>
+        </mat-radio-button>
+      </mat-radio-group>
+    </form>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false" class="o-button-default">
+    {{ 'CANCEL' | oTranslate }}</button>
+  <button type="button" mat-stroked-button class="mat-primary" (click)="confirm()" [mat-dialog-close]="true"
+    [disabled]="columnNameInput.invalid || widthColumnInput.invalid">
+    {{ 'SAVE' | oTranslate }}</button>
+</mat-dialog-actions>

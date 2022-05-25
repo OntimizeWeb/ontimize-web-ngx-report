@@ -1,0 +1,89 @@
+.o-dialog-class .mat-dialog-container .mat-dialog-content {
+  max-height: calc(100% - 82px);
+  height: 100%;
+  overflow: hidden;
+
+  .mat-sidenav {
+    visibility: visible !important;
+    transform: none;
+    top: 0;
+    left: 0;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+
+    .mat-drawer-inner-container {
+      overflow: hidden;
+    }
+
+    .mat-dialog-actions {
+      min-height: auto;
+    }
+
+    .mat-radio-group {
+      margin: 0 12px;
+    }
+
+    .mat-accordion {
+      overflow-y: scroll;
+
+      .acordions.mat-expansion-panel {
+        border-radius: 0;
+        box-shadow: none;
+        margin-bottom: 8px;
+
+        .mat-expansion-panel-header {
+          padding: 0 8px;
+        }
+
+        .mat-expansion-panel-body {
+          padding: 0;
+        }
+      }
+
+      .mat-list-option {
+        .button-edit {
+          cursor: pointer;
+        }
+
+        &.cdk-drag {
+          cursor: move;
+        }
+
+        .mat-list-item-content {
+          padding: 0 0 0 8px;
+
+          .mat-list-text {
+            padding-right: 8px;
+          }
+        }
+      }
+
+    }
+
+    &.mat-drawer-opened {
+      border: 1px solid #DEE1E6;
+      border-radius: 4px;
+      width: 256px;
+    }
+  }
+
+  .mat-sidenav-container {
+    background-color: transparent;
+
+    &.opened {
+      .sidenav-container-content {
+        margin-left: 24px;
+      }
+    }
+  }
+
+  .mat-sidenav-content {
+    overflow: hidden;
+
+    .sidenav-container-content {
+      margin-left: 66px;
+      height: 100%;
+    }
+
+  }
+}

@@ -1,7 +1,7 @@
 {
   "name": "ontimize-web-ngx-report",
-  "version": "8.0.0",
-  "description": "Authomatic reports implementation for Ontimize Web",
+  "version": "8.0.0-SNAPSHOT-0",
+  "description": "Automatic reports implementation for Ontimize Web",
   "keywords": [
     "angular",
     "ontimize-web-ngx",
@@ -18,7 +18,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build ontimize-web-ngx-report",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -38,8 +38,7 @@
     "@angular/router": "~8.2.14",
     "hammerjs": "^2.0.8",
     "ngx-extended-pdf-viewer": "9.0.0-alpha.1",
-    "ontimize-web-ngx": "8.7.0",
-    "ontimize-web-ngx-filemanager": "^8.1.0",
+    "ontimize-web-ngx": "8.7.0-SNAPSHOT-0",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "^0.10.3"
