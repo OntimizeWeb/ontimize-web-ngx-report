@@ -3,7 +3,6 @@ import { Injector, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { OntimizeWebModule, O_REPORT_ON_DEMAND_SERVICE } from 'ontimize-web-ngx';
-import { OFileManagerModule } from 'ontimize-web-ngx-filemanager';
 import { ApplyConfigurationDialogComponent } from './components/report-on-demand/apply-configuration/apply-configuration-dialog.component';
 import { ReportOnDemandComponent } from './components/report-on-demand/report-on-demand/report-on-demand.component';
 import { SavePreferencesDialogComponent } from './components/report-on-demand/save-preferences-dialog/save-preferences-dialog.component';
@@ -45,7 +44,6 @@ export function reportServiceFactory(injector: Injector): OReportService {
     CommonModule,
     OntimizeWebModule,
     OReportRoutingModule,
-    OFileManagerModule,
     NgxExtendedPdfViewerModule,
     FlexLayoutModule
   ],
