@@ -36,6 +36,7 @@ export class ReportOnDemandComponent implements OnInit {
     { value: 'grid', viewValue: 'GRID' },
     { value: 'rowNumber', viewValue: 'ROW_NUMBER' },
     { value: 'columnName', viewValue: 'COLUMNS_NAMES' },
+    { value: 'backgroundOnOddRows', viewValue: 'BACKGROUND_ODD_ROWS' },
     { value: 'hideGroupDetails', viewValue: 'GROUP_DETAILS' },
     { value: 'groupNewPage', viewValue: 'GROUP_PAGE' },
     { value: 'firstGroupNewPage', viewValue: 'FIRST_GROUP_PAGE' }
@@ -73,7 +74,7 @@ export class ReportOnDemandComponent implements OnInit {
     const columnsData = this.data.columns.split(';');
     this.columnsData = this.parseColumnsStyle(columnsData);
     this.columnsToGroupData = columnsData;
-    this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], styleFunctions: [], columnsStyle: [] };
+    this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], styleFunctions: ['columnName'], columnsStyle: [] };
     this.currentConfiguration = { ENTITY: this.data.entity }
 
     this.getFunctions();
