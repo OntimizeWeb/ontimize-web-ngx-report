@@ -133,7 +133,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   parseFunctions(list: any[]) {
     let functions = [];
-    list.map(column => {
+    list.forEach(column => {
       let obj: ReportFunction;
       if (column !== 'TOTAL') {
         obj = { columnName: column, functionName: 'SUM' };
