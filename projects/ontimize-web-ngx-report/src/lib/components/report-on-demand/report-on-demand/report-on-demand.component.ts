@@ -218,12 +218,6 @@ export class ReportOnDemandComponent implements OnInit {
     return dataArray;
   }
 
-  isSelectedFunction(functionParam: ReportFunction): boolean {
-    let isSelected;
-    this.currentPreference.functions.forEach(element => isSelected = (element.functionName == functionParam.functionName));
-    return isSelected;
-  }
-
 
   openSaveAsPreferences(): void {
     this.dialog
