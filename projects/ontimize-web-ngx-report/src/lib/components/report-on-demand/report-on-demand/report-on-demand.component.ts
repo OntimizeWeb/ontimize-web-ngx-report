@@ -23,7 +23,7 @@ export const DEFAULT_HEIGHT_DIALOG = '90%';
   selector: 'app-customers-dialog',
   templateUrl: './report-on-demand.component.html',
   styleUrls: ['./report-on-demand.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class ReportOnDemandComponent implements OnInit {
@@ -32,6 +32,10 @@ export class ReportOnDemandComponent implements OnInit {
   public pdf: string = 'JVBERi0xLjYKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0ZURlY29kZT4+CnN0cmVhbQp4nDPQM1Qo5ypUMFAw0DMwslAwtTTVMzI3VbAwMdSzMDNUKErlCtdSyOMKVAAAtxIIrgplbmRzdHJlYW0KZW5kb2JqCgozIDAgb2JqCjUwCmVuZG9iagoKNSAwIG9iago8PAo+PgplbmRvYmoKCjYgMCBvYmoKPDwvRm9udCA1IDAgUgovUHJvY1NldFsvUERGL1RleHRdCj4+CmVuZG9iagoKMSAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDQgMCBSL1Jlc291cmNlcyA2IDAgUi9NZWRpYUJveFswIDAgNTk1LjMwMzkzNzAwNzg3NCA4NDEuODg5NzYzNzc5NTI4XS9Hcm91cDw8L1MvVHJhbnNwYXJlbmN5L0NTL0RldmljZVJHQi9JIHRydWU+Pi9Db250ZW50cyAyIDAgUj4+CmVuZG9iagoKNCAwIG9iago8PC9UeXBlL1BhZ2VzCi9SZXNvdXJjZXMgNiAwIFIKL01lZGlhQm94WyAwIDAgNTk1IDg0MSBdCi9LaWRzWyAxIDAgUiBdCi9Db3VudCAxPj4KZW5kb2JqCgo3IDAgb2JqCjw8L1R5cGUvQ2F0YWxvZy9QYWdlcyA0IDAgUgovT3BlbkFjdGlvblsxIDAgUiAvWFlaIG51bGwgbnVsbCAwXQovTGFuZyhlcy1FUykKPj4KZW5kb2JqCgo4IDAgb2JqCjw8L0F1dGhvcjxGRUZGMDA1MDAwNjEwMDc0MDA3MjAwNjkwMDYzMDA2OTAwNjEwMDIwMDA0RDAwNjEwMDcyMDA3NDAwRUQwMDZFMDA2NTAwN0EwMDIwMDA1NDAwNjkwMDZDMDA3NjAwNjU+Ci9DcmVhdG9yPEZFRkYwMDU3MDA3MjAwNjkwMDc0MDA2NTAwNzI+Ci9Qcm9kdWNlcjxGRUZGMDA0QzAwNjkwMDYyMDA3MjAwNjUwMDRGMDA2NjAwNjYwMDY5MDA2MzAwNjUwMDIwMDAzNzAwMkUwMDMxPgovQ3JlYXRpb25EYXRlKEQ6MjAyMjA1MTAxNDUyMDYrMDInMDAnKT4+CmVuZG9iagoKeHJlZgowIDkKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMjM0IDAwMDAwIG4gCjAwMDAwMDAwMTkgMDAwMDAgbiAKMDAwMDAwMDE0MCAwMDAwMCBuIAowMDAwMDAwNDAyIDAwMDAwIG4gCjAwMDAwMDAxNTkgMDAwMDAgbiAKMDAwMDAwMDE4MSAwMDAwMCBuIAowMDAwMDAwNTAwIDAwMDAwIG4gCjAwMDAwMDA1OTYgMDAwMDAgbiAKdHJhaWxlcgo8PC9TaXplIDkvUm9vdCA3IDAgUgovSW5mbyA4IDAgUgovSUQgWyA8RDdBODhCRTRFREFDRkU1RDFGMTIwMzNFMDUyN0JERkU+CjxEN0E4OEJFNEVEQUNGRTVEMUYxMjAzM0UwNTI3QkRGRT4gXQovRG9jQ2hlY2tzdW0gLzgwNTA5NDU4QjgyN0RCRDQ2QzlEODdBMjY4NjdCNEFDCj4+CnN0YXJ0eHJlZgo4NzYKJSVFT0YK';
   public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
   public functionsData: ReportFunction[] = [];
+  public appliedConfiguration: boolean = false;
+  public selectedFunctions = [];
+  @ViewChild('functionsList', { static: false })
+  public functionsList: MatSelectionList;
   public dataArray = [
     { value: 'grid', viewValue: 'GRID' },
     { value: 'rowNumber', viewValue: 'ROW_NUMBER' },
@@ -111,40 +115,41 @@ export class ReportOnDemandComponent implements OnInit {
       "service": this.service, "language": this.translateService.getCurrentLang()
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
-        this.parseDefaultFunctionsData(res.data[0].list);
+        this.functionsData = this.parseDefaultFunctionsData(res.data[0].list);
       }
     });
   }
   parseDefaultFunctionsData(list: any[]) {
-    this.functionsData = list.map(column => {
+    let functions = [];
+    list.forEach(column => {
       let obj: ReportFunction;
       if (column !== 'TOTAL') {
         obj = { columnName: column, functionName: 'SUM' };
       } else {
         obj = { columnName: column, functionName: column };
       }
-      return obj;
+      functions.push(obj);
     })
+    return functions;
   }
-
 
   applyConfiguration(configuration: any) {
     this.currentConfiguration = configuration;
     let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
-
+    this.appliedConfiguration = true;
+    this.selectedFunctions = this.parseStringToArray(preference.functions);
     this.currentPreference = {
       title: preference.title,
       subtitle: preference.subtitle,
       vertical: preference.vertical,
       columns: this.parseStringToArray(preference.columns),
-      functions: this.parseStringToArray(preference.functions),
+      functions: this.parseDefaultFunctionsData(this.parseStringToArray(preference.functions)),
       groups: this.parseStringToArray(preference.groups),
       styleFunctions: this.parseStringToArray(preference.styleFunctions),
       columnsStyle: this.parseColumnsStyle(this.parseStringToArray(preference.columns))
     };
 
   }
-
   showColumnStyleDialog(event, id): void {
     event.stopPropagation();
     const columnStyleData: OReportColumnsStyle = this.currentPreference.columnsStyle.find((x: OReportColumnsStyle) => x.id === id);
@@ -202,11 +207,6 @@ export class ReportOnDemandComponent implements OnInit {
     return dataArray;
   }
 
-  isSelectedFunction(functionParam: ReportFunction) {
-    const isSelected = this.currentPreference.functions.filter(x => x.columnName === functionParam.columnName && x.functionName === functionParam.functionName).length;
-    return isSelected > 0;
-  }
-
 
   openSaveAsPreferences(): void {
     this.dialog
@@ -227,7 +227,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.updateColumnStyleSort();
   }
 
-  dropGroups(event: CdkDragDrop<string[]>) {
+  dropGroups(event: CdkDragDrop<any[]>) {
     moveItemInArray(this.columnsToGroupData, event.previousIndex, event.currentIndex)
     this.updateColumnToGroupSort();
   }
@@ -363,7 +363,6 @@ export class ReportOnDemandComponent implements OnInit {
     const isCheckedColumn = this.currentPreference.columnsStyle.length > 0 ? this.currentPreference.columnsStyle.filter(x => x.id === column.id).length > 0 : false;
     return isCheckedColumn;
   }
-
 
   private parseStringToArray(data): string[] {
     const stringParsed = data.replace("[", "").replace("]", "").replace(/ /g, "");

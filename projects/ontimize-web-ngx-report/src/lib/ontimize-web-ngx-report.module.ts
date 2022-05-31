@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { Injector, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -45,7 +46,8 @@ export function reportServiceFactory(injector: Injector): OReportService {
     OntimizeWebModule,
     OReportRoutingModule,
     NgxExtendedPdfViewerModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    DragDropModule
   ],
   exports: [
     OReportHomeComponent,
@@ -63,10 +65,10 @@ export function reportServiceFactory(injector: Injector): OReportService {
   providers: [
     { provide: O_REPORT_ON_DEMAND_SERVICE, useClass: OReportOnDemandService },
     {
-    provide: 'report',
-    useFactory: reportServiceFactory,
-    deps: [Injector]
-  },
+      provide: 'report',
+      useFactory: reportServiceFactory,
+      deps: [Injector]
+    },
     OAlertService, OFillReportService
   ],
   entryComponents: [

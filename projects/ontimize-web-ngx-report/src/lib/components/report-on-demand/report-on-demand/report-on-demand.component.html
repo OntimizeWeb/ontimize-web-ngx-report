@@ -12,7 +12,7 @@
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
     <mat-menu #configurationMenu="matMenu">
-      <button type="button" mat-menu-item (click)="openSavePreferences()">
+      <button type="button" [disabled]="!appliedConfiguration" mat-menu-item (click)="openSavePreferences()">
         {{ 'BUTTONS.SAVE_CONFIGURATION' | oReportsTranslate }}
       </button>
       <button type="button" mat-menu-item (click)="openSaveAsPreferences()">
@@ -80,17 +80,15 @@
                 {{ 'COLUMNS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #columnsList class="columns" cdkDropList (cdkDropListDropped)="dropColumns($event)"
-              [(ngModel)]="currentPreference.columnsStyle">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData"
-               [selected]="isCheckedColumn(column)" [value]="column"
-                cdkDrag>
+            <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsData" (cdkDropListDropped)="dropColumns($event)"
+              class="columns" [(ngModel)]="currentPreference.columnsStyle">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [selected]="currentPreference.columns.includes(column.id)"
+                [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     {{column.name}}
                   </span>
-                  <mat-icon mat-list-icon *ngIf="isCheckedColumn(column)" (click)="showColumnStyleDialog($event, column)"
-                    class="button-edit">
+                  <mat-icon mat-list-icon *ngIf="isCheckedColumn(column)" (click)="showColumnStyleDialog($event, column)" class="button-edit">
                     edit
                   </mat-icon>
                   <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
@@ -105,8 +103,8 @@
                 {{ 'GROUPS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense cdkDropList (cdkDropListDropped)="dropGroups($event)" [(ngModel)]="currentPreference.groups"
-              (selectionChange)="onSelectionChangeGroups($event)">
+            <mat-selection-list dense cdkDropList [cdkDropListData]="columnsToGroupData" (cdkDropListDropped)="dropGroups($event)"
+              [(ngModel)]="currentPreference.groups" (selectionChange)="onSelectionChangeGroups($event)">
               <mat-list-option checkboxPosition="before" *ngFor="let column of columnsToGroupData"
                 [selected]="currentPreference.groups.includes(column)" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
@@ -114,6 +112,11 @@
                     {{ column | oTranslate }}
                   </span>
                   <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
+                  <ng-template cdkDragPreview>
+                    <div class="order-preview">
+                      {{column}}
+                    </div>
+                  </ng-template>
                 </div>
               </mat-list-option>
             </mat-selection-list>
@@ -125,9 +128,9 @@
                 {{ 'FUNCTIONS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #functionsList [(ngModel)]="currentPreference.functions" (selectionChange)="onSelectionChangeFunctions($event)">
-              <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData" [value]="function">
-                <!--  -->
+            <mat-selection-list #functionsList dense [(ngModel)]="currentPreference.functions" (selectionChange)="onSelectionChangeFunctions($event)">
+              <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData"
+                [selected]="selectedFunctions.includes(function.columnName)" [value]="function">
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     <ng-container *ngIf="function.columnName==='TOTAL'; else functionColumnTemplate">
