@@ -115,23 +115,11 @@ export class ReportOnDemandComponent implements OnInit {
       "service": this.service, "language": this.translateService.getCurrentLang()
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
-        this.parseDefaultFunctionsData(res.data[0].list);
+        this.functionsData = this.parseDefaultFunctionsData(res.data[0].list);
       }
     });
   }
   parseDefaultFunctionsData(list: any[]) {
-    this.functionsData = list.map(column => {
-      let obj: ReportFunction;
-      if (column !== 'TOTAL') {
-        obj = { columnName: column, functionName: 'SUM' };
-      } else {
-        obj = { columnName: column, functionName: column };
-      }
-      return obj;
-    })
-  }
-
-  parseFunctions(list: any[]) {
     let functions = [];
     list.forEach(column => {
       let obj: ReportFunction;
@@ -144,6 +132,7 @@ export class ReportOnDemandComponent implements OnInit {
     })
     return functions;
   }
+
   applyConfiguration(configuration: any) {
     this.currentConfiguration = configuration;
     let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
@@ -154,7 +143,7 @@ export class ReportOnDemandComponent implements OnInit {
       subtitle: preference.subtitle,
       vertical: preference.vertical,
       columns: this.parseStringToArray(preference.columns),
-      functions: this.parseFunctions(this.parseStringToArray(preference.functions)),
+      functions: this.parseDefaultFunctionsData(this.parseStringToArray(preference.functions)),
       groups: this.parseStringToArray(preference.groups),
       styleFunctions: this.parseStringToArray(preference.styleFunctions),
       columnsStyle: this.parseColumnsStyle(this.parseStringToArray(preference.columns))
