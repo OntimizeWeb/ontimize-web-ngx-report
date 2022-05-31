@@ -71,10 +71,9 @@ jobs:
         run: |
           cd dist
           npm set registry=${{ env.NPM_REGISTRY }}
-          npm set _auth=$NPM_AUTH_TOKEN
           npm publish
         env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_REGISTRY_AUTH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.OWEB_NPM_AUTOMATION_TOKEN }}
           
       - name: GitHub Release / Create release
         uses: actions/create-release@v1.1.4
