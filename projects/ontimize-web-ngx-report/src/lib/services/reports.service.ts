@@ -1,12 +1,12 @@
 import { Injectable, Injector } from "@angular/core";
-import { Observable, OntimizeEEService } from 'ontimize-web-ngx';
-
+import { Observable, OErrorDialogManager, OntimizeEEService, ServiceRequestParam, ServiceResponse } from 'ontimize-web-ngx';
 @Injectable({ providedIn: 'root' })
 export class ReportsService extends OntimizeEEService {
-
+  public oErrorDialogManager: OErrorDialogManager;
   constructor(protected injector: Injector) {
     super(injector);
     super.configureService(this.getDefaultServiceConfiguration());
+    this.oErrorDialogManager = injector.get(OErrorDialogManager);
   }
 
   public createReport(reportparams?: object): Observable<any> {
@@ -76,12 +76,26 @@ export class ReportsService extends OntimizeEEService {
   public deletePreferences(id?: number): Observable<any> {
 
     const url = this.urlBase + '/preferences/remove/' + id;
-
     return this.doRequest({
       method: 'DELETE',
       url: url
     });
+
   }
 
+  /** overridden method to add error callback for all requests */
+  doRequest(param: ServiceRequestParam): Observable<ServiceResponse> {
+    return super.doRequest({
+      method: param.method,
+      url: param.url,
+      body: param.body,
+      errorCallBack: this.errorCallBack
+    });
+  }
+
+
+  errorCallBack(error: any) {
+    this.oErrorDialogManager.openErrorDialog(error);
+  }
 
 }
