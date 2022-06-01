@@ -380,14 +380,6 @@ export class ReportOnDemandComponent implements OnInit {
     }
   }
 
-  getIcon(order) {
-    if (order) {
-      return 'arrow_upward';
-    }
-    else {
-      return 'arrow_downward'
-    }
-  }
   changeOrder(column, order) {
     if (order) {
       this.columnsGroupBy.find(x => x.columnId === column).ascendent = false;

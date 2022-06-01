@@ -110,7 +110,7 @@
                     {{column.columnName}}
                   </span>
                   <mat-icon (click)="changeOrder(column.columnId, column.ascendent)" mat-list-icon class="button-edit">
-                    {{getIcon(column.ascendent)}}
+                    {{column.ascendent ? "arrow_upward" : "arrow_downward"}}
                   </mat-icon>
                   <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
                 </div>
