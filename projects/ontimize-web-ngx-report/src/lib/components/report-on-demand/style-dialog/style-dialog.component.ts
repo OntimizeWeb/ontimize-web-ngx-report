@@ -18,7 +18,7 @@ export class StyleDialogComponent {
   ]
 
   constructor(
-    public dialogo: MatDialogRef<StyleDialogComponent>,
+    @Optional() public dialogo: MatDialogRef<StyleDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.columnStyle = data;
   }
