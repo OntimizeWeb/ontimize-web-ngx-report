@@ -1,7 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable, OErrorDialogManager, OntimizeEEService, ServiceRequestParam, ServiceResponse } from 'ontimize-web-ngx';
-import { Subscriber } from "rxjs";
-
 @Injectable({ providedIn: 'root' })
 export class ReportsService extends OntimizeEEService {
   public oErrorDialogManager: OErrorDialogManager;
