@@ -32,7 +32,8 @@ export var MAP = {
     'DIALOG.SELECT_FUNCTION.MIN': 'Minumun',
     'DIALOG.SELECT_FUNCTION.MAX': 'Maximun',
     'DIALOG.SELECT_FUNCTION.AVG': 'Average',
-    'DIALOG.SELECT_FUNCTION.SUM': 'Sum'
+    'DIALOG.SELECT_FUNCTION.SUM': 'Sum',
+    'ORDER_BY': 'Order by'
   },
 
   // Spanish
@@ -67,7 +68,8 @@ export var MAP = {
     'DIALOG.SELECT_FUNCTION.MIN': 'Mínimo',
     'DIALOG.SELECT_FUNCTION.MAX': 'Máximo',
     'DIALOG.SELECT_FUNCTION.AVG': 'Media',
-    'DIALOG.SELECT_FUNCTION.SUM': 'Suma'
+    'DIALOG.SELECT_FUNCTION.SUM': 'Suma',
+    'ORDER_BY': 'Ordenar por'
   }
 
 };

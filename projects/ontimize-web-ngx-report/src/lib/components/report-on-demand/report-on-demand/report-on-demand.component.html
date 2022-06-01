@@ -81,7 +81,7 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsData" (cdkDropListDropped)="dropColumns($event)"
-              class="columns" [(ngModel)]="currentPreference.columnsStyle">
+              class="columns" [(ngModel)]="currentPreference.columnsStyle" (selectionChange)="onSelectionChangeColumns($event)">
               <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [selected]="currentPreference.columns.includes(column.id)"
                 [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
@@ -96,7 +96,27 @@
               </mat-list-option>
             </mat-selection-list>
           </mat-expansion-panel>
-
+          <mat-expansion-panel class="acordions">
+            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+              <mat-panel-title>
+                {{ 'ORDER_BY' | oReportsTranslate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsGroupBy" (cdkDropListDropped)="dropColumnsOrderBy($event)"
+              class="columns" [(ngModel)]="currentPreference.columnsGroupBy">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsGroupBy" [value]="column" cdkDrag>
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                  <span mat-line fxFlex>
+                    {{column.columnName}}
+                  </span>
+                  <mat-icon (click)="changeOrder(column.columnId, column.ascendent)" mat-list-icon class="button-edit">
+                    {{getIcon(column.ascendent)}}
+                  </mat-icon>
+                  <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
+                </div>
+              </mat-list-option>
+            </mat-selection-list>
+          </mat-expansion-panel>
           <mat-expansion-panel class="acordions">
             <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
               <mat-panel-title>
