@@ -96,7 +96,7 @@ export class ReportsService extends OntimizeEEService {
   }
 
 
-  errorCallBack(error: any, observer: Subscriber<ServiceResponse>) {
+  errorCallBack(error: any) {
     this.oErrorDialogManager.openErrorDialog(error);
   }
 
