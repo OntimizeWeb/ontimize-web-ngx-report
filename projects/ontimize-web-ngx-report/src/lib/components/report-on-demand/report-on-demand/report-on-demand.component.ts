@@ -9,6 +9,7 @@ import { ReportsService } from '../../../services/reports.service';
 import { OReportColumnsStyle } from '../../../types/report-column-style.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
 import { ReportFunction } from '../../../types/report-function.type';
+import { OReportOrderBy } from '../../../types/report-orderBy.type';
 import { OReportPreferences } from '../../../types/report-preferences.type';
 import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
 import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-preferences-dialog.component';
@@ -47,6 +48,7 @@ export class ReportOnDemandComponent implements OnInit {
   ];
 
   public columnsData: any[];
+  public columnsGroupBy: Array<OReportOrderBy> = [];
   public columnsToGroupData: any[];
   public openedSidenav: boolean = true;
   public fullscreen: boolean = false;
@@ -100,7 +102,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.reportsService.createReport({
       "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups, "entity": this.currentConfiguration.ENTITY,
       "service": this.service, "orientation": orientation, "functions": functions,
-      "styleFunctions": this.currentPreference.styleFunctions, "subtitle": this.currentPreference.subtitle, "columnStyle": this.currentPreference.columnsStyle
+      "styleFunctions": this.currentPreference.styleFunctions, "subtitle": this.currentPreference.subtitle, "columnStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.columnsGroupBy
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.pdf = res.data[0].file;
@@ -231,6 +233,9 @@ export class ReportOnDemandComponent implements OnInit {
     moveItemInArray(this.columnsToGroupData, event.previousIndex, event.currentIndex)
     this.updateColumnToGroupSort();
   }
+  dropColumnsOrderBy(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.columnsGroupBy, event.previousIndex, event.currentIndex);
+  }
 
   updateColumnStyleSort() {
     this.currentPreference.columnsStyle.sort((a: OReportColumnsStyle, b: OReportColumnsStyle) => {
@@ -292,7 +297,7 @@ export class ReportOnDemandComponent implements OnInit {
       "name": data.name, "description": data.description,
       "entity": this.currentConfiguration.ENTITY, "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups,
       "vertical": this.currentPreference.vertical, "functions": functions, "styleFunctions": this.currentPreference.styleFunctions,
-      "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle
+      "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.columnsGroupBy
     }
 
     this.reportsService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
@@ -308,7 +313,7 @@ export class ReportOnDemandComponent implements OnInit {
       "name": data.name, "description": data.description,
       "entity": this.currentConfiguration.ENTITY, "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups,
       "vertical": this.currentPreference.vertical, "functions": functions, "styleFunctions": this.currentPreference.styleFunctions,
-      "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle
+      "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.columnsGroupBy
     }
 
     this.reportsService.saveAsPreferences(preference).subscribe(res => {
@@ -337,6 +342,23 @@ export class ReportOnDemandComponent implements OnInit {
     this.fullscreen = !this.fullscreen;
   }
 
+  onSelectionChangeColumns(event: MatSelectionListChange) {
+    let functionSelected: string = event.option.value.id;
+    const columnGroupBySelected: OReportOrderBy = { columnId: functionSelected, columnName: this.translateService.get(functionSelected), ascendent: true }
+    if (event.option.selected) {
+      if ((this.columnsGroupBy.find(x => x.columnId === functionSelected)) == null) {
+        this.columnsGroupBy.push(columnGroupBySelected);
+      }
+    }
+    else {
+      let index = this.columnsGroupBy.find(x => x.columnId === functionSelected);
+      if (index != null) {
+        this.columnsGroupBy.splice(this.columnsGroupBy.indexOf(index));
+      }
+    }
+
+  }
+
   onSelectionChangeGroups(event: MatSelectionListChange) {
     if (!event.option.selected || event.option.value.columnName === 'TOTAL') return;
     let functionSelected: string = event.option.value;
@@ -358,7 +380,13 @@ export class ReportOnDemandComponent implements OnInit {
     }
   }
 
+  changeOrder(column, order) {
+    if (order) {
+      this.columnsGroupBy.find(x => x.columnId === column).ascendent = false;
+    }
+    else { this.columnsGroupBy.find(x => x.columnId === column).ascendent = true; }
 
+  }
   isCheckedColumn(column) {
     const isCheckedColumn = this.currentPreference.columnsStyle.length > 0 ? this.currentPreference.columnsStyle.filter(x => x.id === column.id).length > 0 : false;
     return isCheckedColumn;

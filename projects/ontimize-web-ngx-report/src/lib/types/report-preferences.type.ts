@@ -1,4 +1,5 @@
 import { OReportColumnsStyle } from "./report-column-style.type"
+import { OReportOrderBy } from "./report-orderBy.type"
 
 export type OReportPreferences = {
   columns: Array<string>,
@@ -8,5 +9,6 @@ export type OReportPreferences = {
   subtitle: string,
   styleFunctions: Array<string>,
   columnsStyle?: Array<OReportColumnsStyle>,
+  columnsGroupBy?: Array<OReportOrderBy>,
   vertical: boolean
 }
