@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { OTableComponent } from 'ontimize-web-ngx';
 import { OAlertService } from '../o-alert.service';
 
