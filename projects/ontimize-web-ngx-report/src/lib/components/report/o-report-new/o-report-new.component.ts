@@ -8,8 +8,8 @@ import { OAlertService } from '../o-alert.service';
   templateUrl: './o-report-new.component.html',
   styleUrls: ['./o-report-new.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  host:{
-    '[class.app-report-store-new]' : 'true'
+  host: {
+    '[class.app-report-store-new]': 'true'
   }
 })
 export class OReportNewComponent implements OnInit {
@@ -56,6 +56,7 @@ export class OReportNewComponent implements OnInit {
     if (this.dialogService) {
       this.dialogService.error('ERROR',
         'SERVER_ERROR_MESSAGE');
+      this.loading = false;
     }
   }
 
@@ -64,6 +65,14 @@ export class OReportNewComponent implements OnInit {
   }
 
   onClickSave(e: Event) {
+    Object.keys(this.form.formGroup.controls).forEach((control) => {
+      this.form.formGroup.controls[control].markAsTouched();
+    });
+
+    if (!this.form.formGroup.valid) {
+      this.dialogService.alert('ERROR', 'MESSAGES.FORM_VALIDATION_ERROR');
+      return;
+    }
     this.loading = true;
     this.file.onClickUpload(e);
   }
