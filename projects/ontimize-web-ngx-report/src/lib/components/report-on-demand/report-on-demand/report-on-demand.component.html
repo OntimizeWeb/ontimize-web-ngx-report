@@ -91,7 +91,7 @@
                   <mat-icon mat-list-icon *ngIf="isCheckedColumn(column)" (click)="showColumnStyleDialog($event, column)" class="button-edit">
                     edit
                   </mat-icon>
-                  <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
+                  <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
                 </div>
               </mat-list-option>
             </mat-selection-list>
@@ -109,10 +109,11 @@
                   <span mat-line fxFlex>
                     {{column.columnName}}
                   </span>
-                  <mat-icon (click)="changeOrder(column.columnId, column.ascendent)" mat-list-icon class="button-edit">
-                    {{column.ascendent ? "arrow_upward" : "arrow_downward"}}
-                  </mat-icon>
-                  <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
+                  <mat-icon *ngIf="column.ascendent" (click)="changeOrder(column.columnId, column.ascendent, $event)" mat-list-icon
+                    svgIcon="ontimize:sort_by_alpha_asc" class="button-edit"></mat-icon>
+                  <mat-icon *ngIf="!column.ascendent" (click)="changeOrder(column.columnId, column.ascendent, $event)" mat-list-icon
+                    svgIcon="ontimize:sort_by_alpha_desc" class="button-edit"></mat-icon>
+                  <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
                 </div>
               </mat-list-option>
             </mat-selection-list>
@@ -131,12 +132,7 @@
                   <span mat-line fxFlex>
                     {{ column | oTranslate }}
                   </span>
-                  <mat-icon mat-list-icon svgIcon="ontimize:drag_handle"></mat-icon>
-                  <ng-template cdkDragPreview>
-                    <div class="order-preview">
-                      {{column}}
-                    </div>
-                  </ng-template>
+                  <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
                 </div>
               </mat-list-option>
             </mat-selection-list>
