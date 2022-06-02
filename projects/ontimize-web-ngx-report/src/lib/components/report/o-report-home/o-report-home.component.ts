@@ -4,22 +4,18 @@ import { OAlertService } from '../o-alert.service';
 
 @Component({
   selector: 'o-report-home',
-  templateUrl: './o-report-home.component.html',
-  styleUrls: ['./o-report-home.component.scss']
+  templateUrl: './o-report-home.component.html'
 })
-export class OReportHomeComponent implements OnInit {
+export class OReportHomeComponent {
 
   @ViewChild('table', { static: true })
   table: OTableComponent;
 
   constructor(private alertService: OAlertService) {
     alertService.alert$.subscribe(
-      res => {
+      _res => {
         this.table.refresh();
       });
-   }
-
-  ngOnInit() {
   }
 
 }

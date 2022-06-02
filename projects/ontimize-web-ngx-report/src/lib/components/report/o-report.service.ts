@@ -81,7 +81,7 @@ export class OReportService extends OntimizeEEService implements IFileService {
     return headers;
   }
 
-  public advancedQuery(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object, offset?: number, pagesize?: number, orderby?: Array<Object>): Observable<any> {
+  public advancedQuery(_kv?: Object, _av?: Array<string>, entity?: string, _sqltypes?: Object, offset?: number, _pagesize?: number, _orderby?: Array<Object>): Observable<any> {
     offset = (Util.isDefined(offset)) ? offset : this.offset;
 
     // Calculate page
@@ -98,7 +98,7 @@ export class OReportService extends OntimizeEEService implements IFileService {
     });
   }
 
-  public query(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any> {
+  public query(kv?: Object, _av?: Array<string>, entity?: string, _sqltypes?: Object): Observable<any> {
     const identifier = kv['UUID'];
     let url = '';
     if (Object.keys(kv).length === 0) {
@@ -113,15 +113,15 @@ export class OReportService extends OntimizeEEService implements IFileService {
     });
   }
 
-  public fillReport(av?: Array<string>, entity?: string, sqltypes?: Object, filter?: Object): Observable<any> {
+  public fillReport(av?: Array<string>, entity?: string, _sqltypes?: Object, filter?: Object): Observable<any> {
     const identifier = av[0];
     let params = '';
 
     for (let i = 1; i < av.length; i++)
       params = params + av[i].toString() + ',';
     let body = JSON.stringify({
-      params : params,
-      filter : filter
+      params: params,
+      filter: filter
     })
 
     let url = `${this.urlBase}/reportstore/${entity}/` + identifier;
@@ -133,7 +133,7 @@ export class OReportService extends OntimizeEEService implements IFileService {
     });
   }
 
-  public delete(kv?: Object, entity?: string, sqltypes?: Object): Observable<any> {
+  public delete(kv?: Object, _entity?: string, _sqltypes?: Object): Observable<any> {
     const identifier = kv.valueOf()[Object.keys(kv)[0]];
     let url = `${this.urlBase}/reportstore/removeReport/` + identifier;
 
@@ -143,7 +143,7 @@ export class OReportService extends OntimizeEEService implements IFileService {
     });
   }
 
-  public update(kv?: Object, av?: Array<string>, entity?: string, sqltypes?: Object): Observable<any> {
+  public update(kv?: Object, av?: Array<string>, _entity?: string, _sqltypes?: Object): Observable<any> {
     const identifier = kv.valueOf()[Object.keys(kv)[0]];
     let url = `${this.urlBase}/reportstore/updateReport/` + identifier;
 
