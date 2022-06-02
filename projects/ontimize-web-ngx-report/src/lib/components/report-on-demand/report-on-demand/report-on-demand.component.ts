@@ -235,12 +235,20 @@ export class ReportOnDemandComponent implements OnInit {
   }
   dropColumnsOrderBy(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.columnsGroupBy, event.previousIndex, event.currentIndex);
+    this.updateColumnGroupBySort();
   }
 
   updateColumnStyleSort() {
     this.currentPreference.columnsStyle.sort((a: OReportColumnsStyle, b: OReportColumnsStyle) => {
       let indexA = this.columnsData.findIndex(x => x.id === a.id);
       let indexB = this.columnsData.findIndex(x => x.id === b.id);
+      return indexA - indexB;
+    });
+  }
+  updateColumnGroupBySort() {
+    this.currentPreference.columnsGroupBy.sort((a: OReportOrderBy, b: OReportOrderBy) => {
+      let indexA = this.columnsGroupBy.findIndex(x => x.columnId === a.columnId);
+      let indexB = this.columnsGroupBy.findIndex(x => x.columnId === b.columnId);
       return indexA - indexB;
     });
   }
@@ -380,12 +388,12 @@ export class ReportOnDemandComponent implements OnInit {
     }
   }
 
-  changeOrder(column, order) {
+  changeOrder(column, order, event) {
     if (order) {
       this.columnsGroupBy.find(x => x.columnId === column).ascendent = false;
     }
     else { this.columnsGroupBy.find(x => x.columnId === column).ascendent = true; }
-
+    event.stopPropagation();
   }
   isCheckedColumn(column) {
     const isCheckedColumn = this.currentPreference.columnsStyle.length > 0 ? this.currentPreference.columnsStyle.filter(x => x.id === column.id).length > 0 : false;
