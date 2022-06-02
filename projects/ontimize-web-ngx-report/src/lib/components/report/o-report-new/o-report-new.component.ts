@@ -45,14 +45,13 @@ export class OReportNewComponent implements OnInit {
     return data;
   }
 
-  onUploadFile(e: Event) {
+  onUploadFile() {
     this.loading = false;
     this.confirm();
-    this.form.confirmExit = false;
-    this.form.closeDetail();
+    this.form._clearAndCloseFormAfterInsert();
   }
 
-  onError(e: Event) {
+  onError() {
     if (this.dialogService) {
       this.dialogService.error('ERROR',
         'SERVER_ERROR_MESSAGE');
