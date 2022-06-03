@@ -1,5 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
-import { Observable, OErrorDialogManager, OntimizeEEService, ServiceRequestParam, ServiceResponse } from 'ontimize-web-ngx';
+import { Observable, OErrorDialogManager, OntimizeEEService, ServiceRequestParam, ServiceResponse, Util } from 'ontimize-web-ngx';
 @Injectable({ providedIn: 'root' })
 export class ReportsService extends OntimizeEEService {
   public oErrorDialogManager: OErrorDialogManager;
@@ -94,7 +94,19 @@ export class ReportsService extends OntimizeEEService {
   }
 
 
-  errorCallBack(error: any) {
+  errorCallBack(httpErrorResponse: any) {
+    const error = httpErrorResponse.error;
+    if (Util.isObject(error)) {
+      if ((error['code'] === 1 || error['code'] === 100) && Util.isDefined(error['message'])) {
+        this.showNotificationError(error['message']);
+        return;
+      }
+    }
+    this.showNotificationError('MESSAGES.ERROR_QUERY');
+
+  }
+
+  showNotificationError(error: string) {
     this.oErrorDialogManager.openErrorDialog(error);
   }
 
