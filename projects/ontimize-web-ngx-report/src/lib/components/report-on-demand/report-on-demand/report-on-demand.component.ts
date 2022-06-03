@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ChangeDetectionStrategy, ViewChild, ViewEncapsulation } from '@angular/core';
+import {  ChangeDetectorRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -35,9 +35,8 @@ export class ReportOnDemandComponent implements OnInit {
   public functionsData: ReportFunction[] = [];
   public appliedConfiguration: boolean = false;
   public selectedFunctions = [];
-  @ViewChild('functionsList', { static: false })
-  public functionsList: MatSelectionList;
-  public dataArray = [
+
+  public stylesArray = [
     { value: 'grid', viewValue: 'GRID' },
     { value: 'rowNumber', viewValue: 'ROW_NUMBER' },
     { value: 'columnName', viewValue: 'COLUMNS_NAMES' },
@@ -47,8 +46,11 @@ export class ReportOnDemandComponent implements OnInit {
     { value: 'firstGroupNewPage', viewValue: 'FIRST_GROUP_PAGE' }
   ];
 
-  public columnsData: any[];
+
+  public columnsData: Array<OReportColumnsStyle>;
+  public selectedColumnsData: any[string];
   public columnsOrderBy: Array<OReportOrderBy> = [];
+
   public columnsToGroupData: any[];
   public openedSidenav: boolean = true;
   public fullscreen: boolean = false;
@@ -64,7 +66,8 @@ export class ReportOnDemandComponent implements OnInit {
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     protected dialogService: DialogService,
-    public translateService: OTranslateService) {
+    public translateService: OTranslateService,
+    public cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -148,9 +151,11 @@ export class ReportOnDemandComponent implements OnInit {
       functions: this.parseDefaultFunctionsData(this.parseStringToArray(preference.functions)),
       groups: this.parseStringToArray(preference.groups),
       styleFunctions: this.parseStringToArray(preference.styleFunctions),
-      columnsStyle: this.parseColumnsStyle(this.parseStringToArray(preference.columns))
+      columnsStyle: this.parseColumnsStyle(this.parseStringToArray(preference.columns)),
+      //columnsOrderBy: this.parseColumnsOrderBy(preference.columnsOrderBy)
     };
-
+    // this.selectedColumnsData = this.currentPreference.columns.map(x => x.attr);
+    ;
   }
   showColumnStyleDialog(event, id): void {
     event.stopPropagation();
@@ -351,7 +356,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   onSelectionChangeColumns(event: MatSelectionListChange) {
-    let functionSelected: string = event.option.value.id;
+    let functionSelected: string = event.option.value;
     const columnGroupBySelected: OReportOrderBy = { columnId: functionSelected, columnName: this.translateService.get(functionSelected), ascendent: true }
     if (event.option.selected) {
       if ((this.columnsOrderBy.find(x => x.columnId === functionSelected)) == null) {

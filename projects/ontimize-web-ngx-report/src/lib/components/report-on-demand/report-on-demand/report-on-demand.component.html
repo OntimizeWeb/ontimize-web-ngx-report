@@ -63,8 +63,7 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-selection-list dense #settings [(ngModel)]="currentPreference.styleFunctions">
-              <mat-list-option checkboxPosition="before" *ngFor="let choice of dataArray"
-                [selected]="currentPreference.styleFunctions.includes(choice.value)" [value]="choice.value">
+              <mat-list-option checkboxPosition="before" *ngFor="let choice of stylesArray" [value]="choice.value">
                 <div fxLayout="row">
                   <span fxFlex>
                     {{choice.viewValue | oReportsTranslate}}
@@ -81,9 +80,8 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsData" (cdkDropListDropped)="dropColumns($event)"
-              class="columns" [(ngModel)]="currentPreference.columnsStyle" (selectionChange)="onSelectionChangeColumns($event)">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [selected]="currentPreference.columns.includes(column.id)"
-                [value]="column" cdkDrag>
+              class="columns" [(ngModel)]="currentPreference.columns" (selectionChange)="onSelectionChangeColumns($event)">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [value]="column.id" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     {{column.name}}
@@ -102,9 +100,9 @@
                 {{ 'ORDER_BY' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsGroupBy" (cdkDropListDropped)="dropColumnsOrderBy($event)"
-              class="columns" [(ngModel)]="currentPreference.columnsGroupBy">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsGroupBy" [value]="column" cdkDrag>
+            <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsOrderBy" (cdkDropListDropped)="dropColumnsOrderBy($event)"
+              class="columns" [(ngModel)]="currentPreference.columnsOrderBy">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsOrderBy" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     {{column.columnName}}
@@ -126,8 +124,7 @@
             </mat-expansion-panel-header>
             <mat-selection-list dense cdkDropList [cdkDropListData]="columnsToGroupData" (cdkDropListDropped)="dropGroups($event)"
               [(ngModel)]="currentPreference.groups" (selectionChange)="onSelectionChangeGroups($event)">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsToGroupData"
-                [selected]="currentPreference.groups.includes(column)" [value]="column" cdkDrag>
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsToGroupData" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     {{ column | oTranslate }}
@@ -145,8 +142,7 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-selection-list #functionsList dense [(ngModel)]="currentPreference.functions" (selectionChange)="onSelectionChangeFunctions($event)">
-              <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData"
-                [selected]="selectedFunctions.includes(function.columnName)" [value]="function">
+              <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData" [value]="function">
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     <ng-container *ngIf="function.columnName==='TOTAL'; else functionColumnTemplate">
@@ -166,8 +162,7 @@
         </mat-accordion>
 
         <mat-dialog-actions align=center *ngIf="openedSidenav">
-          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()"
-            [disabled]="currentPreference.columnsStyle.length===0">
+          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="currentPreference.columns.length===0">
             {{'PREVIEW' | oReportsTranslate }}</button>
         </mat-dialog-actions>
 
