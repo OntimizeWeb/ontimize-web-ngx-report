@@ -97,7 +97,7 @@ export class ReportsService extends OntimizeEEService {
   errorCallBack(httpErrorResponse: any) {
     const error = httpErrorResponse.error;
     if (Util.isObject(error)) {
-      if ((error['code'] === 1 || error['code'] === 100) && Util.isDefined(error['message'])) {
+      if (error['code'] === 1 && Util.isDefined(error['message'])) {
         this.showNotificationError(error['message']);
         return;
       }
