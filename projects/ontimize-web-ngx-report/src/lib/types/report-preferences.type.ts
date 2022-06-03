@@ -9,6 +9,6 @@ export type OReportPreferences = {
   subtitle: string,
   styleFunctions: Array<string>,
   columnsStyle?: Array<OReportColumnsStyle>,
-  columnsGroupBy?: Array<OReportOrderBy>,
+  columnsOrderBy?: Array<OReportOrderBy>,
   vertical: boolean
 }
