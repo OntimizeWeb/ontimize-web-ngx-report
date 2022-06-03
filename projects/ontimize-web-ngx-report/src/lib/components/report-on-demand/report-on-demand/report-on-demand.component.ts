@@ -48,7 +48,7 @@ export class ReportOnDemandComponent implements OnInit {
   ];
 
   public columnsData: any[];
-  public columnsGroupBy: Array<OReportOrderBy> = [];
+  public columnsOrderBy: Array<OReportOrderBy> = [];
   public columnsToGroupData: any[];
   public openedSidenav: boolean = true;
   public fullscreen: boolean = false;
@@ -80,7 +80,7 @@ export class ReportOnDemandComponent implements OnInit {
     const columnsData = this.data.columns.split(';');
     this.columnsData = this.parseColumnsStyle(columnsData);
     this.columnsToGroupData = columnsData;
-    this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], styleFunctions: ['columnName'], columnsStyle: [] };
+    this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], styleFunctions: ['columnName'], columnsStyle: [], columnsOrderBy: [] };
     this.currentConfiguration = { ENTITY: this.data.entity }
 
     this.getFunctions();
@@ -102,7 +102,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.reportsService.createReport({
       "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups, "entity": this.currentConfiguration.ENTITY,
       "service": this.service, "orientation": orientation, "functions": functions,
-      "styleFunctions": this.currentPreference.styleFunctions, "subtitle": this.currentPreference.subtitle, "columnStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.columnsGroupBy
+      "styleFunctions": this.currentPreference.styleFunctions, "subtitle": this.currentPreference.subtitle, "columnStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.columnsOrderBy
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.pdf = res.data[0].file;
@@ -234,7 +234,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.updateColumnToGroupSort();
   }
   dropColumnsOrderBy(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.columnsGroupBy, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.columnsOrderBy, event.previousIndex, event.currentIndex);
     this.updateColumnGroupBySort();
   }
 
@@ -246,9 +246,9 @@ export class ReportOnDemandComponent implements OnInit {
     });
   }
   updateColumnGroupBySort() {
-    this.currentPreference.columnsGroupBy.sort((a: OReportOrderBy, b: OReportOrderBy) => {
-      let indexA = this.columnsGroupBy.findIndex(x => x.columnId === a.columnId);
-      let indexB = this.columnsGroupBy.findIndex(x => x.columnId === b.columnId);
+    this.currentPreference.columnsOrderBy.sort((a: OReportOrderBy, b: OReportOrderBy) => {
+      let indexA = this.columnsOrderBy.findIndex(x => x.columnId === a.columnId);
+      let indexB = this.columnsOrderBy.findIndex(x => x.columnId === b.columnId);
       return indexA - indexB;
     });
   }
@@ -305,7 +305,7 @@ export class ReportOnDemandComponent implements OnInit {
       "name": data.name, "description": data.description,
       "entity": this.currentConfiguration.ENTITY, "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups,
       "vertical": this.currentPreference.vertical, "functions": functions, "styleFunctions": this.currentPreference.styleFunctions,
-      "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.columnsGroupBy
+      "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.columnsOrderBy
     }
 
     this.reportsService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
@@ -321,7 +321,7 @@ export class ReportOnDemandComponent implements OnInit {
       "name": data.name, "description": data.description,
       "entity": this.currentConfiguration.ENTITY, "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups,
       "vertical": this.currentPreference.vertical, "functions": functions, "styleFunctions": this.currentPreference.styleFunctions,
-      "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.columnsGroupBy
+      "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.columnsOrderBy
     }
 
     this.reportsService.saveAsPreferences(preference).subscribe(res => {
@@ -354,14 +354,14 @@ export class ReportOnDemandComponent implements OnInit {
     let functionSelected: string = event.option.value.id;
     const columnGroupBySelected: OReportOrderBy = { columnId: functionSelected, columnName: this.translateService.get(functionSelected), ascendent: true }
     if (event.option.selected) {
-      if ((this.columnsGroupBy.find(x => x.columnId === functionSelected)) == null) {
-        this.columnsGroupBy.push(columnGroupBySelected);
+      if ((this.columnsOrderBy.find(x => x.columnId === functionSelected)) == null) {
+        this.columnsOrderBy.push(columnGroupBySelected);
       }
     }
     else {
-      let index = this.columnsGroupBy.find(x => x.columnId === functionSelected);
+      let index = this.columnsOrderBy.find(x => x.columnId === functionSelected);
       if (index != null) {
-        this.columnsGroupBy.splice(this.columnsGroupBy.indexOf(index));
+        this.columnsOrderBy.splice(this.columnsOrderBy.indexOf(index));
       }
     }
 
@@ -390,9 +390,9 @@ export class ReportOnDemandComponent implements OnInit {
 
   changeOrder(column, order, event) {
     if (order) {
-      this.columnsGroupBy.find(x => x.columnId === column).ascendent = false;
+      this.columnsOrderBy.find(x => x.columnId === column).ascendent = false;
     }
-    else { this.columnsGroupBy.find(x => x.columnId === column).ascendent = true; }
+    else { this.columnsOrderBy.find(x => x.columnId === column).ascendent = true; }
     event.stopPropagation();
   }
   isCheckedColumn(column) {
