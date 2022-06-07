@@ -24,8 +24,8 @@ export class OFillReportService {
           if (parameters.length > 0) {
             let av = [reportId];
             let values = Object.values(parametersValues);
-            for (let i = 0; i < values.length; i++) {
-              av.push(values[i]);
+            for (let value of values) {
+              av.push(value);
             }
             this.dialog.open(OReportViewerComponent, {
               height: '90%',

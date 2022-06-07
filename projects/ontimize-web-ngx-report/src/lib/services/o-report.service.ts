@@ -1,4 +1,4 @@
-import { HttpEventType, HttpHeaders, HttpRequest } from "@angular/common/http";
+import { HttpEventType, HttpRequest } from "@angular/common/http";
 import { Injectable, Injector } from "@angular/core";
 import { IFileService, Observable, OntimizeEEService, Util } from 'ontimize-web-ngx';
 import { share } from 'rxjs/operators';
