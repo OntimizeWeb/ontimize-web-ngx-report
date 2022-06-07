@@ -80,11 +80,12 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsData" (cdkDropListDropped)="dropColumns($event)"
-              class="columns" [(ngModel)]="currentPreference.columns" (selectionChange)="onSelectionChangeColumns($event)">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [value]="column.id" cdkDrag>
+              class="columns" [(ngModel)]="currentPreference.columnsStyle" (selectionChange)="onSelectionChangeColumns($event)"
+              [compareWith]="columnsStyleCompareFunction">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
-                    {{column.name}}
+                    {{column.id | oReportsTranslate}}
                   </span>
                   <mat-icon mat-list-icon *ngIf="isCheckedColumn(column)" (click)="showColumnStyleDialog($event, column)" class="button-edit">
                     edit
@@ -94,23 +95,23 @@
               </mat-list-option>
             </mat-selection-list>
           </mat-expansion-panel>
-          <mat-expansion-panel class="acordions">
+          <mat-expansion-panel class="acordions" *ngIf="columnsOrderBy.length > 0">
             <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
               <mat-panel-title>
                 {{ 'ORDER_BY' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsOrderBy" (cdkDropListDropped)="dropColumnsOrderBy($event)"
-              class="columns" [(ngModel)]="currentPreference.columnsOrderBy">
+              class="columns" [(ngModel)]="currentPreference.orderBy" [compareWith]="columnsOrderByCompareFunction">
               <mat-list-option checkboxPosition="before" *ngFor="let column of columnsOrderBy" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
-                    {{column.columnName}}
+                    {{column.columnId | oReportsTranslate}}
                   </span>
-                  <mat-icon *ngIf="column.ascendent" (click)="changeOrder(column.columnId, column.ascendent, $event)" mat-list-icon
-                    svgIcon="ontimize:sort_by_alpha_asc" class="button-edit"></mat-icon>
-                  <mat-icon *ngIf="!column.ascendent" (click)="changeOrder(column.columnId, column.ascendent, $event)" mat-list-icon
-                    svgIcon="ontimize:sort_by_alpha_desc" class="button-edit"></mat-icon>
+                  <mat-icon *ngIf="column.ascendent" (click)="changeOrder(column, $event)" mat-list-icon svgIcon="ontimize:sort_by_alpha_asc"
+                    class="button-edit"></mat-icon>
+                  <mat-icon *ngIf="!column.ascendent" (click)="changeOrder(column, $event)" mat-list-icon svgIcon="ontimize:sort_by_alpha_desc"
+                    class="button-edit"></mat-icon>
                   <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
                 </div>
               </mat-list-option>
@@ -141,7 +142,8 @@
                 {{ 'FUNCTIONS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list #functionsList dense [(ngModel)]="currentPreference.functions" (selectionChange)="onSelectionChangeFunctions($event)">
+            <mat-selection-list #functionsList dense [(ngModel)]="currentPreference.functions" [compareWith]="functionsCompareFunction"
+              (selectionChange)="onSelectionChangeFunctions($event)">
               <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData" [value]="function">
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
@@ -153,8 +155,9 @@
                     {{function.functionName | oReportsTranslate }}({{function.columnName | oReportsTranslate }})
                   </ng-template>
 
-                  <mat-icon *ngIf="currentPreference.functions.includes(function) && function.functionName!=='TOTAL'" mat-list-icon
-                    (click)="selectFunction($event, function)" class="button-edit">edit</mat-icon>
+                  <mat-icon *ngIf="isCheckedFunction(function)" mat-list-icon (click)="selectFunction($event, function)" class="button-edit">
+                    edit
+                  </mat-icon>
                 </div>
               </mat-list-option>
             </mat-selection-list>
@@ -162,7 +165,8 @@
         </mat-accordion>
 
         <mat-dialog-actions align=center *ngIf="openedSidenav">
-          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="currentPreference.columns.length===0">
+          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()"
+            [disabled]="currentPreference.columnsStyle.length===0">
             {{'PREVIEW' | oReportsTranslate }}</button>
         </mat-dialog-actions>
 
