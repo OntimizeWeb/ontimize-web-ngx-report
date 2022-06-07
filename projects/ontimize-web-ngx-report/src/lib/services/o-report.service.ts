@@ -28,7 +28,7 @@ export class OReportService extends OntimizeEEService implements IFileService {
       }
 
       const request = new HttpRequest('POST', url, toUpload, {
-        headers: this.buildHeadersReport(),
+        headers: this.buildHeaders(),
         reportProgress: true
       });
 
@@ -71,14 +71,6 @@ export class OReportService extends OntimizeEEService implements IFileService {
     return dataObservable.pipe(share());
   }
 
-  protected buildHeadersReport(): HttpHeaders {
-    let headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*' });
-    const sessionId = this.authService.getSessionInfo().id;
-    if (Util.isDefined(sessionId)) {
-      headers = headers.append('Authorization', 'Bearer ' + sessionId);
-    }
-    return headers;
-  }
 
   public advancedQuery(_kv?: Object, _av?: Array<string>, entity?: string, _sqltypes?: Object, offset?: number, _pagesize?: number, _orderby?: Array<Object>): Observable<any> {
     offset = (Util.isDefined(offset)) ? offset : this.offset;
