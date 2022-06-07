@@ -10,13 +10,13 @@ import { ReportOnDemandComponent } from './components/report-on-demand/report-on
 import { SavePreferencesDialogComponent } from './components/report-on-demand/save-preferences-dialog/save-preferences-dialog.component';
 import { SelectFunctionDialogComponent } from './components/report-on-demand/select-function-dialog/select-function-dialog.component';
 import { StyleDialogComponent } from './components/report-on-demand/style-dialog/style-dialog.component';
-import { OAlertService } from './components/report/o-alert.service';
-import { OFillReportService } from './components/report/o-fill-report.service';
+import { OAlertService } from './services/o-alert.service';
+import { OFillReportService } from './services/o-fill-report.service';
 import { OReportDetailComponent } from './components/report/o-report-detail/o-report-detail.component';
 import { OReportNewComponent } from './components/report/o-report-new/o-report-new.component';
 import { OReportRoutingModule } from './components/report/o-report-routing.module';
 import { OReportViewerComponent } from './components/report/o-report-viewer/o-report-viewer.component';
-import { OReportService } from './components/report/o-report.service';
+import { OReportService } from './services/o-report.service';
 import { OReportHomeComponent } from './o-components';
 import { OReportOnDemandService } from './services/reports-on-demand.service';
 import { OReportsTranslatePipe } from './util/o-reports-translate.pipe';

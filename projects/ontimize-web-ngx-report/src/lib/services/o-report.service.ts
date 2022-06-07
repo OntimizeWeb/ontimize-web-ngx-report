@@ -1,7 +1,6 @@
 import { HttpEventType, HttpHeaders, HttpRequest } from "@angular/common/http";
 import { Injectable, Injector } from "@angular/core";
 import { IFileService, Observable, OntimizeEEService, Util } from 'ontimize-web-ngx';
-import { OReportResponseAdapter } from './o-report.response-adapter';
 import { share } from 'rxjs/operators';
 
 @Injectable()
@@ -154,8 +153,5 @@ export class OReportService extends OntimizeEEService implements IFileService {
     });
   }
 
-  public configureAdapter() {
-    this.adapter = this.injector.get(OReportResponseAdapter);
-  }
 
 }

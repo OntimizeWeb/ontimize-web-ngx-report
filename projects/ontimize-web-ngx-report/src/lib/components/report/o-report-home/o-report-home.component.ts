@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { OTableComponent } from 'ontimize-web-ngx';
-import { OAlertService } from '../o-alert.service';
+import { OAlertService } from '../../../services/o-alert.service';
 
 @Component({
   selector: 'o-report-home',
