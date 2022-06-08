@@ -43,17 +43,7 @@ export class OReportService extends OntimizeEEService implements IFileService {
         } else if (HttpEventType.Response === resp.type) {
           // Full response received
           if (resp.body) {
-            if (resp.body['code'] === 3) {
-              this.authService.logout();
-            } else if (resp.body['code'] === 1) {
-              observer.error(resp.body['message']);
-            } else if (resp.body['code'] === 0) {
-              // RESPONSE
-              observer.next(resp.body);
-            } else {
-              // Unknow state -> error
-              observer.error('Service unavailable');
-            }
+            this.bodyCode(resp, observer);
           } else {
             observer.next(resp.body);
           }
@@ -70,7 +60,19 @@ export class OReportService extends OntimizeEEService implements IFileService {
     });
     return dataObservable.pipe(share());
   }
-
+  protected bodyCode(resp, observer) {
+    if (resp.body['code'] === 3) {
+      this.authService.logout();
+    } else if (resp.body['code'] === 1) {
+      observer.error(resp.body['message']);
+    } else if (resp.body['code'] === 0) {
+      // RESPONSE
+      observer.next(resp.body);
+    } else {
+      // Unknow state -> error
+      observer.error('Service unavailable');
+    }
+  }
   protected buildHeadersReport(): HttpHeaders {
     let headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*' });
     const sessionId = this.authService.getSessionInfo().id;

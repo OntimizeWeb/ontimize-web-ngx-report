@@ -12,7 +12,7 @@ export class OReportOnDemandService implements IReportOnDemandService {
     protected dialog: MatDialog
   ) { }
 
-  openReportOnDemand(data, service, entity) {
+  openReportOnDemand(data: any, service: any, entity: any) {
     this.dialog.open(ReportOnDemandComponent, {
       maxWidth: '100vw',
       maxHeight: '100vh',
