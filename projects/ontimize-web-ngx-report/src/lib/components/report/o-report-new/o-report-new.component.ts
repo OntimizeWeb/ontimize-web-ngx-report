@@ -12,7 +12,7 @@ import { OAlertService } from '../../../services/o-alert.service';
     '[class.app-report-store-new]': 'true'
   }
 })
-export class OReportNewComponent implements OnInit {
+export class OReportNewComponent {
 
   @ViewChild('name', { static: true })
   name: OTextInputComponent;
@@ -32,10 +32,6 @@ export class OReportNewComponent implements OnInit {
     private alertService: OAlertService,
     private dialogService: DialogService
   ) { }
-
-  ngOnInit() {
-    //ngOnInit implementation
-  }
 
   getFileData() {
     return {
