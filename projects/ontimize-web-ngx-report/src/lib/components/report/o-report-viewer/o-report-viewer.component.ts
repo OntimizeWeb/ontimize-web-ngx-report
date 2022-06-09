@@ -7,7 +7,7 @@ import { OReportService } from '../../../services/o-report.service';
   selector: 'o-report-viewer',
   templateUrl: './o-report-viewer.component.html'
 })
-export class OReportViewerComponent implements OnInit {
+export class OReportViewerComponent {
 
   public pdf = '';
 
@@ -31,10 +31,6 @@ export class OReportViewerComponent implements OnInit {
         console.log(err);
       }
     );
-  }
-
-  ngOnInit() {
-    //ngOnInit implementation
   }
 
 

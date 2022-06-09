@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { DialogService } from 'ontimize-web-ngx';
 import { OReportViewerComponent } from '../components/report/o-report-viewer/o-report-viewer.component';
+import { Constants } from '../util/constants';
 import { OReportService } from './o-report.service';
 
 @Injectable()
@@ -28,8 +29,10 @@ export class OFillReportService {
               av.push(value);
             }
             this.dialog.open(OReportViewerComponent, {
-              height: '90%',
-              width: '80%',
+              maxWidth: '100vw',
+              maxHeight: '100vh',
+              height: Constants.DEFAULT_HEIGHT_DIALOG,
+              width: Constants.DEFAULT_WIDTH_DIALOG,
               data: {
                 'params': av,
                 'filter': filter
@@ -38,8 +41,10 @@ export class OFillReportService {
           } else {
             let av = [reportId];
             this.dialog.open(OReportViewerComponent, {
-              height: '90%',
-              width: '80%',
+              maxWidth: '100vw',
+              maxHeight: '100vh',
+              height: Constants.DEFAULT_HEIGHT_DIALOG,
+              width: Constants.DEFAULT_WIDTH_DIALOG,
               data: {
                 'params': av,
                 'filter': filter
