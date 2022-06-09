@@ -62,7 +62,7 @@
                 {{ 'STYLE' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #settings [(ngModel)]="currentPreference.styleFunctions">
+            <mat-selection-list dense #settings [(ngModel)]="currentPreference.style">
               <mat-list-option checkboxPosition="before" *ngFor="let choice of stylesArray" [value]="choice.value">
                 <div fxLayout="row">
                   <span fxFlex>
@@ -80,8 +80,8 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsData" (cdkDropListDropped)="dropColumns($event)"
-              class="columns" [(ngModel)]="currentPreference.columnsStyle" (selectionChange)="onSelectionChangeColumns($event)"
-              [compareWith]="columnsStyleCompareFunction">
+              class="columns" [(ngModel)]="currentPreference.columns" (selectionChange)="onSelectionChangeColumns($event)"
+              [compareWith]="columnsCompareFunction">
               <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
@@ -166,7 +166,7 @@
 
         <mat-dialog-actions align=center *ngIf="openedSidenav">
           <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()"
-            [disabled]="currentPreference.columnsStyle.length===0">
+            [disabled]="currentPreference.columns.length===0">
             {{'PREVIEW' | oReportsTranslate }}</button>
         </mat-dialog-actions>
 

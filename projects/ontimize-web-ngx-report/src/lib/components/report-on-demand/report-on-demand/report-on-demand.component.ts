@@ -6,7 +6,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { DialogService, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { ReportsService } from '../../../services/reports.service';
 
-import { OReportColumnsStyle } from '../../../types/report-column-style.type';
+import { OReportColumnStyle } from '../../../types/report-column-style.type';
+import { OReportColumn } from '../../../types/report-column.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
 import { OReportFunction } from '../../../types/report-function.type';
 import { OReportOrderBy } from '../../../types/report-orderBy.type';
@@ -19,6 +20,7 @@ import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 
 export const DEFAULT_WIDTH_DIALOG = '70%';
 export const DEFAULT_HEIGHT_DIALOG = '90%';
+export const DEFAULT_COLUMN_STYLE: OReportColumnStyle = { width: 85, alignment: 'left' };
 
 @Component({
   selector: 'app-customers-dialog',
@@ -46,7 +48,7 @@ export class ReportOnDemandComponent implements OnInit {
   ];
 
 
-  public columnsData: Array<OReportColumnsStyle>;
+  public columnsData: Array<OReportColumn>;
   public selectedColumnsData: string[];
   public columnsToSort: string[];
   public columnsOrderBy: Array<OReportOrderBy> = [];
@@ -77,9 +79,9 @@ export class ReportOnDemandComponent implements OnInit {
   protected initialize() {
     this.service = this.data.service;
     const columnsData = this.data.columns.split(';');
-    this.columnsData = this.parseColumnsStyle(columnsData);
+    this.columnsData = this.parseColumnStyle(columnsData);
     this.columnsToGroupData = columnsData;
-    this.currentPreference = { title: '', subtitle: '', vertical: true, groups: [], functions: [], styleFunctions: ['columnName'], columnsStyle: [], orderBy: [] };
+    this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: ['columnName'], orderBy: [] };
     this.currentConfiguration = { ENTITY: this.data.entity }
 
     this.getFunctions();
@@ -90,9 +92,10 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
 
-  protected parseColumnsStyle(columns: any[]): OReportColumnsStyle[] {
+  protected parseColumnStyle(columns: any[]): OReportColumn[] {
+
     return columns.map(column => {
-      return { id: column, name: this.translateService.get(column), width: 85, alignment: 'left' }
+      return { id: column, name: this.translateService.get(column) }
     });
   }
 
@@ -104,15 +107,15 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   protected openReport() {
-    let orientation = this.currentPreference.vertical ? 'vertical' : 'horizontal';
     let functions = this.currentPreference.functions.map(
       x => {
         if (x.columnName === 'TOTAL') return x.columnName; else return x.columnName + '-' + x.functionName;
       });
     this.reportsService.createReport({
       "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentConfiguration.ENTITY,
-      "service": this.service, "orientation": orientation, "functions": functions,
-      "styleFunctions": this.currentPreference.styleFunctions, "subtitle": this.currentPreference.subtitle, "columnStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.orderBy
+      "service": this.service, "vertical": this.currentPreference.vertical, "functions": functions,
+      "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
+
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.pdf = res.data[0].file;
@@ -148,48 +151,49 @@ export class ReportOnDemandComponent implements OnInit {
   applyConfiguration(configuration: any) {
     this.currentConfiguration = configuration;
     let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
-    this.appliedConfiguration = true;
-    this.selectedFunctions = this.parseStringToArray(preference.functions);
-    this.columnsOrderBy = this.parseColumnsOrderBy(this.parseStringToArray(preference.orderBy));
+    // this.appliedConfiguration = true;
+    // this.selectedFunctions = this.parseStringToArray(preference.functions);
+    // this.columnsOrderBy = this.parseColumnsOrderBy(this.parseStringToArray(preference.orderBy));
 
-    const columnsStyleDataConfiguration = this.parseColumnsStyle(this.parseStringToArray(preference.columns));
-    this.columnsData = this.columnsData.map(x => columnsStyleDataConfiguration.find(colum => x.id === colum.id));
-    console.log(this.columnsData);
+    // const columnsStyleDataConfiguration = this.parseColumnsStyle(this.parseStringToArray(preference.columns));
+    // this.columnsData = this.columnsData.map(x => columnsStyleDataConfiguration.find(colum => x.id === colum.id));
+    // console.log(this.columnsData);
 
-    this.currentPreference = {
-      title: preference.title,
-      subtitle: preference.subtitle,
-      vertical: preference.vertical,
-      functions: this.parseDefaultFunctionsData(this.parseStringToArray(preference.functions)),
-      groups: this.parseStringToArray(preference.groups),
-      styleFunctions: this.parseStringToArray(preference.styleFunctions),
-      columnsStyle: this.parseColumnsStyle(this.parseStringToArray(preference.columns)),
-      orderBy: this.columnsOrderBy
-    };
+    // this.currentPreference = {
+    //   title: preference.title,
+    //   subtitle: preference.subtitle,
+    //   vertical: preference.vertical,
+    //   functions: this.parseDefaultFunctionsData(this.parseStringToArray(preference.functions)),
+    //   groups: this.parseStringToArray(preference.groups),
+    //   style: this.parseStringToArray(preference.style),
+    //   columns: this.parseColumnsStyle(this.parseStringToArray(preference.columns)),
+    //   orderBy: this.columnsOrderBy
+    // };
+    this.currentPreference = preference;
 
   }
 
 
   showColumnStyleDialog(event, id): void {
     event.stopPropagation();
-    const columnStyleData: OReportColumnsStyle = this.currentPreference.columnsStyle.find((x: OReportColumnsStyle) => x.id === id);
+    const columnData: OReportColumn = this.currentPreference.columns.find((x: OReportColumn) => x.id === id);
     this.dialog
       .open(StyleDialogComponent, {
-        data: columnStyleData ? columnStyleData : id,
+        data: columnData ? columnData : id,
         panelClass: ['o-dialog-class', 'o-table-dialog']
       })
       .afterClosed()
-      .subscribe((data: OReportColumnsStyle) => {
+      .subscribe((data: OReportColumn) => {
         if (Util.isDefined(data) && data) {
           this.updateColumnStyleConfigurationData(data);
         }
       });
   }
 
-  updateColumnStyleConfigurationData(data: OReportColumnsStyle) {
-    const indexColumnStyleData = this.currentPreference.columnsStyle.findIndex(x => x.id === data.id);
+  updateColumnStyleConfigurationData(data: OReportColumn) {
+    const indexColumnStyleData = this.currentPreference.columns.findIndex(x => x.id === data.id);
     if (indexColumnStyleData > -1) {
-      this.currentPreference.columnsStyle[indexColumnStyleData] = data;
+      this.currentPreference.columns[indexColumnStyleData] = data;
     }
   }
 
@@ -255,7 +259,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   updateColumnStyleSort() {
-    this.currentPreference.columnsStyle.sort((a: OReportColumnsStyle, b: OReportColumnsStyle) => {
+    this.currentPreference.columns.sort((a: OReportColumn, b: OReportColumn) => {
       let indexA = this.columnsData.findIndex(x => x.id === a.id);
       let indexB = this.columnsData.findIndex(x => x.id === b.id);
       return indexA - indexB;
@@ -316,8 +320,8 @@ export class ReportOnDemandComponent implements OnInit {
     let preference = {
       "name": data.name, "description": data.description,
       "entity": this.currentConfiguration.ENTITY, "title": this.currentPreference.title, "groups": this.currentPreference.groups,
-      "vertical": this.currentPreference.vertical, "functions": functions, "styleFunctions": this.currentPreference.styleFunctions,
-      "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.orderBy
+      "vertical": this.currentPreference.vertical, "functions": functions, "styleFunctions": this.currentPreference.style,
+      "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy
     }
 
     if (update) {
@@ -355,7 +359,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   onSelectionChangeColumns(event: MatSelectionListChange) {
-    const selectedColumn: OReportColumnsStyle = event.option.value;
+    const selectedColumn: OReportColumn = event.option.value;
     const selectColumnId = selectedColumn.id;
     this.updateColumnsOrderByData(event, selectColumnId,);
 
@@ -366,9 +370,9 @@ export class ReportOnDemandComponent implements OnInit {
     let groupSelected: string = event.option.value;
     this.updateColumnsOrderByData(event, groupSelected);
     if (event.option.selected &&
-      this.currentPreference.columnsStyle.findIndex(x => x.id === groupSelected) === -1) {
-      const columnStyleSelected: OReportColumnsStyle = { id: groupSelected, name: this.translateService.get(groupSelected), width: 85, alignment: 'left' };
-      this.addColumnStylesData(columnStyleSelected);
+      this.currentPreference.columns.findIndex(x => x.id === groupSelected) === -1) {
+      const columnStyleSelected: OReportColumn = { id: groupSelected, name: this.translateService.get(groupSelected) };
+      this.addColumnData(columnStyleSelected);
     }
   }
 
@@ -388,21 +392,21 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
 
-  addColumnStylesData(columnStyleSelected) {
+  addColumnData(columnSelected) {
     //Object Deep Cloning
     let currentPreference = JSON.parse(JSON.stringify(this.currentPreference));
-    currentPreference.columnsStyle.push(columnStyleSelected);
+    currentPreference.columns.push(columnSelected);
     this.currentPreference = currentPreference;
   }
 
   onSelectionChangeFunctions(event: MatSelectionListChange) {
     if (!event.option.selected || event.option.value.columnName === 'TOTAL') return;
     const columnSelectedToGroup = event.option.value.columnName;
-    let columnStyleSelected: OReportColumnsStyle = { id: columnSelectedToGroup, name: this.translateService.get(columnSelectedToGroup), width: 85, alignment: 'left' };
+    const columnSelected: OReportColumn = { id: columnSelectedToGroup, name: this.translateService.get(columnSelectedToGroup) };
 
     if (event.option.selected &&
-      this.currentPreference.columnsStyle.findIndex(x => x.id === columnSelectedToGroup) === -1) {
-      this.addColumnStylesData(columnStyleSelected);
+      this.currentPreference.columns.findIndex(x => x.id === columnSelectedToGroup) === -1) {
+      this.addColumnData(columnSelected);
       //  this.currentPreference.columnsStyle.push(columnStyleSelected);
     }
   }
@@ -416,8 +420,8 @@ export class ReportOnDemandComponent implements OnInit {
     event.stopPropagation();
   }
 
-  isCheckedColumn(column: OReportColumnsStyle) {
-    const isCheckedColumn = this.currentPreference.columnsStyle.length > 0 ? this.currentPreference.columnsStyle.filter(x => x.id === column.id).length > 0 : false;
+  isCheckedColumn(column: OReportColumn) {
+    const isCheckedColumn = this.currentPreference.columns.length > 0 ? this.currentPreference.columns.filter(x => x.id === column.id).length > 0 : false;
     return isCheckedColumn;
   }
 
@@ -426,18 +430,13 @@ export class ReportOnDemandComponent implements OnInit {
     return isCheckedFunction;
   }
 
-  //borrar
-  private parseStringToArray(data): string[] {
-    const stringParsed = data.replace("[", "").replace("]", "").replace(/ /g, "");
-    return stringParsed.length === 0 ? [] : stringParsed.split(',');
-  }
 
   columnsOrderByCompareFunction(co1: OReportOrderBy, co2: OReportOrderBy) {
     return co1.columnId === co2.columnId;
 
   }
 
-  columnsStyleCompareFunction(co1: OReportColumnsStyle, co2: OReportColumnsStyle) {
+  columnsCompareFunction(co1: OReportColumn, co2: OReportColumn) {
     return co1.id === co2.id;
   }
 

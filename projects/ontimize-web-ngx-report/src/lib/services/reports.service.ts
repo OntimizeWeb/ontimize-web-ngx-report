@@ -1,5 +1,6 @@
 import { Injectable, Injector } from "@angular/core";
 import { Observable, OErrorDialogManager, OntimizeEEService, ServiceRequestParam, ServiceResponse } from 'ontimize-web-ngx';
+import { OReportParam } from "../types/report-param.type";
 @Injectable({ providedIn: 'root' })
 export class ReportsService extends OntimizeEEService {
   public oErrorDialogManager: OErrorDialogManager;
@@ -9,7 +10,7 @@ export class ReportsService extends OntimizeEEService {
     this.oErrorDialogManager = injector.get(OErrorDialogManager);
   }
 
-  public createReport(reportparams?: object): Observable<any> {
+  public createReport(reportparams: OReportParam): Observable<any> {
 
     const body = JSON.stringify(
       reportparams
