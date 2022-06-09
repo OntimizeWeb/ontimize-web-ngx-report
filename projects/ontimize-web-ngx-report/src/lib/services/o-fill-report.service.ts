@@ -22,6 +22,7 @@ export class OFillReportService {
       res => {
         if (res && res.data.length && res.code === 0) {
           let parameters = res.data[0].PARAMETERS;
+          let name = res.data[0].NAME;
           if (parameters.length > 0) {
             let av = [reportId];
             let values = Object.values(parametersValues);
@@ -33,9 +34,11 @@ export class OFillReportService {
               maxHeight: '100vh',
               height: Constants.DEFAULT_HEIGHT_DIALOG,
               width: Constants.DEFAULT_WIDTH_DIALOG,
+              panelClass: ['o-dialog-class', 'o-table-dialog'],
               data: {
                 'params': av,
-                'filter': filter
+                'filter': filter,
+                'name': name
               }
             });
           } else {
@@ -45,9 +48,11 @@ export class OFillReportService {
               maxHeight: '100vh',
               height: Constants.DEFAULT_HEIGHT_DIALOG,
               width: Constants.DEFAULT_WIDTH_DIALOG,
+              panelClass: ['o-dialog-class', 'o-table-dialog'],
               data: {
                 'params': av,
-                'filter': filter
+                'filter': filter,
+                'name': name
               }
             });
           }

@@ -175,7 +175,8 @@
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="sidenav-container-content">
-        <ngx-extended-pdf-viewer #pdfViewer [base64Src]="pdf" useBrowserLocale="true" delayFirstView="1000" width [textLayer]="true">
+        <ngx-extended-pdf-viewer #pdfViewer [base64Src]="pdf" [filenameForDownload]="currentPreference.title" [showBookmarkButton]="false"
+          [showPropertiesButton]="false" [showOpenFileButton]="false" useBrowserLocale="true" delayFirstView="1000" width [textLayer]="true">
         </ngx-extended-pdf-viewer>
       </div>
     </mat-sidenav-content>
