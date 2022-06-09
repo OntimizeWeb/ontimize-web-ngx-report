@@ -29,32 +29,10 @@ export class OFillReportService {
             for (let value of values) {
               av.push(value);
             }
-            this.dialog.open(OReportViewerComponent, {
-              maxWidth: '100vw',
-              maxHeight: '100vh',
-              height: Constants.DEFAULT_HEIGHT_DIALOG,
-              width: Constants.DEFAULT_WIDTH_DIALOG,
-              panelClass: ['o-dialog-class', 'o-table-dialog'],
-              data: {
-                'params': av,
-                'filter': filter,
-                'name': name
-              }
-            });
+            this.openDialog(av, filter, name);
           } else {
             let av = [reportId];
-            this.dialog.open(OReportViewerComponent, {
-              maxWidth: '100vw',
-              maxHeight: '100vh',
-              height: Constants.DEFAULT_HEIGHT_DIALOG,
-              width: Constants.DEFAULT_WIDTH_DIALOG,
-              panelClass: ['o-dialog-class', 'o-table-dialog'],
-              data: {
-                'params': av,
-                'filter': filter,
-                'name': name
-              }
-            });
+            this.openDialog(av, filter, name);
           }
         }
       },
@@ -67,6 +45,20 @@ export class OFillReportService {
       }
     );
 
+  }
+  openDialog(av: any, filter: any, name: any) {
+    this.dialog.open(OReportViewerComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: Constants.DEFAULT_HEIGHT_DIALOG,
+      width: Constants.DEFAULT_WIDTH_DIALOG,
+      panelClass: ['o-dialog-class', 'o-table-dialog'],
+      data: {
+        'params': av,
+        'filter': filter,
+        'name': name
+      }
+    });
   }
 
 }
