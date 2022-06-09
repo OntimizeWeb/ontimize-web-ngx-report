@@ -1,4 +1,4 @@
-export var MAP = {
+export const MAP = {
 
   // English
   en: {

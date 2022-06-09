@@ -22,7 +22,7 @@ export class ApplyConfigurationDialogComponent implements OnInit {
     private dialogService: DialogService,
     private reportsService: ReportsService,
     public dialogo: MatDialogRef<ApplyConfigurationDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public entity: String) {
+    @Optional() @Inject(MAT_DIALOG_DATA) public entity: string) {
     this.getConfigurations();
   }
   ngOnInit(): void {
