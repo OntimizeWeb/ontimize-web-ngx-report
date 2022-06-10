@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { DialogService, Util } from 'ontimize-web-ngx';
-import { OReportViewerComponent } from './o-report-viewer/o-report-viewer.component';
+import { DialogService } from 'ontimize-web-ngx';
+import { OReportViewerComponent } from '../components/report/o-report-viewer/o-report-viewer.component';
+import { Constants } from '../util/constants';
 import { OReportService } from './o-report.service';
 
 @Injectable()
@@ -16,47 +17,48 @@ export class OFillReportService {
   openFillReport(reportId: string, parametersValues: object, filter: object) {
     this.reportService.configureService(this.reportService.getDefaultServiceConfiguration());
     this.reportService.configureAdapter();
-    let kv = {'UUID': reportId};
+    let kv = { 'UUID': reportId };
     this.reportService.query(kv, null, 'getReport', {}).subscribe(
       res => {
         if (res && res.data.length && res.code === 0) {
           let parameters = res.data[0].PARAMETERS;
+          let name = res.data[0].NAME;
           if (parameters.length > 0) {
             let av = [reportId];
             let values = Object.values(parametersValues);
-            for (let i=0; i<values.length; i++) {
-              av.push(values[i]);
+            for (let value of values) {
+              av.push(value);
             }
-            this.dialog.open(OReportViewerComponent, {
-              height: '90%',
-              width: '80%',
-              data: {
-                'params': av,
-                'filter': filter
-              }
-            });
+            this.openDialog(av, filter, name);
           } else {
             let av = [reportId];
-            this.dialog.open(OReportViewerComponent, {
-              height: '90%',
-              width: '80%',
-              data: {
-                'params': av,
-                'filter': filter
-              }
-            });
+            this.openDialog(av, filter, name);
           }
         }
       },
       err => {
         if (this.dialogService) {
           this.dialogService.error('ERROR',
-              'SERVER_ERROR_MESSAGE');
-          }
-          console.log(err);
+            'SERVER_ERROR_MESSAGE');
+        }
+        console.log(err);
       }
     );
 
+  }
+  openDialog(av: any, filter: any, name: any) {
+    this.dialog.open(OReportViewerComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: Constants.DEFAULT_HEIGHT_DIALOG,
+      width: Constants.DEFAULT_WIDTH_DIALOG,
+      panelClass: ['o-dialog-class', 'o-table-dialog'],
+      data: {
+        'params': av,
+        'filter': filter,
+        'name': name
+      }
+    });
   }
 
 }
