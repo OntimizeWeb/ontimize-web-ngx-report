@@ -1,22 +1,30 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'ontimize-web-ngx';
 import { OReportService } from '../../../services/o-report.service';
+import { CommonDialogMethods } from '../../../util/common-dialog-methods';
 
 @Component({
   selector: 'o-report-viewer',
-  templateUrl: './o-report-viewer.component.html'
+  templateUrl: './o-report-viewer.component.html',
+  styleUrls: ['./o-report-viewer.component.scss'],
+  providers: [CommonDialogMethods]
 })
 export class OReportViewerComponent {
 
   public pdf = '';
+  public name = '';
+  public fullscreen: boolean = false;
 
   constructor(
+    public dialogRef: MatDialogRef<OReportViewerComponent>,
     @Inject('report') private reportService: OReportService,
+    private commonDialogMethods: CommonDialogMethods,
     protected dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     this.reportService.configureService(this.reportService.getDefaultServiceConfiguration());
     this.reportService.configureAdapter();
+    this.name = this.data.name;
     this.reportService.fillReport(this.data['params'], 'fillReport', {}, this.data['filter']).subscribe(
       res => {
         if (res && res.data.length && res.code === 0) {
@@ -32,6 +40,8 @@ export class OReportViewerComponent {
       }
     );
   }
-
-
+  setFullscreenDialog(): void {
+    this.commonDialogMethods.setFullscreenDialog(this.fullscreen, this.dialogRef);
+    this.fullscreen = !this.fullscreen;
+  }
 }

@@ -1,0 +1,11 @@
+import { Constants } from "./constants";
+
+export class CommonDialogMethods {
+  setFullscreenDialog(fullscreen: boolean, dialogRef: any): void {
+    if (!fullscreen) {
+      dialogRef.updateSize("100%", "100%");
+    } else {
+      dialogRef.updateSize(Constants.DEFAULT_WIDTH_DIALOG, Constants.DEFAULT_HEIGHT_DIALOG);
+    }
+  }
+}
