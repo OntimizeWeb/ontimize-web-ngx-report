@@ -274,7 +274,7 @@ export class ReportOnDemandComponent implements OnInit {
           this.applyConfiguration(data);
           this.appliedConfiguration = true;
         }
-      }, error => {
+      }, _error => {
         this.appliedConfiguration = false;
       });
   }
@@ -307,23 +307,29 @@ export class ReportOnDemandComponent implements OnInit {
 
     if (update) {
       this.reportsService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
-        if (res && res.data.length && res.code === 0) {
-          this.snackBarService.open('MESSAGES.SAVED', { icon: 'check_circle' });
-        }
+        this.showConfirmOperatinInSnackBar(res);
       });
     } else {
       this.reportsService.saveAsPreferences(preference).subscribe(res => {
-        if (res && res.data.length && res.code === 0) {
-          this.snackBarService.open('MESSAGES.SAVED', { icon: 'check_circle' });
+        if (res && res.code === 0) {
+          this.showConfirmOperatinInSnackBar(res);
         }
       });
     }
   }
 
+  private showConfirmOperatinInSnackBar(res: any) {
+    if (res && res.code === 0) {
+      this.snackBarService.open('MESSAGES.SAVED', { icon: 'check_circle' });
+    }
+  }
+
   getFunctionValue(reportFunction: OReportFunction) {
-    if (reportFunction.columnName === 'TOTAL')
-      return reportFunction.columnName; else
+    if (reportFunction.columnName === 'TOTAL') {
+      return reportFunction.columnName;
+    } else {
       return reportFunction.columnName + '-' + reportFunction.functionName;
+    }
   }
 
   setFullscreenDialog(): void {
@@ -398,13 +404,11 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   isCheckedColumn(column: OReportColumn) {
-    const isCheckedColumn = this.currentPreference.columns.length > 0 ? this.currentPreference.columns.filter(x => x.id === column.id).length > 0 : false;
-    return isCheckedColumn;
+    return this.currentPreference.columns.length > 0 ? this.currentPreference.columns.filter(x => x.id === column.id).length > 0 : false;
   }
 
   isCheckedFunction(column: OReportFunction) {
-    const isCheckedFunction = this.currentPreference.functions.length > 0 ? this.currentPreference.functions.filter(x => (x === column.columnName + '-' + column.functionName) && x !== 'TOTAL').length > 0 : false;
-    return isCheckedFunction;
+    return this.currentPreference.functions.length > 0 ? this.currentPreference.functions.filter(x => (x === column.columnName + '-' + column.functionName) && x !== 'TOTAL').length > 0 : false;
   }
 
 
