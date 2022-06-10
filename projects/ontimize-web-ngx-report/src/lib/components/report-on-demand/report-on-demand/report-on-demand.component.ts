@@ -99,7 +99,6 @@ export class ReportOnDemandComponent implements OnInit {
     });
   }
 
-  //se deberia borrar
   protected parseColumnsOrderBy(columnsOrderBy: any): OReportOrderBy[] {
     return columnsOrderBy.map(column => {
       return { columnId: column.columnId, columnName: column.name, ascendent: column.ascendent }
@@ -119,7 +118,6 @@ export class ReportOnDemandComponent implements OnInit {
     });
   }
 
-
   getFunctions() {
     this.reportsService.getFunctions({
       "columns": this.data.columns.split(";"), "entity": this.currentConfiguration.ENTITY,
@@ -130,6 +128,7 @@ export class ReportOnDemandComponent implements OnInit {
       }
     });
   }
+
   parseDefaultFunctionsData(list: any[]) {
     let functions = [];
     list.forEach(column => {
@@ -231,6 +230,7 @@ export class ReportOnDemandComponent implements OnInit {
     moveItemInArray(this.columnsToGroupData, event.previousIndex, event.currentIndex)
     this.updateColumnToGroupSort();
   }
+
   dropColumnsOrderBy(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.columnsOrderBy, event.previousIndex, event.currentIndex);
     this.updateColumnGroupBySort();
@@ -243,6 +243,7 @@ export class ReportOnDemandComponent implements OnInit {
       return indexA - indexB;
     });
   }
+
   updateColumnGroupBySort() {
     this.currentPreference.orderBy.sort((a: OReportOrderBy, b: OReportOrderBy) => {
       let indexA = this.columnsOrderBy.findIndex(x => x.columnId === a.columnId);
