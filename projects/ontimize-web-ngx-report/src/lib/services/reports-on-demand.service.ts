@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { DialogService, IReportOnDemandService } from 'ontimize-web-ngx';
-import { DEFAULT_HEIGHT_DIALOG, DEFAULT_WIDTH_DIALOG, ReportOnDemandComponent } from '../components/report-on-demand/report-on-demand/report-on-demand.component';
+import { ReportOnDemandComponent } from '../components/report-on-demand/report-on-demand/report-on-demand.component';
+import { Constants } from '../util/constants';
 
 
 @Injectable({ providedIn: 'root' })
@@ -12,12 +13,12 @@ export class OReportOnDemandService implements IReportOnDemandService {
     protected dialog: MatDialog
   ) { }
 
-  openReportOnDemand(data, service, entity) {
+  openReportOnDemand(data: any, service: any, entity: any) {
     this.dialog.open(ReportOnDemandComponent, {
       maxWidth: '100vw',
       maxHeight: '100vh',
-      height: DEFAULT_HEIGHT_DIALOG,
-      width: DEFAULT_WIDTH_DIALOG,
+      height: Constants.DEFAULT_HEIGHT_DIALOG,
+      width: Constants.DEFAULT_WIDTH_DIALOG,
       panelClass: ['o-dialog-class', 'o-table-dialog', 'report-on-demand'],
       data: { columns: data, service: service, entity: entity }
     });

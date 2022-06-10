@@ -1,10 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { DialogService, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
+import { Constants } from '../../../util/constants';
 import { OReportViewerComponent } from '../o-report-viewer/o-report-viewer.component';
 
-export const DEFAULT_WIDTH_DIALOG = '70%';
-export const DEFAULT_HEIGHT_DIALOG = '90%';
 @Component({
   selector: 'o-report-detail',
   templateUrl: './o-report-detail.component.html'
@@ -47,8 +46,8 @@ export class OReportDetailComponent {
 
 
     this.dialog.open(OReportViewerComponent, {
-      height: DEFAULT_HEIGHT_DIALOG,
-      width: DEFAULT_HEIGHT_DIALOG,
+      height: Constants.DEFAULT_HEIGHT_DIALOG,
+      width: Constants.DEFAULT_HEIGHT_DIALOG,
       data: {
         'params': this.av,
         'filter': {}

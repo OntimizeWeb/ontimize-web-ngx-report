@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DialogService, OFileInputComponent, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
 import { Subscription } from 'rxjs';
-import { OAlertService } from '../o-alert.service';
+import { OAlertService } from '../../../services/o-alert.service';
 
 @Component({
   selector: 'o-report-new',
@@ -12,7 +12,7 @@ import { OAlertService } from '../o-alert.service';
     '[class.app-report-store-new]': 'true'
   }
 })
-export class OReportNewComponent implements OnInit {
+export class OReportNewComponent {
 
   @ViewChild('name', { static: true })
   name: OTextInputComponent;
@@ -33,16 +33,12 @@ export class OReportNewComponent implements OnInit {
     private dialogService: DialogService
   ) { }
 
-  ngOnInit() {
-  }
-
   getFileData() {
-    let data = {
+    return {
       'name': this.name.getValue(),
       'type': this.type.getValue(),
       'description': this.description.getValue(),
     };
-    return data;
   }
 
   onUploadFile() {

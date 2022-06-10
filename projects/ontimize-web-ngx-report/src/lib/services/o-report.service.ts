@@ -1,7 +1,6 @@
 import { HttpEventType, HttpHeaders, HttpRequest } from "@angular/common/http";
 import { Injectable, Injector } from "@angular/core";
 import { IFileService, Observable, OntimizeEEService, Util } from 'ontimize-web-ngx';
-import { OReportResponseAdapter } from './o-report.response-adapter';
 import { share } from 'rxjs/operators';
 
 @Injectable()
@@ -44,17 +43,7 @@ export class OReportService extends OntimizeEEService implements IFileService {
         } else if (HttpEventType.Response === resp.type) {
           // Full response received
           if (resp.body) {
-            if (resp.body['code'] === 3) {
-              this.authService.logout();
-            } else if (resp.body['code'] === 1) {
-              observer.error(resp.body['message']);
-            } else if (resp.body['code'] === 0) {
-              // RESPONSE
-              observer.next(resp.body);
-            } else {
-              // Unknow state -> error
-              observer.error('Service unavailable');
-            }
+            this.bodyCode(resp, observer);
           } else {
             observer.next(resp.body);
           }
@@ -71,7 +60,19 @@ export class OReportService extends OntimizeEEService implements IFileService {
     });
     return dataObservable.pipe(share());
   }
-
+  protected bodyCode(resp, observer) {
+    if (resp.body['code'] === 3) {
+      this.authService.logout();
+    } else if (resp.body['code'] === 1) {
+      observer.error(resp.body['message']);
+    } else if (resp.body['code'] === 0) {
+      // RESPONSE
+      observer.next(resp.body);
+    } else {
+      // Unknow state -> error
+      observer.error('Service unavailable');
+    }
+  }
   protected buildHeadersReport(): HttpHeaders {
     let headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*' });
     const sessionId = this.authService.getSessionInfo().id;
@@ -154,8 +155,5 @@ export class OReportService extends OntimizeEEService implements IFileService {
     });
   }
 
-  public configureAdapter() {
-    this.adapter = this.injector.get(OReportResponseAdapter);
-  }
 
 }
