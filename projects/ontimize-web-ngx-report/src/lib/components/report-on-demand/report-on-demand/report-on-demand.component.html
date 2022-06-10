@@ -144,7 +144,7 @@
             </mat-expansion-panel-header>
             <mat-selection-list #functionsList dense [(ngModel)]="currentPreference.functions" [compareWith]="functionsCompareFunction"
               (selectionChange)="onSelectionChangeFunctions($event)">
-              <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData" [value]="function">
+              <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData" [value]="getFunctionValue(function)">
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     <ng-container *ngIf="function.columnName==='TOTAL'; else functionColumnTemplate">
@@ -165,8 +165,7 @@
         </mat-accordion>
 
         <mat-dialog-actions align=center *ngIf="openedSidenav">
-          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()"
-            [disabled]="currentPreference.columns.length===0">
+          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="currentPreference.columns.length===0">
             {{'PREVIEW' | oReportsTranslate }}</button>
         </mat-dialog-actions>
 
