@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'ontimize-web-ngx';
 import { OReportService } from '../../../services/o-report.service';
-import { Utils } from '../../../util/common-dialog-methods';
+import { Utils } from '../../../util/utils';
 
 @Component({
   selector: 'o-report-viewer',

@@ -13,7 +13,7 @@ import { OReportFunction } from '../../../types/report-function.type';
 import { OReportOrderBy } from '../../../types/report-orderBy.type';
 import { OReportPreferences } from '../../../types/report-preferences.type';
 import { OReportServiceRenderer } from '../../../types/report-service-renderer.type';
-import { Utils } from '../../../util/common-dialog-methods';
+import { Utils } from '../../../util/utils';
 import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
 import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-preferences-dialog.component';
 import { SelectFunctionDialogComponent } from '../select-function-dialog/select-function-dialog.component';
