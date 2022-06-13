@@ -96,7 +96,7 @@ export class ReportOnDemandComponent implements OnInit {
           'parentKeys': Util.parseArray(renderer.parentKeys)
         }
       });
-    console.log('serviceRendererData ', this.serviceRendererData);
+
     this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: ['columnName'], orderBy: [] };
     this.currentConfiguration = { ENTITY: this.data.entity }
 
