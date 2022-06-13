@@ -13,5 +13,6 @@ export type OReportParam = {
   functions: Array<string>,
   style: Array<string>,
   subtitle: string,
-  servicRenderer?: Array<OReportServiceRenderer>
+  servicRenderer?: Array<OReportServiceRenderer>,
+  language: string
 }
