@@ -5,8 +5,6 @@ import { MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { ReportsService } from '../../../services/reports.service';
-
-import { OReportColumnStyle } from '../../../types/report-column-style.type';
 import { OReportColumn } from '../../../types/report-column.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
 import { OReportFunction } from '../../../types/report-function.type';
@@ -19,8 +17,6 @@ import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-
 import { SelectFunctionDialogComponent } from '../select-function-dialog/select-function-dialog.component';
 
 import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
-
-export const DEFAULT_COLUMN_STYLE: OReportColumnStyle = { width: 85, alignment: 'left' };
 
 @Component({
   selector: 'app-customers-dialog',
@@ -108,7 +104,8 @@ export class ReportOnDemandComponent implements OnInit {
       return { columnId: column.columnId, columnName: column.name, ascendent: column.ascendent }
     });
   }
-  protected parseServiceRenderer(table:OTableComponent) {
+
+  protected parseServiceRenderer(table: OTableComponent) {
     return table.oTableOptions.columns.filter((oCol: OColumn) => (table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer)).
       map((oCol: OColumn) => {
         const renderer: any = oCol.renderer;
