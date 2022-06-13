@@ -1,14 +1,15 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ChangeDetectionStrategy, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatSelectionList, MatSelectionListChange } from '@angular/material';
+import { MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogService, OTranslateService, Util } from 'ontimize-web-ngx';
+import { DialogService, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { ReportsService } from '../../../services/reports.service';
 
-import { OReportColumnsStyle } from '../../../types/report-column-style.type';
+import { OReportColumnStyle } from '../../../types/report-column-style.type';
+import { OReportColumn } from '../../../types/report-column.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
-import { ReportFunction } from '../../../types/report-function.type';
+import { OReportFunction } from '../../../types/report-function.type';
 import { OReportOrderBy } from '../../../types/report-orderBy.type';
 import { OReportPreferences } from '../../../types/report-preferences.type';
 import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
@@ -19,6 +20,7 @@ import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 
 export const DEFAULT_WIDTH_DIALOG = '70%';
 export const DEFAULT_HEIGHT_DIALOG = '90%';
+export const DEFAULT_COLUMN_STYLE: OReportColumnStyle = { width: 85, alignment: 'left' };
 
 @Component({
   selector: 'app-customers-dialog',
@@ -29,15 +31,13 @@ export const DEFAULT_HEIGHT_DIALOG = '90%';
 
 export class ReportOnDemandComponent implements OnInit {
 
-  @ViewChild('functionsList', { static: false }) functionList: MatSelectionList;
   public pdf: string = 'JVBERi0xLjYKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0ZURlY29kZT4+CnN0cmVhbQp4nDPQM1Qo5ypUMFAw0DMwslAwtTTVMzI3VbAwMdSzMDNUKErlCtdSyOMKVAAAtxIIrgplbmRzdHJlYW0KZW5kb2JqCgozIDAgb2JqCjUwCmVuZG9iagoKNSAwIG9iago8PAo+PgplbmRvYmoKCjYgMCBvYmoKPDwvRm9udCA1IDAgUgovUHJvY1NldFsvUERGL1RleHRdCj4+CmVuZG9iagoKMSAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDQgMCBSL1Jlc291cmNlcyA2IDAgUi9NZWRpYUJveFswIDAgNTk1LjMwMzkzNzAwNzg3NCA4NDEuODg5NzYzNzc5NTI4XS9Hcm91cDw8L1MvVHJhbnNwYXJlbmN5L0NTL0RldmljZVJHQi9JIHRydWU+Pi9Db250ZW50cyAyIDAgUj4+CmVuZG9iagoKNCAwIG9iago8PC9UeXBlL1BhZ2VzCi9SZXNvdXJjZXMgNiAwIFIKL01lZGlhQm94WyAwIDAgNTk1IDg0MSBdCi9LaWRzWyAxIDAgUiBdCi9Db3VudCAxPj4KZW5kb2JqCgo3IDAgb2JqCjw8L1R5cGUvQ2F0YWxvZy9QYWdlcyA0IDAgUgovT3BlbkFjdGlvblsxIDAgUiAvWFlaIG51bGwgbnVsbCAwXQovTGFuZyhlcy1FUykKPj4KZW5kb2JqCgo4IDAgb2JqCjw8L0F1dGhvcjxGRUZGMDA1MDAwNjEwMDc0MDA3MjAwNjkwMDYzMDA2OTAwNjEwMDIwMDA0RDAwNjEwMDcyMDA3NDAwRUQwMDZFMDA2NTAwN0EwMDIwMDA1NDAwNjkwMDZDMDA3NjAwNjU+Ci9DcmVhdG9yPEZFRkYwMDU3MDA3MjAwNjkwMDc0MDA2NTAwNzI+Ci9Qcm9kdWNlcjxGRUZGMDA0QzAwNjkwMDYyMDA3MjAwNjUwMDRGMDA2NjAwNjYwMDY5MDA2MzAwNjUwMDIwMDAzNzAwMkUwMDMxPgovQ3JlYXRpb25EYXRlKEQ6MjAyMjA1MTAxNDUyMDYrMDInMDAnKT4+CmVuZG9iagoKeHJlZgowIDkKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMjM0IDAwMDAwIG4gCjAwMDAwMDAwMTkgMDAwMDAgbiAKMDAwMDAwMDE0MCAwMDAwMCBuIAowMDAwMDAwNDAyIDAwMDAwIG4gCjAwMDAwMDAxNTkgMDAwMDAgbiAKMDAwMDAwMDE4MSAwMDAwMCBuIAowMDAwMDAwNTAwIDAwMDAwIG4gCjAwMDAwMDA1OTYgMDAwMDAgbiAKdHJhaWxlcgo8PC9TaXplIDkvUm9vdCA3IDAgUgovSW5mbyA4IDAgUgovSUQgWyA8RDdBODhCRTRFREFDRkU1RDFGMTIwMzNFMDUyN0JERkU+CjxEN0E4OEJFNEVEQUNGRTVEMUYxMjAzM0UwNTI3QkRGRT4gXQovRG9jQ2hlY2tzdW0gLzgwNTA5NDU4QjgyN0RCRDQ2QzlEODdBMjY4NjdCNEFDCj4+CnN0YXJ0eHJlZgo4NzYKJSVFT0YK';
   public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
-  public functionsData: ReportFunction[] = [];
+  public functionsData: OReportFunction[] = [];
   public appliedConfiguration: boolean = false;
   public selectedFunctions = [];
-  @ViewChild('functionsList', { static: false })
-  public functionsList: MatSelectionList;
-  public dataArray = [
+
+  public stylesArray = [
     { value: 'grid', viewValue: 'GRID' },
     { value: 'rowNumber', viewValue: 'ROW_NUMBER' },
     { value: 'columnName', viewValue: 'COLUMNS_NAMES' },
@@ -47,8 +47,12 @@ export class ReportOnDemandComponent implements OnInit {
     { value: 'firstGroupNewPage', viewValue: 'FIRST_GROUP_PAGE' }
   ];
 
-  public columnsData: any[];
-  public columnsGroupBy: Array<OReportOrderBy> = [];
+
+  public columnsData: Array<OReportColumn>;
+  public selectedColumnsData: string[];
+  public columnsToSort: string[];
+  public columnsOrderBy: Array<OReportOrderBy> = [];
+
   public columnsToGroupData: any[];
   public openedSidenav: boolean = true;
   public fullscreen: boolean = false;
@@ -64,52 +68,55 @@ export class ReportOnDemandComponent implements OnInit {
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     protected dialogService: DialogService,
-    public translateService: OTranslateService) {
+    public translateService: OTranslateService,
+    protected snackBarService: SnackBarService) {
   }
 
   ngOnInit() {
     this.initialize();
   }
 
-  public previewReport(): void {
-    this.openReport();
-  }
-
   protected initialize() {
     this.service = this.data.service;
     const columnsData = this.data.columns.split(';');
-    this.columnsData = this.parseColumnsStyle(columnsData);
+    this.columnsData = this.parseColumnStyle(columnsData);
     this.columnsToGroupData = columnsData;
-    this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], styleFunctions: ['columnName'], columnsStyle: [] };
+    this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: ['columnName'], orderBy: [] };
     this.currentConfiguration = { ENTITY: this.data.entity }
 
     this.getFunctions();
   }
 
-  protected parseColumnsStyle(columns: any[]): OReportColumnsStyle[] {
+  public previewReport(): void {
+    this.openReport();
+  }
+
+
+  protected parseColumnStyle(columns: any[]): OReportColumn[] {
+
     return columns.map(column => {
-      return { id: column, name: this.translateService.get(column), width: 85, alignment: 'left' }
+      return { id: column, name: this.translateService.get(column) }
+    });
+  }
+
+  protected parseColumnsOrderBy(columnsOrderBy: any): OReportOrderBy[] {
+    return columnsOrderBy.map(column => {
+      return { columnId: column.columnId, columnName: column.name, ascendent: column.ascendent }
     });
   }
 
   protected openReport() {
-    let columns = this.currentPreference.columnsStyle.map(x => x.id);
-    let orientation = this.currentPreference.vertical ? 'vertical' : 'horizontal';
-    let functions = this.currentPreference.functions.map(
-      x => {
-        if (x.columnName === 'TOTAL') return x.columnName; else return x.columnName + '-' + x.functionName;
-      });
     this.reportsService.createReport({
-      "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups, "entity": this.currentConfiguration.ENTITY,
-      "service": this.service, "orientation": orientation, "functions": functions,
-      "styleFunctions": this.currentPreference.styleFunctions, "subtitle": this.currentPreference.subtitle, "columnStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.columnsGroupBy
+      "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentConfiguration.ENTITY,
+      "service": this.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
+      "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
+
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.pdf = res.data[0].file;
       }
     });
   }
-
 
   getFunctions() {
     this.reportsService.getFunctions({
@@ -121,10 +128,11 @@ export class ReportOnDemandComponent implements OnInit {
       }
     });
   }
+
   parseDefaultFunctionsData(list: any[]) {
     let functions = [];
     list.forEach(column => {
-      let obj: ReportFunction;
+      let obj: OReportFunction;
       if (column !== 'TOTAL') {
         obj = { columnName: column, functionName: 'SUM' };
       } else {
@@ -138,40 +146,31 @@ export class ReportOnDemandComponent implements OnInit {
   applyConfiguration(configuration: any) {
     this.currentConfiguration = configuration;
     let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
-    this.appliedConfiguration = true;
-    this.selectedFunctions = this.parseStringToArray(preference.functions);
-    this.currentPreference = {
-      title: preference.title,
-      subtitle: preference.subtitle,
-      vertical: preference.vertical,
-      columns: this.parseStringToArray(preference.columns),
-      functions: this.parseDefaultFunctionsData(this.parseStringToArray(preference.functions)),
-      groups: this.parseStringToArray(preference.groups),
-      styleFunctions: this.parseStringToArray(preference.styleFunctions),
-      columnsStyle: this.parseColumnsStyle(this.parseStringToArray(preference.columns))
-    };
+    this.currentPreference = preference;
 
   }
+
+
   showColumnStyleDialog(event, id): void {
     event.stopPropagation();
-    const columnStyleData: OReportColumnsStyle = this.currentPreference.columnsStyle.find((x: OReportColumnsStyle) => x.id === id);
+    const columnData: OReportColumn = this.currentPreference.columns.find((x: OReportColumn) => x.id === id);
     this.dialog
       .open(StyleDialogComponent, {
-        data: columnStyleData ? columnStyleData : id,
+        data: columnData ? columnData : id,
         panelClass: ['o-dialog-class', 'o-table-dialog']
       })
       .afterClosed()
-      .subscribe((data: OReportColumnsStyle) => {
+      .subscribe((data: OReportColumn) => {
         if (Util.isDefined(data) && data) {
-          this.updateColumnStylesData(data);
+          this.updateColumnStyleConfigurationData(data);
         }
       });
   }
 
-  updateColumnStylesData(data: OReportColumnsStyle) {
-    const indexColumnStyleData = this.currentPreference.columnsStyle.findIndex(x => x.id === data.id);
+  updateColumnStyleConfigurationData(data: OReportColumn) {
+    const indexColumnStyleData = this.currentPreference.columns.findIndex(x => x.id === data.id);
     if (indexColumnStyleData > -1) {
-      this.currentPreference.columnsStyle[indexColumnStyleData] = data;
+      this.currentPreference.columns[indexColumnStyleData] = data;
     }
   }
 
@@ -188,19 +187,17 @@ export class ReportOnDemandComponent implements OnInit {
           //Updated current functions selected and functionsData
           if (data) {
             const index = data.indexOf('-');
-            this.functionList.deselectAll();
             const columnName = data.substring(0, index);
             const functionName = data.substring(index + 1);
             this.functionsData = this.updatedSelectFunctionInArray(columnName, functionName, this.functionsData);
             this.currentPreference.functions = this.updatedSelectFunctionInArray(columnName, functionName, this.currentPreference.functions);
-
           }
         });
     }
   }
 
   private updatedSelectFunctionInArray(columnName: any, functionName: any, dataArray: any[]) {
-    let index = dataArray.findIndex(x => x.columnName === columnName);
+    const index = dataArray.findIndex(x => x.columnName === columnName);
     if (index === -1) {
       dataArray.push({ columnName: columnName, functionName: functionName });
     } else {
@@ -218,7 +215,7 @@ export class ReportOnDemandComponent implements OnInit {
       .afterClosed()
       .subscribe((data: { name: string, description: string }) => {
         if (Util.isDefined(data) && data) {
-          this.saveAsPreferences(data);
+          this.savePreferences(data);
         }
       });
 
@@ -233,22 +230,24 @@ export class ReportOnDemandComponent implements OnInit {
     moveItemInArray(this.columnsToGroupData, event.previousIndex, event.currentIndex)
     this.updateColumnToGroupSort();
   }
+
   dropColumnsOrderBy(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.columnsGroupBy, event.previousIndex, event.currentIndex);
+    moveItemInArray(this.columnsOrderBy, event.previousIndex, event.currentIndex);
     this.updateColumnGroupBySort();
   }
 
   updateColumnStyleSort() {
-    this.currentPreference.columnsStyle.sort((a: OReportColumnsStyle, b: OReportColumnsStyle) => {
+    this.currentPreference.columns.sort((a: OReportColumn, b: OReportColumn) => {
       let indexA = this.columnsData.findIndex(x => x.id === a.id);
       let indexB = this.columnsData.findIndex(x => x.id === b.id);
       return indexA - indexB;
     });
   }
+
   updateColumnGroupBySort() {
-    this.currentPreference.columnsGroupBy.sort((a: OReportOrderBy, b: OReportOrderBy) => {
-      let indexA = this.columnsGroupBy.findIndex(x => x.columnId === a.columnId);
-      let indexB = this.columnsGroupBy.findIndex(x => x.columnId === b.columnId);
+    this.currentPreference.orderBy.sort((a: OReportOrderBy, b: OReportOrderBy) => {
+      let indexA = this.columnsOrderBy.findIndex(x => x.columnId === a.columnId);
+      let indexB = this.columnsOrderBy.findIndex(x => x.columnId === b.columnId);
       return indexA - indexB;
     });
   }
@@ -273,7 +272,10 @@ export class ReportOnDemandComponent implements OnInit {
       .subscribe((data: OReportConfiguration) => {
         if (Util.isDefined(data) && data) {
           this.applyConfiguration(data);
+          this.appliedConfiguration = true;
         }
+      }, _error => {
+        this.appliedConfiguration = false;
       });
   }
 
@@ -288,57 +290,46 @@ export class ReportOnDemandComponent implements OnInit {
         .afterClosed()
         .subscribe((data: { name: string, description: string }) => {
           if (Util.isDefined(data) && data) {
-            this.saveAsPreferences(data);
+            this.savePreferences(data, true);
           }
         });
     }
 
   }
 
-  savePreferences(data: any) {
-    let columns = this.currentPreference.columnsStyle.map(x => x.id);
-    let functions = this.currentPreference.functions.map(
-      x => {
-        if (x.columnName === 'TOTAL') return x.columnName; else return x.columnName + '-' + x.functionName;
-      });
+  savePreferences(data: any, update?: boolean) {
     let preference = {
       "name": data.name, "description": data.description,
-      "entity": this.currentConfiguration.ENTITY, "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups,
-      "vertical": this.currentPreference.vertical, "functions": functions, "styleFunctions": this.currentPreference.styleFunctions,
-      "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.columnsGroupBy
+      "entity": this.currentConfiguration.ENTITY, "title": this.currentPreference.title, "groups": this.currentPreference.groups,
+      "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions, "style": this.currentPreference.style,
+      "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy
     }
 
-    this.reportsService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
-      if (res && res.data.length && res.code === 0) {
-      }
-    });
-  }
-
-  saveAsPreferences(data) {
-    let columns = this.currentPreference.columnsStyle.map(x => x.id);
-    let functions = this.extractFunction();
-    let preference = {
-      "name": data.name, "description": data.description,
-      "entity": this.currentConfiguration.ENTITY, "title": this.currentPreference.title, "columns": columns, "groups": this.currentPreference.groups,
-      "vertical": this.currentPreference.vertical, "functions": functions, "styleFunctions": this.currentPreference.styleFunctions,
-      "subtitle": this.currentPreference.subtitle, "columnsStyle": this.currentPreference.columnsStyle, "orderBy": this.currentPreference.columnsGroupBy
-    }
-
-    this.reportsService.saveAsPreferences(preference).subscribe(res => {
-      if (res && res.data.length && res.code === 0) {
-        // this.currentPreference = preference;
-      }
-    });
-
-  }
-
-  private extractFunction() {
-    return this.currentPreference.functions.map(
-      x => {
-        if (x.columnName === 'TOTAL')
-          return x.columnName; else
-          return x.columnName + '-' + x.functionName;
+    if (update) {
+      this.reportsService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
+        this.showConfirmOperatinInSnackBar(res);
       });
+    } else {
+      this.reportsService.saveAsPreferences(preference).subscribe(res => {
+        if (res && res.code === 0) {
+          this.showConfirmOperatinInSnackBar(res);
+        }
+      });
+    }
+  }
+
+  private showConfirmOperatinInSnackBar(res: any) {
+    if (res && res.code === 0) {
+      this.snackBarService.open('MESSAGES.SAVED', { icon: 'check_circle' });
+    }
+  }
+
+  getFunctionValue(reportFunction: OReportFunction) {
+    if (reportFunction.columnName === 'TOTAL') {
+      return reportFunction.columnName;
+    } else {
+      return reportFunction.columnName + '-' + reportFunction.functionName;
+    }
   }
 
   setFullscreenDialog(): void {
@@ -351,59 +342,87 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   onSelectionChangeColumns(event: MatSelectionListChange) {
-    let functionSelected: string = event.option.value.id;
-    const columnGroupBySelected: OReportOrderBy = { columnId: functionSelected, columnName: this.translateService.get(functionSelected), ascendent: true }
-    if (event.option.selected) {
-      if ((this.columnsGroupBy.find(x => x.columnId === functionSelected)) == null) {
-        this.columnsGroupBy.push(columnGroupBySelected);
-      }
-    }
-    else {
-      let index = this.columnsGroupBy.find(x => x.columnId === functionSelected);
-      if (index != null) {
-        this.columnsGroupBy.splice(this.columnsGroupBy.indexOf(index));
-      }
-    }
+    const selectedColumn: OReportColumn = event.option.value;
+    const selectColumnId = selectedColumn.id;
+    this.updateColumnsOrderByData(event, selectColumnId,);
 
   }
 
   onSelectionChangeGroups(event: MatSelectionListChange) {
-    if (!event.option.selected || event.option.value.columnName === 'TOTAL') return;
-    let functionSelected: string = event.option.value;
+    if (!event.option.selected) return;
+    let groupSelected: string = event.option.value;
+    this.updateColumnsOrderByData(event, groupSelected);
     if (event.option.selected &&
-      this.currentPreference.columnsStyle.findIndex(x => x.id === functionSelected) === -1) {
-      const columnStyleSelected: OReportColumnsStyle = { id: functionSelected, name: this.translateService.get(functionSelected), width: 85, alignment: 'left' };
-      this.currentPreference.columnsStyle.push(columnStyleSelected);
+      this.currentPreference.columns.findIndex(x => x.id === groupSelected) === -1) {
+      const columnStyleSelected: OReportColumn = { id: groupSelected, name: this.translateService.get(groupSelected) };
+      this.addColumnData(columnStyleSelected);
     }
+  }
+
+
+  updateColumnsOrderByData(event: MatSelectionListChange, columnId: string) {
+    const columnGroupBySelected: OReportOrderBy = { columnId: columnId, ascendent: true }
+    let index = this.columnsOrderBy.findIndex(x => x.columnId === columnId);
+    if (event.option.selected) {
+      if (index === -1) {
+        this.columnsOrderBy.push(columnGroupBySelected);
+      }
+    }
+    else if (index > -1) {
+      this.columnsOrderBy.splice(index);
+    }
+
+  }
+
+
+  addColumnData(columnSelected) {
+    //Object Deep Cloning
+    let currentPreference = JSON.parse(JSON.stringify(this.currentPreference));
+    currentPreference.columns.push(columnSelected);
+    this.currentPreference = currentPreference;
   }
 
   onSelectionChangeFunctions(event: MatSelectionListChange) {
-    if (!event.option.selected || event.option.value.columnName === 'TOTAL') return;
-    const columnSelectedToGroup = event.option.value.columnName;
-    let columnStyleSelected: OReportColumnsStyle = { id: columnSelectedToGroup, name: this.translateService.get(columnSelectedToGroup), width: 85, alignment: 'left' };
+    if (!event.option.selected || event.option.value === 'TOTAL') return;
+    const functionSelect = event.option.value;
+    const columnSelectedToGroup = functionSelect.substring(0, functionSelect.indexOf('-'));
 
     if (event.option.selected &&
-      this.currentPreference.columnsStyle.findIndex(x => x.id === columnSelectedToGroup) === -1) {
-      this.currentPreference.columnsStyle.push(columnStyleSelected);
+      this.currentPreference.columns.findIndex(x => x.id === columnSelectedToGroup) === -1) {
+      const column: OReportColumn = { id: columnSelectedToGroup, name: this.translateService.get(columnSelectedToGroup) }
+      this.addColumnData(column);
     }
   }
 
-  changeOrder(column, order, event) {
-    if (order) {
-      this.columnsGroupBy.find(x => x.columnId === column).ascendent = false;
+
+  changeOrder(column: OReportOrderBy, event) {
+    const columnSelectedToOrder = this.columnsOrderBy.find(x => x.columnId === column.columnId);
+    if (columnSelectedToOrder) {
+      columnSelectedToOrder.ascendent = !columnSelectedToOrder.ascendent;
     }
-    else { this.columnsGroupBy.find(x => x.columnId === column).ascendent = true; }
     event.stopPropagation();
   }
-  isCheckedColumn(column) {
-    const isCheckedColumn = this.currentPreference.columnsStyle.length > 0 ? this.currentPreference.columnsStyle.filter(x => x.id === column.id).length > 0 : false;
-    return isCheckedColumn;
+
+  isCheckedColumn(column: OReportColumn) {
+    return this.currentPreference.columns.length > 0 ? this.currentPreference.columns.filter(x => x.id === column.id).length > 0 : false;
   }
 
-  private parseStringToArray(data): string[] {
-    const stringParsed = data.replace("[", "").replace("]", "").replace(/ /g, "");
-    return stringParsed.length === 0 ? [] : stringParsed.split(',');
+  isCheckedFunction(column: OReportFunction) {
+    return this.currentPreference.functions.length > 0 ? this.currentPreference.functions.filter(x => (x === column.columnName + '-' + column.functionName) && x !== 'TOTAL').length > 0 : false;
   }
 
+
+  columnsOrderByCompareFunction(co1: OReportOrderBy, co2: OReportOrderBy) {
+    return co1.columnId === co2.columnId;
+
+  }
+
+  columnsCompareFunction(co1: OReportColumn, co2: OReportColumn) {
+    return co1.id === co2.id;
+  }
+
+  functionsCompareFunction(co1: OReportFunction, co2: OReportFunction) {
+    return co1.columnName === co2.columnName;
+  }
 
 }

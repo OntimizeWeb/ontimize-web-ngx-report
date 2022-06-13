@@ -1,6 +1,6 @@
 import { Component, Inject, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { ReportFunction } from '../../../types/report-function.type';
+import { OReportFunction } from '../../../types/report-function.type';
 
 @Component({
   selector: 'app-select-function-dialog',
@@ -13,7 +13,7 @@ export class SelectFunctionDialogComponent {
   constructor(
     public dialogo: MatDialogRef<SelectFunctionDialogComponent>,
     @Optional()
-    @Inject(MAT_DIALOG_DATA) public reportFunction: ReportFunction) {
+    @Inject(MAT_DIALOG_DATA) public reportFunction: OReportFunction) {
 
     this.functions.push({ id: reportFunction.columnName + '-SUM', value: 'DIALOG.SELECT_FUNCTION.SUM' });
     this.functions.push({ id: reportFunction.columnName + '-AVERAGE', value: 'DIALOG.SELECT_FUNCTION.AVG' });

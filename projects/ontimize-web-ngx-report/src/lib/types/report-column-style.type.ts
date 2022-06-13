@@ -1,6 +1,4 @@
-export type OReportColumnsStyle = {
-  id: string,
-  name: string,
+export type OReportColumnStyle = {
   width: number,
   alignment: 'center' | 'right' | 'left';
 }
