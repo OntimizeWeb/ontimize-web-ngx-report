@@ -60,6 +60,7 @@ export class ReportOnDemandComponent implements OnInit {
   protected service: string;
   protected serviceRendererData: Array<OReportServiceRenderer> = [];
   protected language: string;
+  protected columnsArray: Array<string>;
 
   public currentPreference: OReportPreferences;
   public currentConfiguration: OReportConfiguration;
@@ -81,10 +82,34 @@ export class ReportOnDemandComponent implements OnInit {
     const table: OTableComponent = this.data;
     this.language = this.translateService.getCurrentLang();
     this.service = table.service;
-    this.columnsData = this.parseColumnStyle(table.visibleColArray);
+    this.columnsArray = table.visibleColArray;
+    this.columnsData = this.parseReportColumn(table.visibleColArray);
     this.columnsToGroupData = table.visibleColArray;
+    this.serviceRendererData = this.parseServiceRenderer(table);
+    this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: ['columnName'], orderBy: [] };
+    this.currentConfiguration = { ENTITY: table.entity }
 
-    this.serviceRendererData = table.oTableOptions.columns.filter((oCol: OColumn) => (table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer)).
+    this.getFunctions();
+  }
+
+  public previewReport(): void {
+    this.openReport();
+  }
+
+
+  protected parseReportColumn(columns: any[]): OReportColumn[] {
+    return columns.map(column => {
+      return { id: column, name: this.translateService.get(column) }
+    });
+  }
+
+  protected parseColumnsOrderBy(columnsOrderBy: any): OReportOrderBy[] {
+    return columnsOrderBy.map(column => {
+      return { columnId: column.columnId, columnName: column.name, ascendent: column.ascendent }
+    });
+  }
+  protected parseServiceRenderer(table:OTableComponent) {
+    return table.oTableOptions.columns.filter((oCol: OColumn) => (table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer)).
       map((oCol: OColumn) => {
         const renderer: any = oCol.renderer;
         return {
@@ -96,28 +121,6 @@ export class ReportOnDemandComponent implements OnInit {
           'parentKeys': Util.parseArray(renderer.parentKeys)
         }
       });
-
-    this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: ['columnName'], orderBy: [] };
-    this.currentConfiguration = { ENTITY: this.data.entity }
-
-    this.getFunctions();
-  }
-
-  public previewReport(): void {
-    this.openReport();
-  }
-
-
-  protected parseColumnStyle(columns: any[]): OReportColumn[] {
-    return columns.map(column => {
-      return { id: column, name: this.translateService.get(column) }
-    });
-  }
-
-  protected parseColumnsOrderBy(columnsOrderBy: any): OReportOrderBy[] {
-    return columnsOrderBy.map(column => {
-      return { columnId: column.columnId, columnName: column.name, ascendent: column.ascendent }
-    });
   }
 
   protected openReport() {
@@ -136,7 +139,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   getFunctions() {
     this.reportsService.getFunctions({
-      "columns": this.data.columns.split(";"), "entity": this.currentConfiguration.ENTITY,
+      "columns": this.columnsArray, "entity": this.currentConfiguration.ENTITY,
       "service": this.service, "language": this.language
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
