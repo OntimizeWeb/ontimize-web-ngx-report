@@ -419,10 +419,11 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   onCheckboxStyleClick(value) {
-    let style = this.currentPreference.style[value];
-    if (style) {
-      style = false;
-    } else { style = true }
+    if (this.currentPreference.style[value]) {
+      this.currentPreference.style[value] = false;
+    } else {
+      this.currentPreference.style[value] = true;
+    }
   }
 
   columnsCompareFunction(co1: OReportColumn, co2: OReportColumn) {
