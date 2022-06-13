@@ -2,13 +2,12 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'ontimize-web-ngx';
 import { OReportService } from '../../../services/o-report.service';
-import { CommonDialogMethods } from '../../../util/common-dialog-methods';
+import { Utils } from '../../../util/common-dialog-methods';
 
 @Component({
   selector: 'o-report-viewer',
   templateUrl: './o-report-viewer.component.html',
-  styleUrls: ['./o-report-viewer.component.scss'],
-  providers: [CommonDialogMethods]
+  styleUrls: ['./o-report-viewer.component.scss']
 })
 export class OReportViewerComponent {
 
@@ -19,7 +18,6 @@ export class OReportViewerComponent {
   constructor(
     public dialogRef: MatDialogRef<OReportViewerComponent>,
     @Inject('report') private reportService: OReportService,
-    private commonDialogMethods: CommonDialogMethods,
     protected dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     this.reportService.configureService(this.reportService.getDefaultServiceConfiguration());
@@ -41,7 +39,7 @@ export class OReportViewerComponent {
     );
   }
   setFullscreenDialog(): void {
-    this.commonDialogMethods.setFullscreenDialog(this.fullscreen, this.dialogRef);
+    Utils.setFullscreenDialog(this.fullscreen, this.dialogRef);
     this.fullscreen = !this.fullscreen;
   }
 }

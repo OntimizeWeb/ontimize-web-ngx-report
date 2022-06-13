@@ -1,7 +1,7 @@
 import { Constants } from "./constants";
 
-export class CommonDialogMethods {
-  setFullscreenDialog(fullscreen: boolean, dialogRef: any): void {
+export class Utils {
+  static setFullscreenDialog(fullscreen: boolean, dialogRef: any): void {
     if (!fullscreen) {
       dialogRef.updateSize("100%", "100%");
     } else {
