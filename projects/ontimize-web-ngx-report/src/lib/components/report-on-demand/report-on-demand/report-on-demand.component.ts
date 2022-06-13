@@ -128,7 +128,7 @@ export class ReportOnDemandComponent implements OnInit {
       "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentConfiguration.ENTITY,
       "service": this.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
       "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
-      "servicRenderer": this.serviceRendererData, "language": this.language
+      "serviceRenderer": this.serviceRendererData, "language": this.language
 
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
