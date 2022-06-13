@@ -3,24 +3,20 @@ import { ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogService, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
+import { DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { ReportsService } from '../../../services/reports.service';
-
-import { OReportColumnStyle } from '../../../types/report-column-style.type';
 import { OReportColumn } from '../../../types/report-column.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
 import { OReportFunction } from '../../../types/report-function.type';
 import { OReportOrderBy } from '../../../types/report-orderBy.type';
 import { OReportPreferences } from '../../../types/report-preferences.type';
+import { OReportServiceRenderer } from '../../../types/report-service-renderer.type';
+import { Utils } from '../../../util/utils';
 import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
 import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-preferences-dialog.component';
 import { SelectFunctionDialogComponent } from '../select-function-dialog/select-function-dialog.component';
 
 import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
-
-export const DEFAULT_WIDTH_DIALOG = '70%';
-export const DEFAULT_HEIGHT_DIALOG = '90%';
-export const DEFAULT_COLUMN_STYLE: OReportColumnStyle = { width: 85, alignment: 'left' };
 
 @Component({
   selector: 'app-customers-dialog',
@@ -58,15 +54,17 @@ export class ReportOnDemandComponent implements OnInit {
   public fullscreen: boolean = false;
 
   protected service: string;
+  protected serviceRendererData: Array<OReportServiceRenderer> = [];
+  protected language: string;
+  protected columnsArray: Array<string>;
 
   public currentPreference: OReportPreferences;
   public currentConfiguration: OReportConfiguration;
 
-
   constructor(private reportsService: ReportsService,
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: OTableComponent,
     protected dialogService: DialogService,
     public translateService: OTranslateService,
     protected snackBarService: SnackBarService) {
@@ -77,12 +75,15 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   protected initialize() {
-    this.service = this.data.service;
-    const columnsData = this.data.columns.split(';');
-    this.columnsData = this.parseColumnStyle(columnsData);
-    this.columnsToGroupData = columnsData;
+    const table: OTableComponent = this.data;
+    this.language = this.translateService.getCurrentLang();
+    this.service = table.service;
+    this.columnsArray = table.visibleColArray;
+    this.columnsData = this.parseReportColumn(table.visibleColArray);
+    this.columnsToGroupData = table.visibleColArray;
+    this.serviceRendererData = this.parseServiceRenderer(table);
     this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: ['columnName'], orderBy: [] };
-    this.currentConfiguration = { ENTITY: this.data.entity }
+    this.currentConfiguration = { ENTITY: table.entity }
 
     this.getFunctions();
   }
@@ -92,8 +93,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
 
-  protected parseColumnStyle(columns: any[]): OReportColumn[] {
-
+  protected parseReportColumn(columns: any[]): OReportColumn[] {
     return columns.map(column => {
       return { id: column, name: this.translateService.get(column) }
     });
@@ -105,11 +105,27 @@ export class ReportOnDemandComponent implements OnInit {
     });
   }
 
+  protected parseServiceRenderer(table: OTableComponent) {
+    return table.oTableOptions.columns.filter((oCol: OColumn) => (table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer)).
+      map((oCol: OColumn) => {
+        const renderer: any = oCol.renderer;
+        return {
+          'service': renderer.service,
+          'entity': renderer.entity,
+          'keyColumn': oCol.attr,
+          'valueColumn': renderer.valueColumn,
+          'columns': Util.parseArray(renderer.columns),
+          'parentKeys': Util.parseArray(renderer.parentKeys)
+        }
+      });
+  }
+
   protected openReport() {
     this.reportsService.createReport({
       "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentConfiguration.ENTITY,
       "service": this.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
       "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
+      "serviceRenderer": this.serviceRendererData, "language": this.language
 
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
@@ -120,8 +136,8 @@ export class ReportOnDemandComponent implements OnInit {
 
   getFunctions() {
     this.reportsService.getFunctions({
-      "columns": this.data.columns.split(";"), "entity": this.currentConfiguration.ENTITY,
-      "service": this.service, "language": this.translateService.getCurrentLang()
+      "columns": this.columnsArray, "entity": this.currentConfiguration.ENTITY,
+      "service": this.service, "language": this.language
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.functionsData = this.parseDefaultFunctionsData(res.data[0].list);
@@ -223,7 +239,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   dropColumns(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.columnsData, event.previousIndex, event.currentIndex);
-    this.updateColumnStyleSort();
+    this.updateColumnsSort();
   }
 
   dropGroups(event: CdkDragDrop<any[]>) {
@@ -236,7 +252,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.updateColumnGroupBySort();
   }
 
-  updateColumnStyleSort() {
+  updateColumnsSort() {
     this.currentPreference.columns.sort((a: OReportColumn, b: OReportColumn) => {
       let indexA = this.columnsData.findIndex(x => x.id === a.id);
       let indexB = this.columnsData.findIndex(x => x.id === b.id);
@@ -333,11 +349,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   setFullscreenDialog(): void {
-    if (!this.fullscreen) {
-      this.dialogRef.updateSize("100%", "100%");
-    } else {
-      this.dialogRef.updateSize(DEFAULT_WIDTH_DIALOG, DEFAULT_HEIGHT_DIALOG);
-    }
+    Utils.setFullscreenDialog(this.fullscreen, this.dialogRef);
     this.fullscreen = !this.fullscreen;
   }
 
@@ -380,6 +392,7 @@ export class ReportOnDemandComponent implements OnInit {
     let currentPreference = JSON.parse(JSON.stringify(this.currentPreference));
     currentPreference.columns.push(columnSelected);
     this.currentPreference = currentPreference;
+    this.updateColumnsSort();
   }
 
   onSelectionChangeFunctions(event: MatSelectionListChange) {

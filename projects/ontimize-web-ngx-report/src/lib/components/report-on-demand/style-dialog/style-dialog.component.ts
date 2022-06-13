@@ -1,7 +1,8 @@
 import { Component, Inject, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OReportColumn } from '../../../types/report-column.type';
-import { DEFAULT_COLUMN_STYLE } from '../report-on-demand/report-on-demand.component';
+import { Constants } from '../../../util/constants';
+
 
 
 @Component({
@@ -23,7 +24,7 @@ export class StyleDialogComponent {
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.reportColumn = data;
     if (this.reportColumn.hasOwnProperty('columnStyle')) {
-      this.reportColumn.columnStyle = DEFAULT_COLUMN_STYLE;
+      this.reportColumn.columnStyle = Constants.DEFAULT_COLUMN_STYLE;
     }
   }
 
