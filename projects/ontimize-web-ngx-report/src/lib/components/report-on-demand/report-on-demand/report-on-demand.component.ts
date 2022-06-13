@@ -239,7 +239,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   dropColumns(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.columnsData, event.previousIndex, event.currentIndex);
-    this.updateColumnStyleSort();
+    this.updateColumnsSort();
   }
 
   dropGroups(event: CdkDragDrop<any[]>) {
@@ -252,7 +252,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.updateColumnGroupBySort();
   }
 
-  updateColumnStyleSort() {
+  updateColumnsSort() {
     this.currentPreference.columns.sort((a: OReportColumn, b: OReportColumn) => {
       let indexA = this.columnsData.findIndex(x => x.id === a.id);
       let indexB = this.columnsData.findIndex(x => x.id === b.id);
@@ -392,6 +392,7 @@ export class ReportOnDemandComponent implements OnInit {
     let currentPreference = JSON.parse(JSON.stringify(this.currentPreference));
     currentPreference.columns.push(columnSelected);
     this.currentPreference = currentPreference;
+    this.updateColumnsSort();
   }
 
   onSelectionChangeFunctions(event: MatSelectionListChange) {
