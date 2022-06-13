@@ -5,7 +5,6 @@ import { MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogService, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { ReportsService } from '../../../services/reports.service';
-import { OReportStyleParams } from '../../../types';
 
 import { OReportColumnStyle } from '../../../types/report-column-style.type';
 import { OReportColumn } from '../../../types/report-column.type';
@@ -420,7 +419,8 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   onCheckboxStyleClick(value) {
-    this.currentPreference.style[value] == true ? this.currentPreference.style[value] = false : this.currentPreference.style[value] = true
+    let style = this.currentPreference.style[value];
+    style ? style = false : style = true
   }
 
   columnsCompareFunction(co1: OReportColumn, co2: OReportColumn) {
