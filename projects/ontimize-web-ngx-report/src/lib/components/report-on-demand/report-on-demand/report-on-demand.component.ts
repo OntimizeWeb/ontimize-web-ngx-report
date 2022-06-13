@@ -5,6 +5,7 @@ import { MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogService, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { ReportsService } from '../../../services/reports.service';
+import { OReportStyleParams } from '../../../types';
 
 import { OReportColumnStyle } from '../../../types/report-column-style.type';
 import { OReportColumn } from '../../../types/report-column.type';
@@ -62,7 +63,6 @@ export class ReportOnDemandComponent implements OnInit {
   public currentPreference: OReportPreferences;
   public currentConfiguration: OReportConfiguration;
 
-
   constructor(private reportsService: ReportsService,
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
@@ -81,7 +81,11 @@ export class ReportOnDemandComponent implements OnInit {
     const columnsData = this.data.columns.split(';');
     this.columnsData = this.parseColumnStyle(columnsData);
     this.columnsToGroupData = columnsData;
-    this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: ['columnName'], orderBy: [] };
+    this.currentPreference = {
+      title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: {
+        grid: false, rowNumber: false, columnName: true, backgroundOnOddRows: false, hideGroupDetails: false, groupNewPage: false, firstGroupNewPage: false
+      }, orderBy: []
+    };
     this.currentConfiguration = { ENTITY: this.data.entity }
 
     this.getFunctions();
@@ -411,10 +415,12 @@ export class ReportOnDemandComponent implements OnInit {
     return this.currentPreference.functions.length > 0 ? this.currentPreference.functions.filter(x => (x === column.columnName + '-' + column.functionName) && x !== 'TOTAL').length > 0 : false;
   }
 
-
   columnsOrderByCompareFunction(co1: OReportOrderBy, co2: OReportOrderBy) {
     return co1.columnId === co2.columnId;
+  }
 
+  onCheckboxStyleClick(value) {
+    this.currentPreference.style[value] == true ? this.currentPreference.style[value] = false : this.currentPreference.style[value] = true
   }
 
   columnsCompareFunction(co1: OReportColumn, co2: OReportColumn) {

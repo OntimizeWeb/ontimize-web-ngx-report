@@ -62,8 +62,9 @@
                 {{ 'STYLE' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #settings [(ngModel)]="currentPreference.style">
-              <mat-list-option checkboxPosition="before" *ngFor="let choice of stylesArray" [value]="choice.value">
+            <mat-selection-list dense #settings>
+              <mat-list-option checkboxPosition="before" [selected]="currentPreference.style[choice.value]" *ngFor="let choice of stylesArray"
+                [value]="choice.value" (click)="onCheckboxStyleClick(choice.value)">
                 <div fxLayout="row">
                   <span fxFlex>
                     {{choice.viewValue | oReportsTranslate}}
