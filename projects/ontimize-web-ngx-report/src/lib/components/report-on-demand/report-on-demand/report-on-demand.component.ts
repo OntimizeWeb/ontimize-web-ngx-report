@@ -9,7 +9,7 @@ import { OReportColumn } from '../../../types/report-column.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
 import { OReportFunction } from '../../../types/report-function.type';
 import { OReportOrderBy } from '../../../types/report-orderBy.type';
-import { OReportPreferences } from '../../../types/report-preferences.type';
+import { DefaultOReportPreferences, OReportPreferences } from '../../../types/report-preferences.type';
 import { OReportServiceRenderer } from '../../../types/report-service-renderer.type';
 import { Utils } from '../../../util/utils';
 import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
@@ -83,11 +83,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.columnsData = this.parseReportColumn(table.visibleColArray);
     this.columnsToGroupData = table.visibleColArray;
     this.serviceRendererData = this.parseServiceRenderer(table);
-    this.currentPreference = {
-      title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: {
-        grid: false, rowNumber: false, columnName: true, backgroundOnOddRows: false, hideGroupDetails: false, groupNewPage: false, firstGroupNewPage: false
-      }, orderBy: []
-    };
+    this.currentPreference = new DefaultOReportPreferences();
     this.currentConfiguration = { ENTITY: table.entity }
 
 
@@ -99,12 +95,9 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   public clearCurrentPreferences() {
-    this.currentPreference = {
-      title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: {
-        grid: false, rowNumber: false, columnName: true, backgroundOnOddRows: false, hideGroupDetails: false, groupNewPage: false, firstGroupNewPage: false
-      }, orderBy: []
-    };
+    this.currentPreference = new DefaultOReportPreferences();
   }
+
   protected parseReportColumn(columns: any[]): OReportColumn[] {
     return columns.map(column => {
       return { id: column, name: this.translateService.get(column) }
