@@ -83,7 +83,11 @@ export class ReportOnDemandComponent implements OnInit {
     this.columnsData = this.parseReportColumn(this.table.visibleColArray);
     this.columnsToGroupData = this.table.visibleColArray;
     this.serviceRendererData = this.parseServiceRenderer();
-    this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: ['columnName'], orderBy: [] };
+     this.currentPreference = {
+      title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: {
+        grid: false, rowNumber: false, columnName: true, backgroundOnOddRows: false, hideGroupDetails: false, groupNewPage: false, firstGroupNewPage: false
+      }, orderBy: []
+    };
     this.currentConfiguration = { ENTITY: this.table.entity }
 
     this.getFunctions();
@@ -426,10 +430,16 @@ export class ReportOnDemandComponent implements OnInit {
     return this.currentPreference.functions.length > 0 ? this.currentPreference.functions.filter(x => (x === column.columnName + '-' + column.functionName) && x !== 'TOTAL').length > 0 : false;
   }
 
-
   columnsOrderByCompareFunction(co1: OReportOrderBy, co2: OReportOrderBy) {
     return co1.columnId === co2.columnId;
+  }
 
+  onCheckboxStyleClick(value) {
+    if (this.currentPreference.style[value]) {
+      this.currentPreference.style[value] = false;
+    } else {
+      this.currentPreference.style[value] = true;
+    }
   }
 
   columnsCompareFunction(co1: OReportColumn, co2: OReportColumn) {
