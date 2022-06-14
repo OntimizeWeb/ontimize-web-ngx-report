@@ -57,6 +57,7 @@ export class ReportOnDemandComponent implements OnInit {
   protected serviceRendererData: Array<OReportServiceRenderer> = [];
   protected language: string;
   protected columnsArray: Array<string>;
+  protected table: OTableComponent;
 
   public currentPreference: OReportPreferences;
   public currentConfiguration: OReportConfiguration;
@@ -75,15 +76,15 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   protected initialize() {
-    const table: OTableComponent = this.data;
+    this.table = this.data;
     this.language = this.translateService.getCurrentLang();
-    this.service = table.service;
-    this.columnsArray = table.visibleColArray;
-    this.columnsData = this.parseReportColumn(table.visibleColArray);
-    this.columnsToGroupData = table.visibleColArray;
-    this.serviceRendererData = this.parseServiceRenderer(table);
+    this.service = this.table.service;
+    this.columnsArray = this.table.visibleColArray;
+    this.columnsData = this.parseReportColumn(this.table.visibleColArray);
+    this.columnsToGroupData = this.table.visibleColArray;
+    this.serviceRendererData = this.parseServiceRenderer();
     this.currentPreference = { title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: ['columnName'], orderBy: [] };
-    this.currentConfiguration = { ENTITY: table.entity }
+    this.currentConfiguration = { ENTITY: this.table.entity }
 
     this.getFunctions();
   }
@@ -105,8 +106,8 @@ export class ReportOnDemandComponent implements OnInit {
     });
   }
 
-  protected parseServiceRenderer(table: OTableComponent) {
-    return table.oTableOptions.columns.filter((oCol: OColumn) => (table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer)).
+  protected parseServiceRenderer() {
+    return this.table.oTableOptions.columns.filter((oCol: OColumn) => (this.table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer)).
       map((oCol: OColumn) => {
         const renderer: any = oCol.renderer;
         return {
@@ -145,17 +146,18 @@ export class ReportOnDemandComponent implements OnInit {
     });
   }
 
-  parseDefaultFunctionsData(list: any[]) {
+  parseDefaultFunctionsData(listColumns: string[]) {
     let functions = [];
-    list.forEach(column => {
-      let obj: OReportFunction;
-      if (column !== 'TOTAL') {
-        obj = { columnName: column, functionName: 'SUM' };
-      } else {
-        obj = { columnName: column, functionName: column };
-      }
-      functions.push(obj);
-    })
+
+    listColumns.
+      filter(x =>
+        this.serviceRendererData.findIndex(serviceRendererColumn => serviceRendererColumn.keyColumn === x) === -1
+      )
+      .forEach(column => {
+        let obj: OReportFunction = { columnName: column, functionName: column !== 'TOTAL' ? 'SUM' : column };
+        functions.push(obj);
+      })
+
     return functions;
   }
 
