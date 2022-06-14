@@ -81,9 +81,11 @@ export class ReportOnDemandComponent implements OnInit {
     this.table = this.data;
     this.language = this.translateService.getCurrentLang();
     this.service = this.table.service;
-    this.columnsArray = this.table.visibleColArray;
-    this.columnsData = this.parseReportColumn(this.table.visibleColArray);
-    this.columnsToGroupData = this.table.visibleColArray;
+    this.columnsArray = this.parseColumnsVisible();
+    this.columnsToGroupData = this.columnsArray;
+    this.columnsData = this.parseReportColumn(this.columnsArray);
+
+
     this.serviceRendererData = this.parseServiceRenderer();
     this.currentConfiguration = { ENTITY: this.table.entity };
     this.initializeCurrentPreferences();
@@ -102,6 +104,14 @@ export class ReportOnDemandComponent implements OnInit {
   protected initializeCurrentPreferences() {
     this.pdf = this.blankPdf;
     this.currentPreference = new DefaultOReportPreferences();
+  }
+
+  protected parseColumnsVisible() {
+    const visibleColumns = Util.parseArray(this.table.visibleColumns, true);
+
+    return this.table.oTableOptions.columns.filter(oCol => visibleColumns.indexOf(oCol.attr) !== -1 || oCol.definition !== undefined).map(
+      (x: OColumn) => x.attr
+    )
   }
 
   protected parseReportColumn(columns: any[]): OReportColumn[] {
@@ -189,6 +199,7 @@ export class ReportOnDemandComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((data: OReportColumn) => {
+        console.log('this.currentPreference.columns' + this.currentPreference.columns)
         if (Util.isDefined(data) && data) {
           this.updateColumnStyleConfigurationData(data);
         }
@@ -200,6 +211,7 @@ export class ReportOnDemandComponent implements OnInit {
     if (indexColumnStyleData > -1) {
       this.currentPreference.columns[indexColumnStyleData] = data;
     }
+    console.log('this.currentPreference.columns' + this.currentPreference.columns)
   }
 
   selectFunction(event, functionName: string): void {
