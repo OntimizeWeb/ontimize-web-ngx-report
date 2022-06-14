@@ -33,7 +33,8 @@ export const MAP = {
     'DIALOG.SELECT_FUNCTION.MAX': 'Maximun',
     'DIALOG.SELECT_FUNCTION.AVG': 'Average',
     'DIALOG.SELECT_FUNCTION.SUM': 'Sum',
-    'ORDER_BY': 'Order by'
+    'ORDER_BY': 'Order by',
+    'CLEAR': 'Clear'
   },
 
   // Spanish
@@ -69,7 +70,8 @@ export const MAP = {
     'DIALOG.SELECT_FUNCTION.MAX': 'Máximo',
     'DIALOG.SELECT_FUNCTION.AVG': 'Media',
     'DIALOG.SELECT_FUNCTION.SUM': 'Suma',
-    'ORDER_BY': 'Ordenar por'
+    'ORDER_BY': 'Ordenar por',
+    'CLEAR': 'Limpiar'
   }
 
 };

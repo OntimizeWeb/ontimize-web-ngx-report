@@ -98,7 +98,13 @@ export class ReportOnDemandComponent implements OnInit {
     this.openReport();
   }
 
-
+  public clearCurrentPreferences() {
+    this.currentPreference = {
+      title: '', subtitle: '', vertical: true, columns: [], groups: [], functions: [], style: {
+        grid: false, rowNumber: false, columnName: true, backgroundOnOddRows: false, hideGroupDetails: false, groupNewPage: false, firstGroupNewPage: false
+      }, orderBy: []
+    };
+  }
   protected parseReportColumn(columns: any[]): OReportColumn[] {
     return columns.map(column => {
       return { id: column, name: this.translateService.get(column) }
