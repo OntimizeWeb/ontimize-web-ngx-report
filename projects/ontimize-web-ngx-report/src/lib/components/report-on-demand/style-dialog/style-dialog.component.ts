@@ -3,8 +3,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OReportColumn } from '../../../types/report-column.type';
 import { Constants } from '../../../util/constants';
 
-
-
 @Component({
   selector: 'app-style-dialog',
   templateUrl: './style-dialog.component.html'
@@ -23,11 +21,10 @@ export class StyleDialogComponent {
     @Optional() public dialogo: MatDialogRef<StyleDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.reportColumn = data;
-    if (this.reportColumn.hasOwnProperty('columnStyle')) {
+    if (!this.reportColumn.hasOwnProperty('columnStyle')) {
       this.reportColumn.columnStyle = Constants.DEFAULT_COLUMN_STYLE;
     }
   }
-
 
   confirm(): void {
     this.dialogo.close(this.reportColumn);
