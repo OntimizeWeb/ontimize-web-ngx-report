@@ -165,7 +165,7 @@
           </mat-expansion-panel>
         </mat-accordion>
 
-        <div mat-dialog-actions fxLayout="row" align=center *ngIf="openedSidenav">
+        <div mat-dialog-actions fxLayout="row" fxLayoutAlign="center center" *ngIf="openedSidenav">
           <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="currentPreference.columns.length===0">
             {{'PREVIEW' | oReportsTranslate }}</button>
           <button type="button" mat-stroked-button class="o-report-on-demand-clear-button" (click)="clearCurrentPreferences()">
