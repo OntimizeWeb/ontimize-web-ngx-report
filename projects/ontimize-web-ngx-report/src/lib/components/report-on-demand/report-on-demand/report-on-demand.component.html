@@ -165,10 +165,12 @@
           </mat-expansion-panel>
         </mat-accordion>
 
-        <mat-dialog-actions align=center *ngIf="openedSidenav">
+        <div mat-dialog-actions fxLayout="row" fxLayoutAlign="center center" *ngIf="openedSidenav">
           <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="currentPreference.columns.length===0">
             {{'PREVIEW' | oReportsTranslate }}</button>
-        </mat-dialog-actions>
+          <button type="button" mat-stroked-button class="o-report-on-demand-clear-button" (click)="clearCurrentPreferences()">
+            {{'CLEAR' | oReportsTranslate }}</button>
+        </div>
 
       </div>
     </mat-sidenav>
