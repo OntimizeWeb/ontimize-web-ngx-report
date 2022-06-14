@@ -17,6 +17,10 @@
 
     .mat-dialog-actions {
       min-height: auto;
+
+      button.o-report-on-demand-clear-button {
+        min-width: 80px;
+      }
     }
 
     .mat-radio-group {
