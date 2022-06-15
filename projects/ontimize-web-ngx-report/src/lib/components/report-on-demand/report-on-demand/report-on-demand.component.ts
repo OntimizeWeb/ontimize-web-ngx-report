@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatSelectionListChange } from '@angular/material';
+import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { ReportsService } from '../../../services/reports.service';
@@ -27,6 +27,7 @@ import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 
 export class ReportOnDemandComponent implements OnInit {
 
+  @ViewChild('columnsList', { static: false }) columnsList: MatSelectionList;
 
   public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
   public functionsData: OReportFunction[] = [];
@@ -70,7 +71,8 @@ export class ReportOnDemandComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: OTableComponent,
     protected dialogService: DialogService,
     public translateService: OTranslateService,
-    protected snackBarService: SnackBarService) {
+    protected snackBarService: SnackBarService,
+    protected _changeDetectorRef: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -84,8 +86,6 @@ export class ReportOnDemandComponent implements OnInit {
     this.columnsArray = this.parseColumnsVisible();
     this.columnsToGroupData = this.columnsArray;
     this.columnsData = this.parseReportColumn(this.columnsArray);
-
-
     this.serviceRendererData = this.parseServiceRenderer();
     this.currentConfiguration = { ENTITY: this.table.entity };
     this.initializeCurrentPreferences();
@@ -185,33 +185,57 @@ export class ReportOnDemandComponent implements OnInit {
     this.currentConfiguration = configuration;
     let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
     this.currentPreference = preference;
-
   }
 
 
-  showColumnStyleDialog(event, id): void {
+  showColumnStyleDialog(event: Event, id: string): void {
     event.stopPropagation();
-    const columnData: OReportColumn = this.currentPreference.columns.find((x: OReportColumn) => x.id === id);
-    this.dialog
-      .open(StyleDialogComponent, {
-        data: columnData ? columnData : id,
-        panelClass: ['o-dialog-class', 'o-table-dialog']
-      })
-      .afterClosed()
-      .subscribe((data: OReportColumn) => {
-        console.log('this.currentPreference.columns' + this.currentPreference.columns)
-        if (Util.isDefined(data) && data) {
-          this.updateColumnStyleConfigurationData(data);
-        }
-      });
+    const columnData: OReportColumn = Object.assign({}, this.currentPreference.columns.find((x: OReportColumn) => x.id === id));
+    if (Util.isDefined(columnData)) {
+      this.dialog
+        .open(StyleDialogComponent, {
+          data: columnData,
+          panelClass: ['o-dialog-class', 'o-table-dialog']
+        })
+        .afterClosed()
+        .subscribe((data: OReportColumn) => {
+          if (Util.isDefined(data) && data) {
+            const column = Utils.cloneObject(data);
+            this.updateColumnStyleConfigurationData(column);
+          }
+        });
+    }
   }
 
   updateColumnStyleConfigurationData(data: OReportColumn) {
-    const indexColumnStyleData = this.currentPreference.columns.findIndex(x => x.id === data.id);
+
+
+    let columns = Utils.cloneObject(this.currentPreference.columns);
+    this.currentPreference.columns = [];
+
+    const indexColumnStyleData = columns.findIndex(x => x.id === data.id);
     if (indexColumnStyleData > -1) {
-      this.currentPreference.columns[indexColumnStyleData] = data;
+      columns[indexColumnStyleData] = data;
     }
-    console.log('this.currentPreference.columns' + this.currentPreference.columns)
+    this.currentPreference.columns = columns;
+    //this.columnsList._value = columns;
+    // option.value = data; // no funciona, deselecciona el option
+    //this.columnsList._emitChangeEvent(option);
+    //this.columnsList._value = columns;
+    // this._changeDetectorRef.markForCheck();
+    // this.columnsList._reportValueChange();
+
+
+
+  }
+
+  trackByColumn(index: number, item: any) {
+    console.log(item);
+    return item.id;
+  }
+
+  ngModelChange($event) {
+    console.log('event change ', $event)
   }
 
   selectFunction(event, functionName: string): void {
@@ -413,7 +437,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   addColumnData(columnSelected) {
     //Object Deep Cloning
-    let currentPreference = JSON.parse(JSON.stringify(this.currentPreference));
+    let currentPreference = Utils.cloneObject(this.currentPreference);
     currentPreference.columns.push(columnSelected);
     this.currentPreference = currentPreference;
     this.updateColumnsSort();

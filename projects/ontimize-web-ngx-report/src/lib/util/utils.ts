@@ -8,4 +8,7 @@ export class Utils {
       dialogRef.updateSize(Constants.DEFAULT_WIDTH_DIALOG, Constants.DEFAULT_HEIGHT_DIALOG);
     }
   }
+  static cloneObject(data: Object) {
+    return JSON.parse(JSON.stringify(data));
+  }
 }
