@@ -51,9 +51,12 @@ export class ReportsService extends OntimizeEEService {
     });
   }
 
-  public getPreferences(): Observable<any> {
+  public getPreferences(entity?: string, service?: string): Observable<any> {
+    let url = this.urlBase + '/preferences/preferences';
 
-    const url = this.urlBase + '/preferences/preferences';
+    if (entity != null && service != null) {
+      url += '?entity=' + entity + '&service=' + service;
+    }
 
     return this.doRequest({
       method: 'GET',
