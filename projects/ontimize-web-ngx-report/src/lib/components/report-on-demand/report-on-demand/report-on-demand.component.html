@@ -80,17 +80,15 @@
                 {{ 'COLUMNS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #columnsList ngDefaultControl cdkDropList [cdkDropListData]="columnsData"
-              (cdkDropListDropped)="dropColumns($event)" class="columns" [(ngModel)]="currentPreference.columns"
-              (ngModelChange)="ngModelChange($event)" (selectionChange)="onSelectionChangeColumns($event)" [compareWith]="columnsCompareFunction">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData;trackBy:trackByColumn"
-                [value]="column" cdkDrag>
+            <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsData" (cdkDropListDropped)="dropColumns($event)"
+              class="columns" [(ngModel)]="currentPreference.columns" (selectionChange)="onSelectionChangeColumns($event)"
+              [compareWith]="columnsCompareFunction">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     {{column.id | oReportsTranslate}}
                   </span>
-                  <mat-icon mat-list-icon *ngIf="isCheckedColumn(column)" (click)="showColumnStyleDialog($event, column.id)"
-                    class="button-edit">
+                  <mat-icon mat-list-icon *ngIf="isCheckedColumn(column)" (click)="showColumnStyleDialog($event, column.id)" class="button-edit">
                     edit
                   </mat-icon>
                   <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
@@ -168,10 +166,10 @@
         </mat-accordion>
 
         <div mat-dialog-actions fxLayout="row" fxLayoutAlign="center center" *ngIf="openedSidenav">
-          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="currentPreference.columns.length===0">
-            {{'PREVIEW' | oReportsTranslate }}</button>
           <button type="button" mat-stroked-button class="o-report-on-demand-clear-button" (click)="clearCurrentPreferences()">
             {{'CLEAR' | oReportsTranslate }}</button>
+          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="currentPreference.columns.length===0">
+            {{'PREVIEW' | oReportsTranslate }}</button>
         </div>
 
       </div>

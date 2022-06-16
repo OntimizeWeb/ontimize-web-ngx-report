@@ -47,7 +47,6 @@ export class ReportOnDemandComponent implements OnInit {
 
   public columnsData: Array<OReportColumn>;
   public selectedColumnsData: string[];
-  public columnsToSort: string[];
   public columnsOrderBy: Array<OReportOrderBy> = [];
 
   public columnsToGroupData: any[];
@@ -85,10 +84,9 @@ export class ReportOnDemandComponent implements OnInit {
     this.service = this.table.service;
     this.columnsArray = this.parseColumnsVisible();
     this.columnsToGroupData = this.columnsArray;
-    this.columnsData = this.parseReportColumn(this.columnsArray);
     this.serviceRendererData = this.parseServiceRenderer();
     this.currentConfiguration = { ENTITY: this.table.entity };
-    this.initializeCurrentPreferences();
+    this.initializeReportPreferences();
 
     this.getFunctions();
   }
@@ -98,14 +96,19 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   public clearCurrentPreferences() {
-    this.initializeCurrentPreferences();
+    this.initializeReportPreferences();
   }
 
-  protected initializeCurrentPreferences() {
+  protected initializeReportPreferences() {
     this.pdf = this.blankPdf;
     this.currentPreference = new DefaultOReportPreferences();
   }
 
+  ngAfterViewInit() {
+    this.columnsList._reportValueChange();
+    this.columnsData = this.parseReportColumn(this.columnsArray);
+
+  }
   protected parseColumnsVisible() {
     const visibleColumns = Util.parseArray(this.table.visibleColumns, true);
 
@@ -185,6 +188,28 @@ export class ReportOnDemandComponent implements OnInit {
     this.currentConfiguration = configuration;
     let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
     this.currentPreference = preference;
+    this.currentPreference.columns.forEach((column: OReportColumn) => this.updateColumnsOrderByData(column.id));
+    this.columnsData = this.parseReportColumn(this.columnsArray);
+
+    this.columnsData.sort((a: OReportColumn, b: OReportColumn) => {
+      const total = this.currentPreference.columns.length;
+      let indexA = this.currentPreference.columns.findIndex(x => x.id === a.id);
+      let indexB = this.currentPreference.columns.findIndex(x => x.id === b.id);
+      return indexA === -1 ? indexB : (indexB === -1) ? indexB : (indexA - indexB);
+
+    });
+    this.columnsOrderBy.sort((a: OReportOrderBy, b: OReportOrderBy) => {
+      let indexA = this.currentPreference.columns.findIndex(x => x.id === a.columnId);
+      let indexB = this.currentPreference.columns.findIndex(x => x.id === b.columnId);
+      return (indexA === -1 || indexB === -1) ? 0 : (indexA - indexB);
+
+    });
+    this.columnsToGroupData.sort((a: string, b: string) => {
+      let indexA = this.currentPreference.columns.findIndex(x => x.id === a);
+      let indexB = this.currentPreference.columns.findIndex(x => x.id === b);
+      return (indexA === -1 || indexB === -1) ? 0 : (indexA - indexB);
+    });
+
   }
 
 
@@ -212,31 +237,19 @@ export class ReportOnDemandComponent implements OnInit {
 
     let columns = Utils.cloneObject(this.currentPreference.columns);
     this.currentPreference.columns = [];
-
+    const indexColumnData = this.columnsData.findIndex(x => x.id === data.id);
+    if (indexColumnData > -1) {
+      this.columnsData[indexColumnData] = data;
+    }
     const indexColumnStyleData = columns.findIndex(x => x.id === data.id);
     if (indexColumnStyleData > -1) {
       columns[indexColumnStyleData] = data;
     }
+
     this.currentPreference.columns = columns;
-    //this.columnsList._value = columns;
-    // option.value = data; // no funciona, deselecciona el option
-    //this.columnsList._emitChangeEvent(option);
-    //this.columnsList._value = columns;
-    // this._changeDetectorRef.markForCheck();
-    // this.columnsList._reportValueChange();
-
-
 
   }
 
-  trackByColumn(index: number, item: any) {
-    console.log(item);
-    return item.id;
-  }
-
-  ngModelChange($event) {
-    console.log('event change ', $event)
-  }
 
   selectFunction(event, functionName: string): void {
     event.stopPropagation();
@@ -345,7 +358,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   openSavePreferences(): void {
     if (Util.isDefined(this.currentConfiguration.ID)) {
-      this.savePreferences({ name: this.currentConfiguration.NAME, description: this.currentConfiguration.NAME });
+      this.savePreferences({ name: this.currentConfiguration.NAME, description: this.currentConfiguration.DESCRIPTION }, true);
     } else {
       this.dialog
         .open(SavePreferencesDialogComponent, {
@@ -404,14 +417,14 @@ export class ReportOnDemandComponent implements OnInit {
   onSelectionChangeColumns(event: MatSelectionListChange) {
     const selectedColumn: OReportColumn = event.option.value;
     const selectColumnId = selectedColumn.id;
-    this.updateColumnsOrderByData(event, selectColumnId,);
+    this.updateColumnsOrderByData(selectColumnId, event);
 
   }
 
   onSelectionChangeGroups(event: MatSelectionListChange) {
     if (!event.option.selected) return;
     let groupSelected: string = event.option.value;
-    this.updateColumnsOrderByData(event, groupSelected);
+    this.updateColumnsOrderByData(groupSelected, event);
     if (event.option.selected &&
       this.currentPreference.columns.findIndex(x => x.id === groupSelected) === -1) {
       const columnStyleSelected: OReportColumn = { id: groupSelected, name: this.translateService.get(groupSelected) };
@@ -420,10 +433,19 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
 
-  updateColumnsOrderByData(event: MatSelectionListChange, columnId: string) {
+  updateColumnsOrderByData(columnId: string, event?: MatSelectionListChange) {
+
+    if (!event) {
+      const existColumn = this.columnsArray.findIndex(col => col === columnId);
+      if (existColumn === -1) {
+        console.warn('The loaded configuration has the column ' + columnId + ' configured but this column does not exist as a table column');
+        return;
+      }
+    }
+
     const columnGroupBySelected: OReportOrderBy = { columnId: columnId, ascendent: true }
     let index = this.columnsOrderBy.findIndex(x => x.columnId === columnId);
-    if (event.option.selected) {
+    if ((!event) || (event && event.option.selected)) {
       if (index === -1) {
         this.columnsOrderBy.push(columnGroupBySelected);
       }
