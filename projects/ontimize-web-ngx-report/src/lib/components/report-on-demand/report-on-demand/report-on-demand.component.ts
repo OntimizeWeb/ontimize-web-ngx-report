@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ChangeDetectorRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -70,8 +70,7 @@ export class ReportOnDemandComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: OTableComponent,
     protected dialogService: DialogService,
     public translateService: OTranslateService,
-    protected snackBarService: SnackBarService,
-    protected _changeDetectorRef: ChangeDetectorRef) {
+    protected snackBarService: SnackBarService) {
   }
 
   ngOnInit() {
@@ -192,26 +191,30 @@ export class ReportOnDemandComponent implements OnInit {
     this.columnsData = this.parseReportColumn(this.columnsArray);
 
     this.columnsData.sort((a: OReportColumn, b: OReportColumn) => {
-      const total = this.currentPreference.columns.length;
       let indexA = this.currentPreference.columns.findIndex(x => x.id === a.id);
       let indexB = this.currentPreference.columns.findIndex(x => x.id === b.id);
-      return indexA === -1 ? indexB : (indexB === -1) ? indexB : (indexA - indexB);
+      return this.getSortIndex(indexA, indexB);
 
     });
     this.columnsOrderBy.sort((a: OReportOrderBy, b: OReportOrderBy) => {
       let indexA = this.currentPreference.columns.findIndex(x => x.id === a.columnId);
       let indexB = this.currentPreference.columns.findIndex(x => x.id === b.columnId);
-      return (indexA === -1 || indexB === -1) ? 0 : (indexA - indexB);
+      return this.getSortIndex(indexA, indexB);
 
     });
     this.columnsToGroupData.sort((a: string, b: string) => {
       let indexA = this.currentPreference.columns.findIndex(x => x.id === a);
       let indexB = this.currentPreference.columns.findIndex(x => x.id === b);
-      return (indexA === -1 || indexB === -1) ? 0 : (indexA - indexB);
+      return this.getSortIndex(indexA, indexB);
     });
 
   }
 
+
+
+  private getSortIndex(indexA: number, indexB: number): number {
+    return indexA === -1 ? indexB : (indexB === -1) ? indexB : (indexA - indexB)
+  }
 
   showColumnStyleDialog(event: Event, id: string): void {
     event.stopPropagation();
