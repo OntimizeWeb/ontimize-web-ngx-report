@@ -173,6 +173,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   applyConfiguration(configuration: any) {
     this.currentConfiguration = configuration;
+    this.currentConfiguration.ENTITY = configuration.ENTITY.split("-")[0];
     let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
     this.currentPreference = preference;
 
