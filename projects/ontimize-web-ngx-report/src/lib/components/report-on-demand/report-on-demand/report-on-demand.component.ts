@@ -173,10 +173,9 @@ export class ReportOnDemandComponent implements OnInit {
 
   applyConfiguration(configuration: any) {
     this.currentConfiguration = configuration;
-    this.currentConfiguration.ENTITY = configuration.ENTITY.split("-")[0];
+    this.currentConfiguration.ENTITY = JSON.parse(this.currentConfiguration.PREFERENCES).entity;
     let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
     this.currentPreference = preference;
-
   }
 
 
@@ -332,7 +331,7 @@ export class ReportOnDemandComponent implements OnInit {
       "entity": this.currentConfiguration.ENTITY, "service": this.service, "reportParams": {
         "title": this.currentPreference.title, "groups": this.currentPreference.groups,
         "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions, "style": this.currentPreference.style,
-        "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy
+        "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy, "entity": this.currentConfiguration.ENTITY, "service": this.service
       }
     }
 
