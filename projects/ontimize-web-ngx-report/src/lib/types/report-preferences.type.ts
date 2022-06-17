@@ -10,7 +10,9 @@ export type OReportPreferences = {
   columns: Array<OReportColumn>,
   orderBy?: Array<OReportOrderBy>,
   functions?: Array<any>,
-  groups?: Array<string>
+  groups?: Array<string>,
+  entity: string,
+  service: string
 }
 
 export class DefaultOReportPreferences implements OReportPreferences {
@@ -22,6 +24,8 @@ export class DefaultOReportPreferences implements OReportPreferences {
   public functions: any[];
   public style: OReportStyleParams;
   public orderBy: OReportOrderBy[];
+  public entity: string;
+  public service: string;
 
   constructor() {
     this.title = '';
@@ -34,6 +38,8 @@ export class DefaultOReportPreferences implements OReportPreferences {
       grid: false, rowNumber: false, columnName: true, backgroundOnOddRows: false, hideGroupDetails: false, groupNewPage: false, firstGroupNewPage: false
     };
     this.orderBy = [];
+    this.entity = '';
+    this.service = '';
 
   }
 }
