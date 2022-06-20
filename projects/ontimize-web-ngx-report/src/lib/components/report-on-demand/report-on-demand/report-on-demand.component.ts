@@ -28,9 +28,11 @@ import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 export class ReportOnDemandComponent implements OnInit {
 
   @ViewChild('columnsList', { static: false }) columnsList: MatSelectionList;
+  @ViewChild('functionsList', { static: false }) functionsList: MatSelectionList;
 
   public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
   public functionsData: OReportFunction[] = [];
+  private initialFunctionsData: OReportFunction[] = []; // when clear
   public appliedConfiguration: boolean = false;
   public selectedFunctions = [];
 
@@ -96,18 +98,19 @@ export class ReportOnDemandComponent implements OnInit {
 
   public clearCurrentPreferences() {
     this.initializeReportPreferences();
+    this.columnsList.deselectAll();
+    this.columnsList.deselectAll();
   }
 
   protected initializeReportPreferences() {
+    /* initialize columnsData and functionsData because they are modified by
+    changing settings */
+    this.columnsData = this.parseReportColumn(this.columnsArray);
+    this.functionsData = this.initialFunctionsData;
     this.pdf = this.blankPdf;
     this.currentPreference = new DefaultOReportPreferences();
   }
 
-  ngAfterViewInit() {
-    this.columnsList._reportValueChange();
-    this.columnsData = this.parseReportColumn(this.columnsArray);
-
-  }
   protected parseColumnsVisible() {
     const visibleColumns = Util.parseArray(this.table.visibleColumns, true);
 
@@ -164,6 +167,8 @@ export class ReportOnDemandComponent implements OnInit {
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.functionsData = this.parseDefaultFunctionsData(res.data[0].list);
+        // set the initials functions data  in initialFunctionsData variable
+        this.initialFunctionsData = this.functionsData;
       }
     });
   }
@@ -190,6 +195,15 @@ export class ReportOnDemandComponent implements OnInit {
     this.currentPreference.columns.forEach((column: OReportColumn) => this.updateColumnsOrderByData(column.id));
     this.columnsData = this.parseReportColumn(this.columnsArray);
 
+    // Set the functionsData with the data that is loaded from the configuration because it changes
+    this.functionsData = this.functionsData.map((functionData: OReportFunction) => {
+      const index = this.currentPreference.functions.findIndex(x => x.columnName === functionData.columnName);
+      if (index > -1) {
+        functionData.functionName = this.currentPreference.functions[index].functionName;
+      }
+      return functionData
+    });
+
     this.columnsData.sort((a: OReportColumn, b: OReportColumn) => {
       let indexA = this.currentPreference.columns.findIndex(x => x.id === a.id);
       let indexB = this.currentPreference.columns.findIndex(x => x.id === b.id);
@@ -213,7 +227,7 @@ export class ReportOnDemandComponent implements OnInit {
 
 
   private getSortIndex(indexA: number, indexB: number): number {
-    return indexA === -1 ? indexB : (indexB === -1) ? indexB : (indexA - indexB)
+    return indexA === -1 ? 0 : (indexB === -1) ? indexA : (indexA - indexB)
   }
 
   showColumnStyleDialog(event: Event, id: string): void {
@@ -511,10 +525,6 @@ export class ReportOnDemandComponent implements OnInit {
 
   columnsCompareFunction(co1: OReportColumn, co2: OReportColumn) {
     return co1.id === co2.id;
-  }
-
-  functionsCompareFunction(co1: OReportFunction, co2: OReportFunction) {
-    return co1.columnName === co2.columnName;
   }
 
 }

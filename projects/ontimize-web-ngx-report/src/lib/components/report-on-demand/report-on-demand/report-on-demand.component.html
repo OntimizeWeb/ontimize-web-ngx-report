@@ -143,8 +143,7 @@
                 {{ 'FUNCTIONS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list #functionsList dense [(ngModel)]="currentPreference.functions" [compareWith]="functionsCompareFunction"
-              (selectionChange)="onSelectionChangeFunctions($event)">
+            <mat-selection-list #functionsList dense [(ngModel)]="currentPreference.functions" (selectionChange)="onSelectionChangeFunctions($event)">
               <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData" [value]="getFunctionValue(function)">
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
