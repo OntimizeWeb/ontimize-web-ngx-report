@@ -149,7 +149,7 @@
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
                     <ng-container *ngIf="function.columnName==='TOTAL'; else functionColumnTemplate">
-                      {{function.type}}
+                      {{function.type | oReportsTranslate}}
                     </ng-container>
                   </span>
                   <ng-template #functionColumnTemplate>

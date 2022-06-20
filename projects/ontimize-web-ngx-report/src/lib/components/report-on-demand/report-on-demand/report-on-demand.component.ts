@@ -101,7 +101,9 @@ export class ReportOnDemandComponent implements OnInit {
     this.initializeReportPreferences();
     this.columnsList.deselectAll();
     this.functionsList.deselectAll();
-    this.orderByList.deselectAll();
+    if (this.orderByList) {
+      this.orderByList.deselectAll();
+    }
   }
 
   protected initializeReportPreferences() {
