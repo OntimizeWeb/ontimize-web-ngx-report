@@ -227,7 +227,15 @@ export class ReportOnDemandComponent implements OnInit {
 
 
   private getSortIndex(indexA: number, indexB: number): number {
-    return indexA === -1 ? 0 : (indexB === -1) ? indexA : (indexA - indexB)
+    if (indexA === -1) {
+      return 0;
+    }
+    if (indexB === -1) {
+      return indexA;
+    } else {
+      return indexA - indexB;
+    }
+
   }
 
   showColumnStyleDialog(event: Event, id: string): void {
