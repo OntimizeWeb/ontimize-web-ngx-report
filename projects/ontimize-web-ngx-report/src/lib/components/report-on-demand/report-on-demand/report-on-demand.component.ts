@@ -172,7 +172,6 @@ export class ReportOnDemandComponent implements OnInit {
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.functionsData = res.data[0].list;
-        //this.functionsData = this.parseDefaultFunctionsData(res.data[0].list);
         this.initialFunctionsData = this.functionsData;
       }
     });
@@ -319,7 +318,6 @@ export class ReportOnDemandComponent implements OnInit {
       if (columnName === columnNameSelected) {
         this.currentPreference.functions[i].columnName = columnName;
         this.currentPreference.functions[i].type = functionNameSelected;
-        //this.currentPreference.functions[i] = columnName + '-' + functionNameSelected;
       }
     })
   }
