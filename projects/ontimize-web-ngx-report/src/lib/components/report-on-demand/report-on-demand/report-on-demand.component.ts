@@ -5,12 +5,12 @@ import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { ReportsService } from '../../../services/reports.service';
+import { OReportColumnStyle } from '../../../types';
 import { OReportColumn } from '../../../types/report-column.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
 import { OReportFunction } from '../../../types/report-function.type';
 import { OReportOrderBy } from '../../../types/report-orderBy.type';
 import { DefaultOReportPreferences, OReportPreferences } from '../../../types/report-preferences.type';
-import { OReportServiceRenderer } from '../../../types/report-service-renderer.type';
 import { Utils } from '../../../util/utils';
 import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
 import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-preferences-dialog.component';
@@ -57,7 +57,6 @@ export class ReportOnDemandComponent implements OnInit {
   public fullscreen: boolean = false;
 
   protected service: string;
-  protected serviceRendererData: Array<OReportServiceRenderer> = [];
   protected language: string;
   protected columnsArray: Array<string>;
   protected table: OTableComponent;
@@ -86,7 +85,6 @@ export class ReportOnDemandComponent implements OnInit {
     this.service = this.table.service;
     this.columnsArray = this.parseColumnsVisible();
     this.columnsToGroupData = this.columnsArray;
-    this.serviceRendererData = this.parseServiceRenderer();
     this.currentConfiguration = { ENTITY: this.table.entity };
     this.initializeReportPreferences();
 
@@ -118,7 +116,6 @@ export class ReportOnDemandComponent implements OnInit {
 
   protected parseColumnsVisible() {
     const visibleColumns = Util.parseArray(this.table.visibleColumns, true);
-
     return this.table.oTableOptions.columns.filter(oCol => visibleColumns.indexOf(oCol.attr) !== -1 || oCol.definition !== undefined).map(
       (x: OColumn) => x.attr
     )
@@ -126,29 +123,24 @@ export class ReportOnDemandComponent implements OnInit {
 
   protected parseReportColumn(columns: any[]): OReportColumn[] {
     return columns.map(column => {
-      return { id: column, name: this.translateService.get(column) }
+      return { id: column, name: this.translateService.get(column), columnStyle: this.parseColumnStyle(column) }
     });
+  }
+
+  protected parseColumnStyle(column: string): OReportColumnStyle {
+    let columnStyle: OReportColumnStyle = {};
+    const renderer = this.createRenderer(column);
+    if (Util.isDefined(renderer) && Util.isDefined(renderer.type)) {
+      columnStyle.renderer = renderer;
+    }
+
+    return columnStyle;
   }
 
   protected parseColumnsOrderBy(columnsOrderBy: any): OReportOrderBy[] {
     return columnsOrderBy.map(column => {
       return { columnId: column.columnId, columnName: column.name, ascendent: column.ascendent }
     });
-  }
-
-  protected parseServiceRenderer() {
-    return this.table.oTableOptions.columns.filter((oCol: OColumn) => (this.table as any).isInstanceOfOTableCellRendererServiceComponent(oCol.renderer)).
-      map((oCol: OColumn) => {
-        const renderer: any = oCol.renderer;
-        return {
-          'service': renderer.service,
-          'entity': renderer.entity,
-          'keyColumn': oCol.attr,
-          'valueColumn': renderer.valueColumn,
-          'columns': Util.parseArray(renderer.columns),
-          'parentKeys': Util.parseArray(renderer.parentKeys)
-        }
-      });
   }
 
   protected openReport() {
@@ -182,8 +174,8 @@ export class ReportOnDemandComponent implements OnInit {
     let functions = [];
 
     listColumns.
-      filter(x =>
-        this.serviceRendererData.findIndex(serviceRendererColumn => serviceRendererColumn.keyColumn === x) === -1
+      filter(column =>
+        this.currentPreference.columns.findIndex(columnPreference => columnPreference.columnStyle.renderer.type === 'service' && columnPreference.id === column) === -1
       )
       .forEach(column => {
         let obj: OReportFunction = { columnName: column, functionName: column !== 'TOTAL' ? 'SUM' : column };
@@ -548,4 +540,46 @@ export class ReportOnDemandComponent implements OnInit {
     return co1.id === co2.id;
   }
 
+  protected createRenderer(column: string): any {
+    let oColumn: OColumn = this.table.oTableOptions.columns.find(x => x.attr === column);
+    let newRenderer: any;
+    if (Util.isDefined(oColumn) && Util.isDefined(oColumn.type) && oColumn.type !== 'string') {
+      const type = oColumn.type;
+      newRenderer = {};
+
+      let columnRenderer: any = oColumn.renderer;
+      switch (type) {
+        case 'currency':
+          newRenderer.type = oColumn.type
+          newRenderer.currencySymbol = columnRenderer.currencySymbol;
+          newRenderer.currencySymbolPosition = columnRenderer.currencySymbolPosition;
+          break;
+        case 'date':
+          newRenderer.type = oColumn.type
+          newRenderer.format = columnRenderer.format;
+          break;
+        case 'integer':
+          newRenderer.type = oColumn.type
+          newRenderer.grouping = columnRenderer.grouping;
+          newRenderer.thousandSeparator = columnRenderer.thousandSeparator;
+          break;
+        case 'real':
+          newRenderer.type = oColumn.type
+          newRenderer.decimalSeparator = columnRenderer.decimalSeparator;
+          newRenderer.grouping = columnRenderer.grouping;
+          newRenderer.thousandSeparator = columnRenderer.thousandSeparator;
+          break;
+        case 'service':
+          newRenderer.type = oColumn.type
+          newRenderer.entity = columnRenderer.entity;
+          newRenderer.service = columnRenderer.service;
+          newRenderer.keyColumn = oColumn.attr;
+          newRenderer.columns = Util.parseArray(columnRenderer.columns);
+          newRenderer.valueColumn = columnRenderer.valueColumn;
+          newRenderer.parentKeys = Util.parseArray(columnRenderer.parentKeys);
+          break;
+      }
+    }
+    return newRenderer;
+  }
 }
