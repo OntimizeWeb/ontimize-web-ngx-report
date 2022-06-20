@@ -1,7 +1,6 @@
 import { OReportColumn } from './report-column.type';
 import { OReportFunction } from './report-function.type';
 import { OReportOrderBy } from './report-orderBy.type';
-import { OReportServiceRenderer } from './report-service-renderer.type';
 import { OReportStyleParams } from './report-style-params.type';
 
 export type OReportParam = {
@@ -15,6 +14,5 @@ export type OReportParam = {
   functions: Array<OReportFunction>,
   style: OReportStyleParams,
   subtitle: string,
-  serviceRenderer?: Array<OReportServiceRenderer>,
   language: string
 }
