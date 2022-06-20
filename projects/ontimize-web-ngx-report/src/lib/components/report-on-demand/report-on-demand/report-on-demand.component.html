@@ -88,7 +88,7 @@
                   <span mat-line fxFlex>
                     {{column.id | oReportsTranslate}}
                   </span>
-                  <mat-icon mat-list-icon *ngIf="isCheckedColumn(column)" (click)="showColumnStyleDialog($event, column)" class="button-edit">
+                  <mat-icon mat-list-icon *ngIf="isCheckedColumn(column)" (click)="showColumnStyleDialog($event, column.id)" class="button-edit">
                     edit
                   </mat-icon>
                   <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
@@ -102,7 +102,7 @@
                 {{ 'ORDER_BY' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsOrderBy" (cdkDropListDropped)="dropColumnsOrderBy($event)"
+            <mat-selection-list dense #orderByList cdkDropList [cdkDropListData]="columnsOrderBy" (cdkDropListDropped)="dropColumnsOrderBy($event)"
               class="columns" [(ngModel)]="currentPreference.orderBy" [compareWith]="columnsOrderByCompareFunction">
               <mat-list-option checkboxPosition="before" *ngFor="let column of columnsOrderBy" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
@@ -166,10 +166,10 @@
         </mat-accordion>
 
         <div mat-dialog-actions fxLayout="row" fxLayoutAlign="center center" *ngIf="openedSidenav">
-          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="currentPreference.columns.length===0">
-            {{'PREVIEW' | oReportsTranslate }}</button>
           <button type="button" mat-stroked-button class="o-report-on-demand-clear-button" (click)="clearCurrentPreferences()">
             {{'CLEAR' | oReportsTranslate }}</button>
+          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="currentPreference.columns.length===0">
+            {{'PREVIEW' | oReportsTranslate }}</button>
         </div>
 
       </div>

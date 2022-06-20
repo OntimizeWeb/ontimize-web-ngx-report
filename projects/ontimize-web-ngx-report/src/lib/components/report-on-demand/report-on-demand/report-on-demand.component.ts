@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ViewEncapsulation } from '@angular/core';
+import { ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatSelectionListChange } from '@angular/material';
+import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { ReportsService } from '../../../services/reports.service';
@@ -27,9 +27,13 @@ import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 
 export class ReportOnDemandComponent implements OnInit {
 
+  @ViewChild('columnsList', { static: false }) columnsList: MatSelectionList;
+  @ViewChild('functionsList', { static: false }) functionsList: MatSelectionList;
+  @ViewChild('orderByList', { static: false }) orderByList: MatSelectionList;
 
   public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
   public functionsData: OReportFunction[] = [];
+  private initialFunctionsData: OReportFunction[] = []; // when clear
   public appliedConfiguration: boolean = false;
   public selectedFunctions = [];
 
@@ -46,7 +50,6 @@ export class ReportOnDemandComponent implements OnInit {
 
   public columnsData: Array<OReportColumn>;
   public selectedColumnsData: string[];
-  public columnsToSort: string[];
   public columnsOrderBy: Array<OReportOrderBy> = [];
 
   public columnsToGroupData: any[];
@@ -81,12 +84,11 @@ export class ReportOnDemandComponent implements OnInit {
     this.table = this.data;
     this.language = this.translateService.getCurrentLang();
     this.service = this.table.service;
-    this.columnsArray = this.table.visibleColArray;
-    this.columnsData = this.parseReportColumn(this.table.visibleColArray);
-    this.columnsToGroupData = this.table.visibleColArray;
+    this.columnsArray = this.parseColumnsVisible();
+    this.columnsToGroupData = this.columnsArray;
     this.serviceRendererData = this.parseServiceRenderer();
     this.currentConfiguration = { ENTITY: this.table.entity };
-    this.initializeCurrentPreferences();
+    this.initializeReportPreferences();
 
     this.getFunctions();
   }
@@ -96,14 +98,30 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   public clearCurrentPreferences() {
-    this.initializeCurrentPreferences();
+    this.initializeReportPreferences();
+    this.columnsList.deselectAll();
+    this.functionsList.deselectAll();
+    this.orderByList.deselectAll();
   }
 
-  protected initializeCurrentPreferences() {
+  protected initializeReportPreferences() {
+    /* initialize columnsData and functionsData because they are modified by
+    changing settings */
+    this.columnsData = this.parseReportColumn(this.columnsArray);
+    this.functionsData = this.initialFunctionsData;
+    this.columnsOrderBy = [];
     this.pdf = this.blankPdf;
     this.currentPreference = new DefaultOReportPreferences();
     this.currentPreference.entity = this.table.entity;
     this.currentPreference.service = this.table.service;
+  }
+
+  protected parseColumnsVisible() {
+    const visibleColumns = Util.parseArray(this.table.visibleColumns, true);
+
+    return this.table.oTableOptions.columns.filter(oCol => visibleColumns.indexOf(oCol.attr) !== -1 || oCol.definition !== undefined).map(
+      (x: OColumn) => x.attr
+    )
   }
 
   protected parseReportColumn(columns: any[]): OReportColumn[] {
@@ -155,7 +173,7 @@ export class ReportOnDemandComponent implements OnInit {
       if (res && res.data.length && res.code === 0) {
         this.functionsData = res.data[0].list;
         //this.functionsData = this.parseDefaultFunctionsData(res.data[0].list);
-
+        this.initialFunctionsData = this.functionsData;
       }
     });
   }
@@ -176,34 +194,91 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   applyConfiguration(configuration: any) {
+    this.clearCurrentPreferences();
     this.currentConfiguration = configuration;
     let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
     this.currentPreference = preference;
+    this.currentPreference.columns.forEach((column: OReportColumn) => this.updateColumnsOrderByData(column.id));
+    this.columnsData = this.parseReportColumn(this.columnsArray);
+
+    // Set the functionsData with the data that is loaded from the configuration because it changes
+    this.functionsData = this.functionsData.map((functionData: OReportFunction) => {
+      const index = this.currentPreference.functions.findIndex(x => x.columnName === functionData.columnName);
+      if (index > -1) {
+        functionData.type = this.currentPreference.functions[index].type;
+      }
+      return functionData
+    });
+
+    this.columnsData.sort((a: OReportColumn, b: OReportColumn) => {
+      let indexA = this.currentPreference.columns.findIndex(x => x.id === a.id);
+      let indexB = this.currentPreference.columns.findIndex(x => x.id === b.id);
+      return this.getSortIndex(indexA, indexB);
+
+    });
+    this.columnsOrderBy.sort((a: OReportOrderBy, b: OReportOrderBy) => {
+      let indexA = this.currentPreference.columns.findIndex(x => x.id === a.columnId);
+      let indexB = this.currentPreference.columns.findIndex(x => x.id === b.columnId);
+      return this.getSortIndex(indexA, indexB);
+
+    });
+    this.columnsToGroupData.sort((a: string, b: string) => {
+      let indexA = this.currentPreference.columns.findIndex(x => x.id === a);
+      let indexB = this.currentPreference.columns.findIndex(x => x.id === b);
+      return this.getSortIndex(indexA, indexB);
+    });
+
   }
 
+  private getSortIndex(indexA: number, indexB: number): number {
+    if (indexA === -1) {
+      return 0;
+    }
+    if (indexB === -1) {
+      return indexA;
+    } else {
+      return indexA - indexB;
+    }
 
-  showColumnStyleDialog(event, id): void {
+  }
+
+  showColumnStyleDialog(event: Event, id: string): void {
     event.stopPropagation();
-    const columnData: OReportColumn = this.currentPreference.columns.find((x: OReportColumn) => x.id === id);
-    this.dialog
-      .open(StyleDialogComponent, {
-        data: columnData ? columnData : id,
-        panelClass: ['o-dialog-class', 'o-table-dialog']
-      })
-      .afterClosed()
-      .subscribe((data: OReportColumn) => {
-        if (Util.isDefined(data) && data) {
-          this.updateColumnStyleConfigurationData(data);
-        }
-      });
+    const columnData: OReportColumn = Object.assign({}, this.currentPreference.columns.find((x: OReportColumn) => x.id === id));
+    if (Util.isDefined(columnData)) {
+      this.dialog
+        .open(StyleDialogComponent, {
+          data: columnData,
+          panelClass: ['o-dialog-class', 'o-table-dialog']
+        })
+        .afterClosed()
+        .subscribe((data: OReportColumn) => {
+          if (Util.isDefined(data) && data) {
+            const column = Utils.cloneObject(data);
+            this.updateColumnStyleConfigurationData(column);
+          }
+        });
+    }
   }
 
   updateColumnStyleConfigurationData(data: OReportColumn) {
-    const indexColumnStyleData = this.currentPreference.columns.findIndex(x => x.id === data.id);
-    if (indexColumnStyleData > -1) {
-      this.currentPreference.columns[indexColumnStyleData] = data;
+
+
+    let columns = Utils.cloneObject(this.currentPreference.columns);
+    this.currentPreference.columns = [];
+    const indexColumnData = this.columnsData.findIndex(x => x.id === data.id);
+    if (indexColumnData > -1) {
+      this.columnsData[indexColumnData] = data;
     }
+    const indexColumnStyleData = columns.findIndex(x => x.id === data.id);
+    if (indexColumnStyleData > -1) {
+      columns[indexColumnStyleData] = data;
+    }
+
+    this.currentPreference.columns = columns;
+
   }
+
 
   selectFunction(event, functionName: string): void {
     event.stopPropagation();
@@ -220,23 +295,34 @@ export class ReportOnDemandComponent implements OnInit {
             const index = data.indexOf('-');
             const columnName = data.substring(0, index);
             const functionName = data.substring(index + 1);
-            this.functionsData = this.updatedSelectFunctionInArray(columnName, functionName, this.functionsData);
-            this.currentPreference.functions = this.updatedSelectFunctionInArray(columnName, functionName, this.currentPreference.functions);
+            this.updatedFunctionData(columnName, functionName);
+            this.updatedSelectFunction(columnName, functionName);
           }
         });
     }
   }
 
-  private updatedSelectFunctionInArray(columnName: any, functionName: any, dataArray: any[]) {
-    const index = dataArray.findIndex(x => x.columnName === columnName);
+  private updatedFunctionData(columnName: string, functionName: any) {
+    const index = this.functionsData.findIndex(x => x.columnName === columnName);
     if (index === -1) {
-      dataArray.push({ columnName: columnName, type: functionName });
+
+      this.functionsData.push({ columnName: columnName, type: functionName });
     } else {
-      dataArray[index] = { columnName: columnName, type: functionName };
+      this.functionsData[index] = { columnName: columnName, type: functionName };
     }
-    return dataArray;
   }
 
+  private updatedSelectFunction(columnNameSelected: string, functionNameSelected: any) {
+    this.currentPreference.functions.forEach((data: any, i: number) => {
+      const index = data.indexOf('-');
+      const columnName = data.substring(0, index);
+      if (columnName === columnNameSelected) {
+        this.currentPreference.functions[i].columnName = columnName;
+        this.currentPreference.functions[i].type = functionNameSelected;
+        //this.currentPreference.functions[i] = columnName + '-' + functionNameSelected;
+      }
+    })
+  }
 
   openSaveAsPreferences(): void {
     this.dialog
@@ -312,7 +398,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   openSavePreferences(): void {
     if (Util.isDefined(this.currentConfiguration.ID)) {
-      this.savePreferences({ name: this.currentConfiguration.NAME, description: this.currentConfiguration.NAME });
+      this.savePreferences({ name: this.currentConfiguration.NAME, description: this.currentConfiguration.DESCRIPTION }, true);
     } else {
       this.dialog
         .open(SavePreferencesDialogComponent, {
@@ -373,14 +459,14 @@ export class ReportOnDemandComponent implements OnInit {
   onSelectionChangeColumns(event: MatSelectionListChange) {
     const selectedColumn: OReportColumn = event.option.value;
     const selectColumnId = selectedColumn.id;
-    this.updateColumnsOrderByData(event, selectColumnId,);
+    this.updateColumnsOrderByData(selectColumnId, event);
 
   }
 
   onSelectionChangeGroups(event: MatSelectionListChange) {
     if (!event.option.selected) return;
     let groupSelected: string = event.option.value;
-    this.updateColumnsOrderByData(event, groupSelected);
+    this.updateColumnsOrderByData(groupSelected, event);
     if (event.option.selected &&
       this.currentPreference.columns.findIndex(x => x.id === groupSelected) === -1) {
       const columnStyleSelected: OReportColumn = { id: groupSelected, name: this.translateService.get(groupSelected) };
@@ -389,10 +475,19 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
 
-  updateColumnsOrderByData(event: MatSelectionListChange, columnId: string) {
+  updateColumnsOrderByData(columnId: string, event?: MatSelectionListChange) {
+
+    if (!event) {
+      const existColumn = this.columnsArray.findIndex(col => col === columnId);
+      if (existColumn === -1) {
+        console.warn('The loaded configuration has the column ' + columnId + ' configured but this column does not exist as a table column');
+        return;
+      }
+    }
+
     const columnGroupBySelected: OReportOrderBy = { columnId: columnId, ascendent: true }
     let index = this.columnsOrderBy.findIndex(x => x.columnId === columnId);
-    if (event.option.selected) {
+    if ((!event) || (event && event.option.selected)) {
       if (index === -1) {
         this.columnsOrderBy.push(columnGroupBySelected);
       }
@@ -406,7 +501,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   addColumnData(columnSelected) {
     //Object Deep Cloning
-    let currentPreference = JSON.parse(JSON.stringify(this.currentPreference));
+    let currentPreference = Utils.cloneObject(this.currentPreference);
     currentPreference.columns.push(columnSelected);
     this.currentPreference = currentPreference;
     this.updateColumnsSort();
@@ -438,7 +533,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   isCheckedFunction(column: OReportFunction) {
-    return this.currentPreference.functions.length > 0 ? this.currentPreference.functions.filter(x => (x === column) && x.type !== 'TOTAL').length > 0 : false;
+    return this.currentPreference.functions.length > 0 ? this.currentPreference.functions.filter(x => (x.columnName === column.columnName && x.type === column.type) && x.type !== 'TOTAL').length > 0 : false;
   }
 
   columnsOrderByCompareFunction(co1: OReportOrderBy, co2: OReportOrderBy) {
@@ -456,9 +551,7 @@ export class ReportOnDemandComponent implements OnInit {
   columnsCompareFunction(co1: OReportColumn, co2: OReportColumn) {
     return co1.id === co2.id;
   }
-
   functionsCompareFunction(co1: OReportFunction, co2: OReportFunction) {
     return co1.columnName === co2.columnName;
   }
-
 }
