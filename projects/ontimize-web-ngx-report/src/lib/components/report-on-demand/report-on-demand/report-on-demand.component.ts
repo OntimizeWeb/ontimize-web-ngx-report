@@ -109,6 +109,8 @@ export class ReportOnDemandComponent implements OnInit {
     this.functionsData = this.initialFunctionsData;
     this.pdf = this.blankPdf;
     this.currentPreference = new DefaultOReportPreferences();
+    this.currentPreference.entity = this.table.entity;
+    this.currentPreference.service = this.table.service;
   }
 
   protected parseColumnsVisible() {
@@ -148,10 +150,10 @@ export class ReportOnDemandComponent implements OnInit {
 
   protected openReport() {
     this.reportsService.createReport({
-      "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentConfiguration.ENTITY,
-      "service": this.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
+      "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentPreference.entity,
+      "service": this.currentPreference.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
       "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
-      "serviceRenderer": this.serviceRendererData, "language": this.language
+      "language": this.language
 
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
@@ -162,8 +164,8 @@ export class ReportOnDemandComponent implements OnInit {
 
   getFunctions() {
     this.reportsService.getFunctions({
-      "columns": this.columnsArray, "entity": this.currentConfiguration.ENTITY,
-      "service": this.service, "language": this.language
+      "columns": this.columnsArray, "entity": this.currentPreference.entity,
+      "service": this.currentPreference.service, "language": this.language
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.functionsData = this.parseDefaultFunctionsData(res.data[0].list);
@@ -369,7 +371,7 @@ export class ReportOnDemandComponent implements OnInit {
       minWidth: '30vw',
       disableClose: true,
       panelClass: ['o-dialog-class', 'o-table-dialog'],
-      data: this,
+      data: { entity: this.currentPreference.entity, service: this.currentPreference.service },
     }).afterClosed()
       .subscribe((data: OReportConfiguration) => {
         if (Util.isDefined(data) && data) {
@@ -402,9 +404,11 @@ export class ReportOnDemandComponent implements OnInit {
   savePreferences(data: any, update?: boolean) {
     let preference = {
       "name": data.name, "description": data.description,
-      "entity": this.currentConfiguration.ENTITY, "title": this.currentPreference.title, "groups": this.currentPreference.groups,
-      "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions, "style": this.currentPreference.style,
-      "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy
+      "entity": this.currentPreference.entity, "service": this.currentPreference.service, "reportParams": {
+        "title": this.currentPreference.title, "groups": this.currentPreference.groups,
+        "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions, "style": this.currentPreference.style,
+        "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy, "entity": this.currentPreference.entity, "service": this.currentPreference.service
+      }
     }
 
     if (update) {

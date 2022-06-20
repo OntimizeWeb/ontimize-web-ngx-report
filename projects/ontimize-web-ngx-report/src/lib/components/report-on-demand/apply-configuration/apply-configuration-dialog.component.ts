@@ -22,7 +22,7 @@ export class ApplyConfigurationDialogComponent implements OnInit {
     private dialogService: DialogService,
     private reportsService: ReportsService,
     public dialogo: MatDialogRef<ApplyConfigurationDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public entity: string) {
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.getConfigurations();
   }
   ngOnInit(): void {
@@ -49,7 +49,7 @@ export class ApplyConfigurationDialogComponent implements OnInit {
   }
 
   getConfigurations() {
-    this.reportsService.getPreferences().subscribe(resp => {
+    this.reportsService.getPreferences(this.data.entity, this.data.service).subscribe(resp => {
       if (resp.isSuccessful()) {
         this.setData(resp.data);
 
