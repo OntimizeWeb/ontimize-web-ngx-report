@@ -38,7 +38,8 @@ export const MAP = {
     'MIN': 'Minumun',
     'MAX': 'Maximun',
     'AVERAGE': 'Average',
-    'SUM': 'Sum'
+    'SUM': 'Sum',
+    'TOTAL': 'Total'
   },
 
   // Spanish
@@ -79,7 +80,8 @@ export const MAP = {
     'MIN': 'Mínimo',
     'MAX': 'Máximo',
     'AVERAGE': 'Media',
-    'SUM': 'Suma'
+    'SUM': 'Suma',
+    'TOTAL': 'Total'
   }
 
 };
