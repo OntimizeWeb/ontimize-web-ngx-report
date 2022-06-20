@@ -1,4 +1,4 @@
 export type OReportFunction = {
   columnName: string,
-  functionName: 'SUM' | 'AVERAGE' | 'MIN' | 'MAX' | 'TOTAL';
+  type: 'SUM' | 'AVERAGE' | 'MIN' | 'MAX' | 'TOTAL';
 }

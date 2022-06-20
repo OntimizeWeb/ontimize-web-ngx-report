@@ -34,7 +34,12 @@ export const MAP = {
     'DIALOG.SELECT_FUNCTION.AVG': 'Average',
     'DIALOG.SELECT_FUNCTION.SUM': 'Sum',
     'ORDER_BY': 'Order by',
-    'CLEAR': 'Clear'
+    'CLEAR': 'Clear',
+    'MIN': 'Minumun',
+    'MAX': 'Maximun',
+    'AVERAGE': 'Average',
+    'SUM': 'Sum',
+    'TOTAL': 'Total'
   },
 
   // Spanish
@@ -71,7 +76,12 @@ export const MAP = {
     'DIALOG.SELECT_FUNCTION.AVG': 'Media',
     'DIALOG.SELECT_FUNCTION.SUM': 'Suma',
     'ORDER_BY': 'Ordenar por',
-    'CLEAR': 'Limpiar'
+    'CLEAR': 'Limpiar',
+    'MIN': 'Mínimo',
+    'MAX': 'Máximo',
+    'AVERAGE': 'Media',
+    'SUM': 'Suma',
+    'TOTAL': 'Total'
   }
 
 };

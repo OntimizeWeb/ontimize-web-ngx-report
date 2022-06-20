@@ -1,4 +1,5 @@
 import { OReportColumn } from "./report-column.type"
+import { OReportFunction } from "./report-function.type"
 import { OReportOrderBy } from "./report-orderBy.type"
 import { OReportStyleParams } from "./report-style-params.type"
 
@@ -9,7 +10,7 @@ export type OReportPreferences = {
   style: OReportStyleParams,
   columns: Array<OReportColumn>,
   orderBy?: Array<OReportOrderBy>,
-  functions?: Array<any>,
+  functions?: Array<OReportFunction>,
   groups?: Array<string>,
   entity: string,
   service: string
@@ -21,7 +22,7 @@ export class DefaultOReportPreferences implements OReportPreferences {
   public vertical: boolean;
   public columns: OReportColumn[];
   public groups: string[];
-  public functions: any[];
+  public functions: OReportFunction[];
   public style: OReportStyleParams;
   public orderBy: OReportOrderBy[];
   public entity: string;
@@ -43,4 +44,5 @@ export class DefaultOReportPreferences implements OReportPreferences {
 
   }
 }
+
 

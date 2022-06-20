@@ -99,7 +99,9 @@ export class ReportOnDemandComponent implements OnInit {
     this.initializeReportPreferences();
     this.columnsList.deselectAll();
     this.functionsList.deselectAll();
-    this.orderByList.deselectAll();
+    if (this.orderByList) {
+      this.orderByList.deselectAll();
+    }
   }
 
   protected initializeReportPreferences() {
@@ -163,8 +165,7 @@ export class ReportOnDemandComponent implements OnInit {
       "service": this.currentPreference.service, "language": this.language
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
-        this.functionsData = this.parseDefaultFunctionsData(res.data[0].list);
-        // set the initials functions data  in initialFunctionsData variable
+        this.functionsData = res.data[0].functions;
         this.initialFunctionsData = this.functionsData;
       }
     });
@@ -178,7 +179,7 @@ export class ReportOnDemandComponent implements OnInit {
         this.currentPreference.columns.findIndex(columnPreference => columnPreference.columnStyle.renderer.type === 'service' && columnPreference.id === column) === -1
       )
       .forEach(column => {
-        let obj: OReportFunction = { columnName: column, functionName: column !== 'TOTAL' ? 'SUM' : column };
+        let obj: OReportFunction = { columnName: column, type: column !== 'TOTAL' ? 'SUM' : column };
         functions.push(obj);
       })
 
@@ -186,6 +187,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   applyConfiguration(configuration: any) {
+    this.clearCurrentPreferences();
     this.currentConfiguration = configuration;
     let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
     this.currentPreference = preference;
@@ -196,7 +198,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.functionsData = this.functionsData.map((functionData: OReportFunction) => {
       const index = this.currentPreference.functions.findIndex(x => x.columnName === functionData.columnName);
       if (index > -1) {
-        functionData.functionName = this.currentPreference.functions[index].functionName;
+        functionData.type = this.currentPreference.functions[index].type;
       }
       return functionData
     });
@@ -296,18 +298,20 @@ export class ReportOnDemandComponent implements OnInit {
   private updatedFunctionData(columnName: string, functionName: any) {
     const index = this.functionsData.findIndex(x => x.columnName === columnName);
     if (index === -1) {
-      this.functionsData.push({ columnName: columnName, functionName: functionName });
+
+      this.functionsData.push({ columnName: columnName, type: functionName });
     } else {
-      this.functionsData[index] = { columnName: columnName, functionName: functionName };
+      this.functionsData[index] = { columnName: columnName, type: functionName };
     }
   }
 
-  private updatedSelectFunction(columnNameSelected: string, functionNameSelected: string) {
+  private updatedSelectFunction(columnNameSelected: string, functionNameSelected: any) {
     this.currentPreference.functions.forEach((data: any, i: number) => {
       const index = data.indexOf('-');
       const columnName = data.substring(0, index);
       if (columnName === columnNameSelected) {
-        this.currentPreference.functions[i] = columnName + '-' + functionNameSelected;
+        this.currentPreference.functions[i].columnName = columnName;
+        this.currentPreference.functions[i].type = functionNameSelected;
       }
     })
   }
@@ -431,14 +435,6 @@ export class ReportOnDemandComponent implements OnInit {
     }
   }
 
-  getFunctionValue(reportFunction: OReportFunction) {
-    if (reportFunction.columnName === 'TOTAL') {
-      return reportFunction.columnName;
-    } else {
-      return reportFunction.columnName + '-' + reportFunction.functionName;
-    }
-  }
-
   setFullscreenDialog(): void {
     Utils.setFullscreenDialog(this.fullscreen, this.dialogRef);
     this.fullscreen = !this.fullscreen;
@@ -496,9 +492,9 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   onSelectionChangeFunctions(event: MatSelectionListChange) {
-    if (!event.option.selected || event.option.value === 'TOTAL') return;
+    if (!event.option.selected || event.option.value.columnName === 'TOTAL') return;
     const functionSelect = event.option.value;
-    const columnSelectedToGroup = functionSelect.substring(0, functionSelect.indexOf('-'));
+    const columnSelectedToGroup = functionSelect.columnName;
 
     if (event.option.selected &&
       this.currentPreference.columns.findIndex(x => x.id === columnSelectedToGroup) === -1) {
@@ -521,7 +517,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   isCheckedFunction(column: OReportFunction) {
-    return this.currentPreference.functions.length > 0 ? this.currentPreference.functions.filter(x => (x === column.columnName + '-' + column.functionName) && x !== 'TOTAL').length > 0 : false;
+    return this.currentPreference.functions.length > 0 ? this.currentPreference.functions.filter(x => (x.columnName === column.columnName && x.type === column.type) && x.type !== 'TOTAL').length > 0 : false;
   }
 
   columnsOrderByCompareFunction(co1: OReportOrderBy, co2: OReportOrderBy) {
@@ -539,6 +535,12 @@ export class ReportOnDemandComponent implements OnInit {
   columnsCompareFunction(co1: OReportColumn, co2: OReportColumn) {
     return co1.id === co2.id;
   }
+
+  functionsCompareFunction(co1: OReportFunction, co2: OReportFunction) {
+    return co1.columnName === co2.columnName;
+  }
+
+
 
   protected createRenderer(column: string): any {
     let oColumn: OColumn = this.table.oTableOptions.columns.find(x => x.attr === column);
@@ -583,3 +585,4 @@ export class ReportOnDemandComponent implements OnInit {
     return newRenderer;
   }
 }
+
