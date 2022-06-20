@@ -165,7 +165,7 @@ export class ReportOnDemandComponent implements OnInit {
       "service": this.currentPreference.service, "language": this.language
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
-        this.functionsData = res.data[0].list;
+        this.functionsData = res.data[0].functions;
         this.initialFunctionsData = this.functionsData;
       }
     });
