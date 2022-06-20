@@ -29,6 +29,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   @ViewChild('columnsList', { static: false }) columnsList: MatSelectionList;
   @ViewChild('functionsList', { static: false }) functionsList: MatSelectionList;
+  @ViewChild('orderByList', { static: false }) orderByList: MatSelectionList;
 
   public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
   public functionsData: OReportFunction[] = [];
@@ -99,7 +100,8 @@ export class ReportOnDemandComponent implements OnInit {
   public clearCurrentPreferences() {
     this.initializeReportPreferences();
     this.columnsList.deselectAll();
-    this.columnsList.deselectAll();
+    this.functionsList.deselectAll();
+    this.orderByList.deselectAll();
   }
 
   protected initializeReportPreferences() {
@@ -107,6 +109,7 @@ export class ReportOnDemandComponent implements OnInit {
     changing settings */
     this.columnsData = this.parseReportColumn(this.columnsArray);
     this.functionsData = this.initialFunctionsData;
+    this.columnsOrderBy = [];
     this.pdf = this.blankPdf;
     this.currentPreference = new DefaultOReportPreferences();
     this.currentPreference.entity = this.table.entity;
@@ -226,8 +229,6 @@ export class ReportOnDemandComponent implements OnInit {
 
   }
 
-
-
   private getSortIndex(indexA: number, indexB: number): number {
     if (indexA === -1) {
       return 0;
@@ -293,23 +294,31 @@ export class ReportOnDemandComponent implements OnInit {
             const index = data.indexOf('-');
             const columnName = data.substring(0, index);
             const functionName = data.substring(index + 1);
-            this.functionsData = this.updatedSelectFunctionInArray(columnName, functionName, this.functionsData);
-            this.currentPreference.functions = this.updatedSelectFunctionInArray(columnName, functionName, this.currentPreference.functions);
+            this.updatedFunctionData(columnName, functionName);
+            this.updatedSelectFunction(columnName, functionName);
           }
         });
     }
   }
 
-  private updatedSelectFunctionInArray(columnName: any, functionName: any, dataArray: any[]) {
-    const index = dataArray.findIndex(x => x.columnName === columnName);
+  private updatedFunctionData(columnName: string, functionName: any) {
+    const index = this.functionsData.findIndex(x => x.columnName === columnName);
     if (index === -1) {
-      dataArray.push({ columnName: columnName, functionName: functionName });
+      this.functionsData.push({ columnName: columnName, functionName: functionName });
     } else {
-      dataArray[index] = { columnName: columnName, functionName: functionName };
+      this.functionsData[index] = { columnName: columnName, functionName: functionName };
     }
-    return dataArray;
   }
 
+  private updatedSelectFunction(columnNameSelected: string, functionNameSelected: string) {
+    this.currentPreference.functions.forEach((data: any, i: number) => {
+      const index = data.indexOf('-');
+      const columnName = data.substring(0, index);
+      if (columnName === columnNameSelected) {
+        this.currentPreference.functions[i] = columnName + '-' + functionNameSelected;
+      }
+    })
+  }
 
   openSaveAsPreferences(): void {
     this.dialog
