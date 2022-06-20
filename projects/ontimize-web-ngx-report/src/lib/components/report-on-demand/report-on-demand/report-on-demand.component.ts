@@ -443,14 +443,6 @@ export class ReportOnDemandComponent implements OnInit {
     }
   }
 
-  getFunctionValue(reportFunction: OReportFunction) {
-    if (reportFunction.columnName === 'TOTAL') {
-      return reportFunction.columnName;
-    } else {
-      return reportFunction.columnName + '-' + reportFunction.type;
-    }
-  }
-
   setFullscreenDialog(): void {
     Utils.setFullscreenDialog(this.fullscreen, this.dialogRef);
     this.fullscreen = !this.fullscreen;
