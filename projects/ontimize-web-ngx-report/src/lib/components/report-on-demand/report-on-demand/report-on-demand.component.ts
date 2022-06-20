@@ -153,7 +153,9 @@ export class ReportOnDemandComponent implements OnInit {
       "service": this.currentPreference.service, "language": this.language
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
-        this.functionsData = this.parseDefaultFunctionsData(res.data[0].list);
+        this.functionsData = res.data[0].list;
+        //this.functionsData = this.parseDefaultFunctionsData(res.data[0].list);
+
       }
     });
   }
@@ -166,7 +168,7 @@ export class ReportOnDemandComponent implements OnInit {
         this.serviceRendererData.findIndex(serviceRendererColumn => serviceRendererColumn.keyColumn === x) === -1
       )
       .forEach(column => {
-        let obj: OReportFunction = { columnName: column, functionName: column !== 'TOTAL' ? 'SUM' : column };
+        let obj: OReportFunction = { columnName: column, type: column !== 'TOTAL' ? 'SUM' : column };
         functions.push(obj);
       })
 
@@ -228,9 +230,9 @@ export class ReportOnDemandComponent implements OnInit {
   private updatedSelectFunctionInArray(columnName: any, functionName: any, dataArray: any[]) {
     const index = dataArray.findIndex(x => x.columnName === columnName);
     if (index === -1) {
-      dataArray.push({ columnName: columnName, functionName: functionName });
+      dataArray.push({ columnName: columnName, type: functionName });
     } else {
-      dataArray[index] = { columnName: columnName, functionName: functionName };
+      dataArray[index] = { columnName: columnName, type: functionName };
     }
     return dataArray;
   }
@@ -359,7 +361,7 @@ export class ReportOnDemandComponent implements OnInit {
     if (reportFunction.columnName === 'TOTAL') {
       return reportFunction.columnName;
     } else {
-      return reportFunction.columnName + '-' + reportFunction.functionName;
+      return reportFunction.columnName + '-' + reportFunction.type;
     }
   }
 
@@ -411,9 +413,9 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   onSelectionChangeFunctions(event: MatSelectionListChange) {
-    if (!event.option.selected || event.option.value === 'TOTAL') return;
+    if (!event.option.selected || event.option.value.columnName === 'TOTAL') return;
     const functionSelect = event.option.value;
-    const columnSelectedToGroup = functionSelect.substring(0, functionSelect.indexOf('-'));
+    const columnSelectedToGroup = functionSelect.columnName;
 
     if (event.option.selected &&
       this.currentPreference.columns.findIndex(x => x.id === columnSelectedToGroup) === -1) {
@@ -436,7 +438,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   isCheckedFunction(column: OReportFunction) {
-    return this.currentPreference.functions.length > 0 ? this.currentPreference.functions.filter(x => (x === column.columnName + '-' + column.functionName) && x !== 'TOTAL').length > 0 : false;
+    return this.currentPreference.functions.length > 0 ? this.currentPreference.functions.filter(x => (x === column) && x.type !== 'TOTAL').length > 0 : false;
   }
 
   columnsOrderByCompareFunction(co1: OReportOrderBy, co2: OReportOrderBy) {

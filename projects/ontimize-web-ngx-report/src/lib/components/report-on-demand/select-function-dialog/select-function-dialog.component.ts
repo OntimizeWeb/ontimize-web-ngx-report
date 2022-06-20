@@ -19,7 +19,7 @@ export class SelectFunctionDialogComponent {
     this.functions.push({ id: reportFunction.columnName + '-AVERAGE', value: 'DIALOG.SELECT_FUNCTION.AVG' });
     this.functions.push({ id: reportFunction.columnName + '-MAX', value: 'DIALOG.SELECT_FUNCTION.MAX' });
     this.functions.push({ id: reportFunction.columnName + '-MIN', value: 'DIALOG.SELECT_FUNCTION.MIN' });
-    this.selectedFunction = reportFunction.columnName + '-' + reportFunction.functionName;
+    this.selectedFunction = reportFunction.columnName + '-' + reportFunction.type;
   }
 
 
