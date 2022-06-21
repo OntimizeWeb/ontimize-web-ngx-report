@@ -97,8 +97,13 @@ export class ReportOnDemandComponent implements OnInit {
 
   public clearCurrentPreferences() {
     this.initializeReportPreferences();
-    this.columnsList.deselectAll();
-    this.functionsList.deselectAll();
+    if (this.columnsList) {
+      this.columnsList.deselectAll();
+    }
+    if (this.functionsList) {
+      this.functionsList.deselectAll();
+    }
+
     if (this.orderByList) {
       this.orderByList.deselectAll();
     }
@@ -165,23 +170,26 @@ export class ReportOnDemandComponent implements OnInit {
       "service": this.currentPreference.service, "language": this.language
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
-        this.functionsData = res.data[0].functions;
+        this.functionsData = this.parseDefaultFunctionsData(res.data[0].functions);
         this.initialFunctionsData = this.functionsData;
       }
     });
   }
 
-  parseDefaultFunctionsData(listColumns: string[]) {
-    let functions = [];
-
-    listColumns.
-      filter(column =>
-        this.currentPreference.columns.findIndex(columnPreference => columnPreference.columnStyle.renderer.type === 'service' && columnPreference.id === column) === -1
-      )
-      .forEach(column => {
-        let obj: OReportFunction = { columnName: column, type: column !== 'TOTAL' ? 'SUM' : column };
-        functions.push(obj);
-      })
+  parseDefaultFunctionsData(listColumns: OReportFunction[]) {
+    let functions = listColumns.filter(column =>
+        this.columnsData.
+          findIndex(columnData =>
+            columnData.columnStyle.renderer && columnData.columnStyle.renderer.type === 'service' && columnData.id === column.columnName
+          ) === -1
+    );
+    listColumns.forEach(column => {
+      let indice = this.columnsData.
+        findIndex(columnData =>
+          columnData.columnStyle.renderer && columnData.columnStyle.renderer.type === 'service' && columnData.id === column.columnName
+      );
+      console.log(column.columnName, indice);
+    } );
 
     return functions;
   }
@@ -552,27 +560,27 @@ export class ReportOnDemandComponent implements OnInit {
       let columnRenderer: any = oColumn.renderer;
       switch (type) {
         case 'currency':
-          newRenderer.type = oColumn.type
+          newRenderer.type = type
           newRenderer.currencySymbol = columnRenderer.currencySymbol;
           newRenderer.currencySymbolPosition = columnRenderer.currencySymbolPosition;
           break;
         case 'date':
-          newRenderer.type = oColumn.type
+          newRenderer.type = type
           newRenderer.format = columnRenderer.format;
           break;
         case 'integer':
-          newRenderer.type = oColumn.type
+          newRenderer.type = type
           newRenderer.grouping = columnRenderer.grouping;
           newRenderer.thousandSeparator = columnRenderer.thousandSeparator;
           break;
         case 'real':
-          newRenderer.type = oColumn.type
+          newRenderer.type = type
           newRenderer.decimalSeparator = columnRenderer.decimalSeparator;
           newRenderer.grouping = columnRenderer.grouping;
           newRenderer.thousandSeparator = columnRenderer.thousandSeparator;
           break;
         case 'service':
-          newRenderer.type = oColumn.type
+          newRenderer.type = type
           newRenderer.entity = columnRenderer.entity;
           newRenderer.service = columnRenderer.service;
           newRenderer.keyColumn = oColumn.attr;
