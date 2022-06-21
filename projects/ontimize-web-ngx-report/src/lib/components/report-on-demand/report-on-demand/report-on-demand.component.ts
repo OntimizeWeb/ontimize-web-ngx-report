@@ -285,33 +285,27 @@ export class ReportOnDemandComponent implements OnInit {
         .subscribe((data: any) => {
           //Updated current functions selected and functionsData
           if (data) {
-            const index = data.indexOf('-');
-            const columnName = data.substring(0, index);
-            const functionName = data.substring(index + 1);
-            this.updatedFunctionData(columnName, functionName);
-            this.updatedSelectFunction(columnName, functionName);
+            this.updatedFunctionData(data);
+            this.updatedSelectFunction(data);
           }
         });
     }
   }
 
-  private updatedFunctionData(columnName: string, functionName: any) {
-    const index = this.functionsData.findIndex(x => x.columnName === columnName);
+  private updatedFunctionData(data: OReportFunction) {
+    const index = this.functionsData.findIndex(x => x.columnName === data.columnName);
     if (index === -1) {
 
-      this.functionsData.push({ columnName: columnName, type: functionName });
+      this.functionsData.push(data);
     } else {
-      this.functionsData[index] = { columnName: columnName, type: functionName };
+      this.functionsData[index] = data;
     }
   }
 
-  private updatedSelectFunction(columnNameSelected: string, functionNameSelected: any) {
+  private updatedSelectFunction(selectedFunction: OReportFunction) {
     this.currentPreference.functions.forEach((data: any, i: number) => {
-      const index = data.indexOf('-');
-      const columnName = data.substring(0, index);
-      if (columnName === columnNameSelected) {
-        this.currentPreference.functions[i].columnName = columnName;
-        this.currentPreference.functions[i].type = functionNameSelected;
+      if (data.columnName === selectedFunction.columnName) {
+        this.currentPreference.functions[i] = data;
       }
     })
   }
