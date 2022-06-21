@@ -285,30 +285,27 @@ export class ReportOnDemandComponent implements OnInit {
         .subscribe((data: any) => {
           //Updated current functions selected and functionsData
           if (data) {
-            const columnName = data.columnName;
-            const type = data.type;
-            this.updatedFunctionData(columnName, type);
-            this.updatedSelectFunction(columnName, type);
+            this.updatedFunctionData(data);
+            this.updatedSelectFunction(data);
           }
         });
     }
   }
 
-  private updatedFunctionData(columnName: string, functionName: any) {
-    const index = this.functionsData.findIndex(x => x.columnName === columnName);
+  private updatedFunctionData(data: OReportFunction) {
+    const index = this.functionsData.findIndex(x => x.columnName === data.columnName);
     if (index === -1) {
 
-      this.functionsData.push({ columnName: columnName, type: functionName });
+      this.functionsData.push(data);
     } else {
-      this.functionsData[index] = { columnName: columnName, type: functionName };
+      this.functionsData[index] = data;
     }
   }
 
-  private updatedSelectFunction(columnNameSelected: string, functionNameSelected: any) {
+  private updatedSelectFunction(selectedFunction: OReportFunction) {
     this.currentPreference.functions.forEach((data: any, i: number) => {
-      if (data.columnName === columnNameSelected) {
-        this.currentPreference.functions[i].columnName = data.columnName;
-        this.currentPreference.functions[i].type = functionNameSelected;
+      if (data.columnName === selectedFunction.columnName) {
+        this.currentPreference.functions[i] = data;
       }
     })
   }
