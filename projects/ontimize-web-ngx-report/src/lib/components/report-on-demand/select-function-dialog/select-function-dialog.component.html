@@ -4,7 +4,7 @@
   <div mat-subheader>{{ 'DIALOG.SELECT_FUNCTION.DESCRIPTION' | oReportsTranslate }}</div>
 
   <mat-radio-group name="Function" [(ngModel)]="selectedFunction" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="12px">
-    <mat-radio-button *ngFor="let function of functions" [value]="function.id" [checked]="function===selectedFunction">
+    <mat-radio-button *ngFor="let function of functions" [value]="function.id" [checked]="isCheckedFunction(function.id)">
       {{ function.value | oReportsTranslate }}
     </mat-radio-button>
   </mat-radio-group>

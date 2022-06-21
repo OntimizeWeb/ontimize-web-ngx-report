@@ -285,9 +285,8 @@ export class ReportOnDemandComponent implements OnInit {
         .subscribe((data: any) => {
           //Updated current functions selected and functionsData
           if (data) {
-            const index = data.indexOf('-');
-            const columnName = data.substring(0, index);
-            const functionName = data.substring(index + 1);
+            const columnName = data.columnName;
+            const functionName = data.type;
             this.updatedFunctionData(columnName, functionName);
             this.updatedSelectFunction(columnName, functionName);
           }
@@ -307,10 +306,8 @@ export class ReportOnDemandComponent implements OnInit {
 
   private updatedSelectFunction(columnNameSelected: string, functionNameSelected: any) {
     this.currentPreference.functions.forEach((data: any, i: number) => {
-      const index = data.indexOf('-');
-      const columnName = data.substring(0, index);
-      if (columnName === columnNameSelected) {
-        this.currentPreference.functions[i].columnName = columnName;
+      if (data.columnName === columnNameSelected) {
+        this.currentPreference.functions[i].columnName = data.columnName;
         this.currentPreference.functions[i].type = functionNameSelected;
       }
     })

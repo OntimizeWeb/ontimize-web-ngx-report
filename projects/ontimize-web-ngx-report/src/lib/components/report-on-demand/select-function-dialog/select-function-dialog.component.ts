@@ -8,23 +8,25 @@ import { OReportFunction } from '../../../types/report-function.type';
   styleUrls: ['./select-function-dialog.component.scss'],
 })
 export class SelectFunctionDialogComponent {
-  public selectedFunction: string;
-  public functions = [];
+  public selectedFunction: OReportFunction;
+  public functions: { id: OReportFunction, value: string }[] = [
+    { id: { columnName: this.reportFunction.columnName, type: 'SUM' }, value: 'DIALOG.SELECT_FUNCTION.SUM' },
+    { id: { columnName: this.reportFunction.columnName, type: 'AVERAGE' }, value: 'DIALOG.SELECT_FUNCTION.AVG' },
+    { id: { columnName: this.reportFunction.columnName, type: 'MAX' }, value: 'DIALOG.SELECT_FUNCTION.MAX' },
+    { id: { columnName: this.reportFunction.columnName, type: 'MIN' }, value: 'DIALOG.SELECT_FUNCTION.MIN' }];
   constructor(
     public dialogo: MatDialogRef<SelectFunctionDialogComponent>,
     @Optional()
     @Inject(MAT_DIALOG_DATA) public reportFunction: OReportFunction) {
-
-    this.functions.push({ id: reportFunction.columnName + '-SUM', value: 'DIALOG.SELECT_FUNCTION.SUM' });
-    this.functions.push({ id: reportFunction.columnName + '-AVERAGE', value: 'DIALOG.SELECT_FUNCTION.AVG' });
-    this.functions.push({ id: reportFunction.columnName + '-MAX', value: 'DIALOG.SELECT_FUNCTION.MAX' });
-    this.functions.push({ id: reportFunction.columnName + '-MIN', value: 'DIALOG.SELECT_FUNCTION.MIN' });
-    this.selectedFunction = reportFunction.columnName + '-' + reportFunction.type;
+    this.selectedFunction = reportFunction;
   }
 
 
   public save(): void {
     this.dialogo.close(this.selectedFunction);
   }
+  public isCheckedFunction(reportFunction: OReportFunction) {
+    return reportFunction.type == this.selectedFunction.type;
 
+  }
 }
