@@ -286,9 +286,9 @@ export class ReportOnDemandComponent implements OnInit {
           //Updated current functions selected and functionsData
           if (data) {
             const columnName = data.columnName;
-            const functionName = data.type;
-            this.updatedFunctionData(columnName, functionName);
-            this.updatedSelectFunction(columnName, functionName);
+            const type = data.type;
+            this.updatedFunctionData(columnName, type);
+            this.updatedSelectFunction(columnName, type);
           }
         });
     }
