@@ -500,7 +500,7 @@ export class ReportOnDemandComponent implements OnInit {
 
     if (event.option.selected &&
       this.currentPreference.columns.findIndex(x => x.id === columnSelectedToGroup) === -1) {
-      const column: OReportColumn = { id: columnSelectedToGroup, name: this.translateService.get(columnSelectedToGroup) }
+      const column = this.columnsData.find(x => x.id === columnSelectedToGroup);
       this.addColumnData(column);
     }
   }
