@@ -137,10 +137,8 @@ export class ReportOnDemandComponent implements OnInit {
       let reportColumn: OReportColumn = {
         id: column, name: this.translateService.get(column)
       };
-      const columnStyle = this.parseColumnStyle(column);
-      if (columnStyle.renderer) {
-        reportColumn.columnStyle = this.parseColumnStyle(column)
-      }
+
+      reportColumn.columnStyle = this.parseColumnStyle(column);
       return reportColumn;
     });
   }
@@ -151,7 +149,6 @@ export class ReportOnDemandComponent implements OnInit {
     if (Util.isDefined(renderer) && Util.isDefined(renderer.type)) {
       columnStyle.renderer = renderer;
     }
-
     return columnStyle;
   }
 
