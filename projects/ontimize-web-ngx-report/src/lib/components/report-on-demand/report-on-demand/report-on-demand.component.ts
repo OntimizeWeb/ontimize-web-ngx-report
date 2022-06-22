@@ -130,7 +130,14 @@ export class ReportOnDemandComponent implements OnInit {
 
   protected parseReportColumn(columns: any[]): OReportColumn[] {
     return columns.map(column => {
-      return { id: column, name: this.translateService.get(column), columnStyle: this.parseColumnStyle(column) }
+      let reportColumn: OReportColumn = {
+        id: column, name: this.translateService.get(column)
+      };
+      const columnStyle = this.parseColumnStyle(column);
+      if (columnStyle.renderer) {
+        reportColumn.columnStyle = this.parseColumnStyle(column)
+      }
+      return reportColumn;
     });
   }
 
@@ -178,18 +185,12 @@ export class ReportOnDemandComponent implements OnInit {
 
   parseDefaultFunctionsData(listColumns: OReportFunction[]) {
     let functions = listColumns.filter(column =>
-        this.columnsData.
-          findIndex(columnData =>
-            columnData.columnStyle.renderer && columnData.columnStyle.renderer.type === 'service' && columnData.id === column.columnName
-          ) === -1
-    );
-    listColumns.forEach(column => {
-      let indice = this.columnsData.
+      this.columnsData.
         findIndex(columnData =>
-          columnData.columnStyle.renderer && columnData.columnStyle.renderer.type === 'service' && columnData.id === column.columnName
-      );
-      console.log(column.columnName, indice);
-    } );
+          columnData.columnStyle && columnData.columnStyle.renderer && columnData.columnStyle.renderer.type === 'service' && columnData.id === column.columnName
+        ) === -1
+    );
+
 
     return functions;
   }
@@ -281,12 +282,12 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
 
-  selectFunction(event, functionName: string): void {
+  selectFunction(event, reportFunction: OReportFunction): void {
     event.stopPropagation();
-    if (functionName != 'TOTAL') {
+    if (reportFunction.columnName != 'TOTAL') {
       this.dialog
         .open(SelectFunctionDialogComponent, {
-          data: functionName,
+          data: reportFunction,
           panelClass: ['o-dialog-class', 'o-table-dialog']
         })
         .afterClosed()
