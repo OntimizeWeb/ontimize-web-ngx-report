@@ -33,7 +33,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
   public functionsData: OReportFunction[] = [];
-  private initialFunctionsData: OReportFunction[] = []; // when clear
+  private initialFunctionsData: OReportFunction[] = [];
   public appliedConfiguration: boolean = false;
   public selectedFunctions = [];
 
@@ -49,10 +49,12 @@ export class ReportOnDemandComponent implements OnInit {
 
 
   public columnsData: Array<OReportColumn>;
+  private initialColumnsData: Array<OReportColumn>;
   public selectedColumnsData: string[];
   public columnsOrderBy: Array<OReportOrderBy> = [];
 
   public columnsToGroupData: any[];
+  private initialColumnsToGroupData: any[];
   public openedSidenav: boolean = true;
   public fullscreen: boolean = false;
 
@@ -84,7 +86,8 @@ export class ReportOnDemandComponent implements OnInit {
     this.language = this.translateService.getCurrentLang();
     this.service = this.table.service;
     this.columnsArray = this.parseColumnsVisible();
-    this.columnsToGroupData = this.columnsArray;
+    this.initialColumnsData = this.parseReportColumn(this.columnsArray);
+    this.initialColumnsToGroupData = this.columnsArray;
     this.currentConfiguration = { ENTITY: this.table.entity };
     this.initializeReportPreferences();
 
@@ -97,8 +100,13 @@ export class ReportOnDemandComponent implements OnInit {
 
   public clearCurrentPreferences() {
     this.initializeReportPreferences();
-    this.columnsList.deselectAll();
-    this.functionsList.deselectAll();
+    if (this.columnsList) {
+      this.columnsList.deselectAll();
+    }
+    if (this.functionsList) {
+      this.functionsList.deselectAll();
+    }
+
     if (this.orderByList) {
       this.orderByList.deselectAll();
     }
@@ -107,8 +115,9 @@ export class ReportOnDemandComponent implements OnInit {
   protected initializeReportPreferences() {
     /* initialize columnsData and functionsData because they are modified by
     changing settings */
-    this.columnsData = this.parseReportColumn(this.columnsArray);
-    this.functionsData = this.initialFunctionsData;
+    this.columnsData = Utils.cloneObject(this.initialColumnsData);
+    this.functionsData = Utils.cloneObject(this.initialFunctionsData);
+    this.columnsToGroupData = Utils.cloneObject(this.initialColumnsToGroupData);
     this.columnsOrderBy = [];
     this.pdf = this.blankPdf;
     this.currentPreference = new DefaultOReportPreferences();
@@ -125,7 +134,14 @@ export class ReportOnDemandComponent implements OnInit {
 
   protected parseReportColumn(columns: any[]): OReportColumn[] {
     return columns.map(column => {
-      return { id: column, name: this.translateService.get(column), columnStyle: this.parseColumnStyle(column) }
+      let reportColumn: OReportColumn = {
+        id: column, name: this.translateService.get(column)
+      };
+      let columnStyle = this.parseColumnStyle(column);
+      if (Util.isObject(columnStyle) && Object.keys(columnStyle).length > 0) {
+        reportColumn.columnStyle = columnStyle;
+      }
+      return reportColumn;
     });
   }
 
@@ -135,7 +151,6 @@ export class ReportOnDemandComponent implements OnInit {
     if (Util.isDefined(renderer) && Util.isDefined(renderer.type)) {
       columnStyle.renderer = renderer;
     }
-
     return columnStyle;
   }
 
@@ -165,25 +180,19 @@ export class ReportOnDemandComponent implements OnInit {
       "service": this.currentPreference.service, "language": this.language
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
-        this.functionsData = res.data[0].functions;
+        this.functionsData = this.parseDefaultFunctionsData(res.data[0].functions);
         this.initialFunctionsData = this.functionsData;
       }
     });
   }
 
-  parseDefaultFunctionsData(listColumns: string[]) {
-    let functions = [];
-
-    listColumns.
-      filter(column =>
-        this.currentPreference.columns.findIndex(columnPreference => columnPreference.columnStyle.renderer.type === 'service' && columnPreference.id === column) === -1
-      )
-      .forEach(column => {
-        let obj: OReportFunction = { columnName: column, type: column !== 'TOTAL' ? 'SUM' : column };
-        functions.push(obj);
-      })
-
-    return functions;
+  parseDefaultFunctionsData(listColumns: OReportFunction[]) {
+    return listColumns.filter(column =>
+      this.columnsData.
+        findIndex(columnData =>
+          columnData.columnStyle && columnData.columnStyle.renderer && columnData.columnStyle.renderer.type === 'service' && columnData.id === column.columnName
+        ) === -1
+    );
   }
 
   applyConfiguration(configuration: any) {
@@ -210,14 +219,14 @@ export class ReportOnDemandComponent implements OnInit {
 
     });
     this.columnsOrderBy.sort((a: OReportOrderBy, b: OReportOrderBy) => {
-      let indexA = this.currentPreference.columns.findIndex(x => x.id === a.columnId);
-      let indexB = this.currentPreference.columns.findIndex(x => x.id === b.columnId);
+      let indexA = this.currentPreference.orderBy.findIndex(x => x.columnId === a.columnId);
+      let indexB = this.currentPreference.orderBy.findIndex(x => x.columnId === b.columnId);
       return this.getSortIndex(indexA, indexB);
 
     });
     this.columnsToGroupData.sort((a: string, b: string) => {
-      let indexA = this.currentPreference.columns.findIndex(x => x.id === a);
-      let indexB = this.currentPreference.columns.findIndex(x => x.id === b);
+      let indexA = this.currentPreference.groups.findIndex(x => x === a);
+      let indexB = this.currentPreference.groups.findIndex(x => x === b);
       return this.getSortIndex(indexA, indexB);
     });
 
@@ -228,7 +237,7 @@ export class ReportOnDemandComponent implements OnInit {
       return 0;
     }
     if (indexB === -1) {
-      return indexA;
+      return indexB;
     } else {
       return indexA - indexB;
     }
@@ -273,12 +282,12 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
 
-  selectFunction(event, functionName: string): void {
+  selectFunction(event, reportFunction: OReportFunction): void {
     event.stopPropagation();
-    if (functionName != 'TOTAL') {
+    if (reportFunction.columnName != 'TOTAL') {
       this.dialog
         .open(SelectFunctionDialogComponent, {
-          data: functionName,
+          data: reportFunction,
           panelClass: ['o-dialog-class', 'o-table-dialog']
         })
         .afterClosed()
@@ -295,7 +304,6 @@ export class ReportOnDemandComponent implements OnInit {
   private updatedFunctionData(data: OReportFunction) {
     const index = this.functionsData.findIndex(x => x.columnName === data.columnName);
     if (index === -1) {
-
       this.functionsData.push(data);
     } else {
       this.functionsData[index] = data;
@@ -492,7 +500,7 @@ export class ReportOnDemandComponent implements OnInit {
 
     if (event.option.selected &&
       this.currentPreference.columns.findIndex(x => x.id === columnSelectedToGroup) === -1) {
-      const column: OReportColumn = { id: columnSelectedToGroup, name: this.translateService.get(columnSelectedToGroup) }
+      const column = this.columnsData.find(x => x.id === columnSelectedToGroup);
       this.addColumnData(column);
     }
   }
@@ -546,27 +554,27 @@ export class ReportOnDemandComponent implements OnInit {
       let columnRenderer: any = oColumn.renderer;
       switch (type) {
         case 'currency':
-          newRenderer.type = oColumn.type
+          newRenderer.type = type
           newRenderer.currencySymbol = columnRenderer.currencySymbol;
           newRenderer.currencySymbolPosition = columnRenderer.currencySymbolPosition;
           break;
         case 'date':
-          newRenderer.type = oColumn.type
+          newRenderer.type = type
           newRenderer.format = columnRenderer.format;
           break;
         case 'integer':
-          newRenderer.type = oColumn.type
+          newRenderer.type = type
           newRenderer.grouping = columnRenderer.grouping;
           newRenderer.thousandSeparator = columnRenderer.thousandSeparator;
           break;
         case 'real':
-          newRenderer.type = oColumn.type
+          newRenderer.type = type
           newRenderer.decimalSeparator = columnRenderer.decimalSeparator;
           newRenderer.grouping = columnRenderer.grouping;
           newRenderer.thousandSeparator = columnRenderer.thousandSeparator;
           break;
         case 'service':
-          newRenderer.type = oColumn.type
+          newRenderer.type = type
           newRenderer.entity = columnRenderer.entity;
           newRenderer.service = columnRenderer.service;
           newRenderer.keyColumn = oColumn.attr;

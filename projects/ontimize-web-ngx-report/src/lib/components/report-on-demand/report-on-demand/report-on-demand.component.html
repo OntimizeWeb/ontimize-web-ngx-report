@@ -137,7 +137,7 @@
             </mat-selection-list>
           </mat-expansion-panel>
 
-          <mat-expansion-panel class="acordions">
+          <mat-expansion-panel class="acordions" *ngIf="functionsData.length>0">
             <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
               <mat-panel-title>
                 {{ 'FUNCTIONS' | oReportsTranslate }}

@@ -21,11 +21,18 @@ export class StyleDialogComponent {
 
   constructor(
     @Optional() public dialogo: MatDialogRef<StyleDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: OReportColumn) {
 
     this.reportColumn = Utils.cloneObject(data);
-    if (!this.reportColumn.hasOwnProperty('columnStyle') || !Util.isDefined(this.reportColumn.columnStyle) ) {
-      this.reportColumn.columnStyle = Object.assign({}, Constants.DEFAULT_COLUMN_STYLE);
+
+    if (this.reportColumn.columnStyle && !Util.isDefined(this.reportColumn.columnStyle.width)) {
+      this.reportColumn.columnStyle.width = Constants.DEFAULT_WIDTH_COLUMN_STYLE;
+    }
+    if (this.reportColumn.columnStyle && !Util.isDefined(this.reportColumn.columnStyle.alignment)) {
+      this.reportColumn.columnStyle.alignment = Constants.DEFAULT_ALIGNMENT_COLUMN_STYLE;
+    }
+    if (!this.reportColumn.columnStyle) {
+      this.reportColumn.columnStyle = { width: Constants.DEFAULT_WIDTH_COLUMN_STYLE, alignment: Constants.DEFAULT_ALIGNMENT_COLUMN_STYLE }
     }
   }
 
