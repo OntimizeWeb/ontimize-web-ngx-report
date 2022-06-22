@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSelectionList, MatListOption } from '@angular/material';
-import { DialogService } from 'ontimize-web-ngx';
+import { DialogService, Util } from 'ontimize-web-ngx';
 import { ReportsService } from '../../../services/reports.service';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
 
@@ -51,13 +51,16 @@ export class ApplyConfigurationDialogComponent implements OnInit {
   getConfigurations() {
     this.reportsService.getPreferences(this.data.entity, this.data.service).subscribe(resp => {
       if (resp.isSuccessful()) {
-        this.setData(resp.data);
-
+        this.setDataArray(resp.data);
       }
     });
   }
 
-  setData(data) {
-    this.configurationListData = data;
+  setDataArray(data: any) {
+    if (Util.isArray(data)) {
+      this.configurationListData = data;
+    } else {
+      this.configurationListData = []
+    }
   }
 }
