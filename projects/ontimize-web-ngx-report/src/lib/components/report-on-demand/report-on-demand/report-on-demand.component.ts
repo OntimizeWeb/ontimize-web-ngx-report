@@ -1,9 +1,9 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ViewChild, ViewEncapsulation } from '@angular/core';
+import { Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
+import { AppConfig, DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { ReportsService } from '../../../services/reports.service';
 import { OReportColumnStyle } from '../../../types/report-column-style.type';
 import { OReportColumn } from '../../../types/report-column.type';
@@ -68,13 +68,24 @@ export class ReportOnDemandComponent implements OnInit {
   public currentConfiguration: OReportConfiguration;
   public pdf: string;
 
-  constructor(private reportsService: ReportsService,
-    public dialog: MatDialog,
+  public translateService: OTranslateService;
+  protected appConfig: AppConfig;
+  protected snackBarService: SnackBarService;
+  protected reportsService: ReportsService;
+  protected dialogService: DialogService;
+  public dialog: MatDialog;
+
+  constructor(
+    public injector: Injector,
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OTableComponent,
-    protected dialogService: DialogService,
-    public translateService: OTranslateService,
-    protected snackBarService: SnackBarService) {
+    @Inject(MAT_DIALOG_DATA) public data: OTableComponent
+  ) {
+    this.appConfig = this.injector.get(AppConfig);
+    this.translateService = this.injector.get<OTranslateService>(OTranslateService);
+    this.snackBarService = this.injector.get<SnackBarService>(SnackBarService);
+    this.reportsService = this.injector.get<ReportsService>(ReportsService);
+    this.dialogService = this.injector.get<DialogService>(DialogService);
+    this.dialog = this.injector.get<MatDialog>(MatDialog);
   }
 
   ngOnInit() {
@@ -92,6 +103,15 @@ export class ReportOnDemandComponent implements OnInit {
     this.initializeReportPreferences();
 
     this.getFunctions();
+  }
+
+  public getDefaultServiceConfiguration(serviceName?: string): any {
+    const configuration = this.appConfig.getServiceConfiguration();
+    let servConfig = {};
+    if (serviceName && configuration.hasOwnProperty(serviceName)) {
+      servConfig = configuration[serviceName];
+    }
+    return servConfig;
   }
 
   public previewReport(): void {
@@ -161,8 +181,13 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   protected openReport() {
+    const serviceConfiguration = this.getDefaultServiceConfiguration(this.currentPreference.service);
+    let pathService: string;
+    if (Util.isObject(serviceConfiguration) && Object.hasOwnProperty(serviceConfiguration.path)) {
+      pathService = serviceConfiguration.path;
+    }
     this.reportsService.createReport({
-      "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentPreference.entity,
+      "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentPreference.entity, "path": pathService,
       "service": this.currentPreference.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
       "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
       "language": this.language
@@ -581,6 +606,10 @@ export class ReportOnDemandComponent implements OnInit {
           newRenderer.columns = Util.parseArray(columnRenderer.columns);
           newRenderer.valueColumn = columnRenderer.valueColumn;
           newRenderer.parentKeys = Util.parseArray(columnRenderer.parentKeys);
+          const serviceConfiguration = this.getDefaultServiceConfiguration(columnRenderer.service);
+          if (Util.isObject(serviceConfiguration) && Object.hasOwnProperty(serviceConfiguration.path)) {
+            newRenderer.path = serviceConfiguration.path;
+          }
           break;
       }
     }
