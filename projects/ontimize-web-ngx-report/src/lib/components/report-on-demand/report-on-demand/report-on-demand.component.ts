@@ -33,7 +33,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
   public functionsData: OReportFunction[] = [];
-  private initialFunctionsData: OReportFunction[] = []; // when clear
+  private initialFunctionsData: OReportFunction[] = [];
   public appliedConfiguration: boolean = false;
   public selectedFunctions = [];
 
@@ -49,10 +49,12 @@ export class ReportOnDemandComponent implements OnInit {
 
 
   public columnsData: Array<OReportColumn>;
+  private initialColumnsData: Array<OReportColumn>;
   public selectedColumnsData: string[];
   public columnsOrderBy: Array<OReportOrderBy> = [];
 
   public columnsToGroupData: any[];
+  private initialColumnsToGroupData: any[];
   public openedSidenav: boolean = true;
   public fullscreen: boolean = false;
 
@@ -84,7 +86,8 @@ export class ReportOnDemandComponent implements OnInit {
     this.language = this.translateService.getCurrentLang();
     this.service = this.table.service;
     this.columnsArray = this.parseColumnsVisible();
-    this.columnsToGroupData = this.columnsArray;
+    this.initialColumnsData = this.parseReportColumn(this.columnsArray);
+    this.initialColumnsToGroupData = this.columnsArray;
     this.currentConfiguration = { ENTITY: this.table.entity };
     this.initializeReportPreferences();
 
@@ -112,8 +115,9 @@ export class ReportOnDemandComponent implements OnInit {
   protected initializeReportPreferences() {
     /* initialize columnsData and functionsData because they are modified by
     changing settings */
-    this.columnsData = this.parseReportColumn(this.columnsArray);
-    this.functionsData = this.initialFunctionsData;
+    this.columnsData = Utils.cloneObject(this.initialColumnsData);
+    this.functionsData = Utils.cloneObject(this.initialFunctionsData);
+    this.columnsToGroupData = Utils.cloneObject(this.initialColumnsToGroupData);
     this.columnsOrderBy = [];
     this.pdf = this.blankPdf;
     this.currentPreference = new DefaultOReportPreferences();
@@ -184,15 +188,12 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   parseDefaultFunctionsData(listColumns: OReportFunction[]) {
-    let functions = listColumns.filter(column =>
+    return listColumns.filter(column =>
       this.columnsData.
         findIndex(columnData =>
           columnData.columnStyle && columnData.columnStyle.renderer && columnData.columnStyle.renderer.type === 'service' && columnData.id === column.columnName
         ) === -1
     );
-
-
-    return functions;
   }
 
   applyConfiguration(configuration: any) {
@@ -219,14 +220,14 @@ export class ReportOnDemandComponent implements OnInit {
 
     });
     this.columnsOrderBy.sort((a: OReportOrderBy, b: OReportOrderBy) => {
-      let indexA = this.currentPreference.columns.findIndex(x => x.id === a.columnId);
-      let indexB = this.currentPreference.columns.findIndex(x => x.id === b.columnId);
+      let indexA = this.currentPreference.orderBy.findIndex(x => x.columnId === a.columnId);
+      let indexB = this.currentPreference.orderBy.findIndex(x => x.columnId === b.columnId);
       return this.getSortIndex(indexA, indexB);
 
     });
     this.columnsToGroupData.sort((a: string, b: string) => {
-      let indexA = this.currentPreference.columns.findIndex(x => x.id === a);
-      let indexB = this.currentPreference.columns.findIndex(x => x.id === b);
+      let indexA = this.currentPreference.groups.findIndex(x => x === a);
+      let indexB = this.currentPreference.groups.findIndex(x => x === b);
       return this.getSortIndex(indexA, indexB);
     });
 
@@ -237,7 +238,7 @@ export class ReportOnDemandComponent implements OnInit {
       return 0;
     }
     if (indexB === -1) {
-      return indexA;
+      return indexB;
     } else {
       return indexA - indexB;
     }
