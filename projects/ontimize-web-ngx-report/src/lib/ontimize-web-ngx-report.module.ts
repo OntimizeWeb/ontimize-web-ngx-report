@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
-
-import { ODUMMY_MODULES } from './o-components';
-
-export * from './o-components';
+import { OREPORT_PROVIDERS } from './config/o-providers';
+import { OREPORT_DECLARATION_MODULES, OREPORT_ENTRY_COMPONENTS_MODULES, OREPORT_EXPORT_MODULES, OREPORT_IMPORTS_MODULES } from './config/o-components';
 
 @NgModule({
-  imports: ODUMMY_MODULES,
-  exports: ODUMMY_MODULES
+  declarations: OREPORT_DECLARATION_MODULES,
+  imports: OREPORT_IMPORTS_MODULES,
+  exports: OREPORT_EXPORT_MODULES,
+  providers: OREPORT_PROVIDERS,
+  entryComponents: OREPORT_ENTRY_COMPONENTS_MODULES
 })
+
 export class OReportModule { }

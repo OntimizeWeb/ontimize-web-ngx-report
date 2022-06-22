@@ -37,6 +37,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "ontimize-web-ngx-report"
 }

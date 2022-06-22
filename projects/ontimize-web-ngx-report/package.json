@@ -1,6 +1,6 @@
 {
   "name": "ontimize-web-ngx-report",
-  "version": "8.0.0",
+  "version": "8.0.0-rc.0",
   "description": "Authomatic reports implementation for Ontimize Web",
   "keywords": [
     "angular",
@@ -15,7 +15,14 @@
   },
   "license": "Apache-2.0",
   "main": "./bundles/ontimize-web-ngx-report.umd.js",
+  "scripts": {
+    "test": "karma start",
+    "test-watch": "karma start --singleRun=false --autoWatch=true"
+  },
   "peerDependencies": {
-    "ontimize-web-ngx": "~8.2.3"
+    "ontimize-web-ngx": "8.7.0-rc.0"
+  },
+  "dependencies": {
+    "ngx-extended-pdf-viewer": "9.0.0-alpha.1"
   }
 }
