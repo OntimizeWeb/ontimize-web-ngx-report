@@ -15,5 +15,5 @@ export type OReportParam = {
   style: OReportStyleParams,
   subtitle: string,
   language: string,
-  path:string
+  path: string
 }

@@ -5,5 +5,5 @@ export type OReportServiceRenderer = {
   valueColumn: string,
   columns: Array<string>,
   parentKeys: Array<string>,
-  path:string
+  path: string
 }
