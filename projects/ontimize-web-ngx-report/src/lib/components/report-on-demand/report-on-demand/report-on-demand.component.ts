@@ -137,8 +137,10 @@ export class ReportOnDemandComponent implements OnInit {
       let reportColumn: OReportColumn = {
         id: column, name: this.translateService.get(column)
       };
-
-      reportColumn.columnStyle = this.parseColumnStyle(column);
+      let columnStyle = this.parseColumnStyle(column);
+      if (Util.isObject(columnStyle) && Object.keys(columnStyle).length > 0) {
+        reportColumn.columnStyle = columnStyle;
+      }
       return reportColumn;
     });
   }
@@ -302,7 +304,6 @@ export class ReportOnDemandComponent implements OnInit {
   private updatedFunctionData(data: OReportFunction) {
     const index = this.functionsData.findIndex(x => x.columnName === data.columnName);
     if (index === -1) {
-
       this.functionsData.push(data);
     } else {
       this.functionsData[index] = data;
