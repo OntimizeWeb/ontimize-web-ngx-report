@@ -220,11 +220,22 @@ export class ReportOnDemandComponent implements OnInit {
     );
   }
 
+  /**
+   * Checks preference data is consistent with the table data
+   */
+  private checkPreferenceData() {
+    this.currentPreference.columns = this.currentPreference.columns.filter(column => this.initialColumnsData.findIndex(columnData => columnData.id === column.id) > -1);
+    this.currentPreference.groups = this.currentPreference.groups.filter(column => this.initialColumnsToGroupData.findIndex(columnData => columnData === column) > -1);
+    this.currentPreference.functions = this.currentPreference.functions.filter(column => this.initialFunctionsData.findIndex(columnData => columnData.columnName === column.columnName) > -1);
+    this.currentPreference.orderBy = this.currentPreference.orderBy.filter(column => this.columnsOrderBy.findIndex(columnData => columnData.columnId === column.columnId) > -1);
+  }
+
   applyConfiguration(configuration: any) {
     this.clearCurrentPreferences();
     this.currentConfiguration = configuration;
-    let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
-    this.currentPreference = preference;
+    this.currentPreference = JSON.parse(this.currentConfiguration.PREFERENCES);;
+    this.checkPreferenceData();
+
     this.currentPreference.columns.forEach((column: OReportColumn) => this.updateColumnsOrderByData(column.id));
     this.columnsData = this.parseReportColumn(this.columnsArray);
 
