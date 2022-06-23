@@ -233,12 +233,10 @@ export class ReportOnDemandComponent implements OnInit {
   applyConfiguration(configuration: any) {
     this.clearCurrentPreferences();
     this.currentConfiguration = configuration;
-    this.currentPreference = JSON.parse(this.currentConfiguration.PREFERENCES);;
-    this.checkPreferenceData();
-
+    this.currentPreference = JSON.parse(this.currentConfiguration.PREFERENCES);
     this.currentPreference.columns.forEach((column: OReportColumn) => this.updateColumnsOrderByData(column.id));
-    this.columnsData = this.parseReportColumn(this.columnsArray);
 
+    this.checkPreferenceData();
     // Set the functionsData with the data that is loaded from the configuration because it changes
     this.functionsData = this.functionsData.map((functionData: OReportFunction) => {
       const index = this.currentPreference.functions.findIndex(x => x.columnName === functionData.columnName);
