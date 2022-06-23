@@ -206,7 +206,7 @@ export class ReportOnDemandComponent implements OnInit {
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.functionsData = this.parseDefaultFunctionsData(res.data[0].functions);
-        this.initialFunctionsData = this.functionsData;
+        this.initialFunctionsData = Utils.cloneObject(this.functionsData);
       }
     });
   }
