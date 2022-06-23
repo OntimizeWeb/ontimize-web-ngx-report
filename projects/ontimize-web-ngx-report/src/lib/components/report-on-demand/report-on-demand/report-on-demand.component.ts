@@ -206,7 +206,7 @@ export class ReportOnDemandComponent implements OnInit {
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.functionsData = this.parseDefaultFunctionsData(res.data[0].functions);
-        this.initialFunctionsData = this.functionsData;
+        this.initialFunctionsData = Utils.cloneObject(this.functionsData);
       }
     });
   }
@@ -220,14 +220,23 @@ export class ReportOnDemandComponent implements OnInit {
     );
   }
 
+  /**
+   * Checks preference data is consistent with the table data
+   */
+  private checkPreferenceData() {
+    this.currentPreference.columns = this.currentPreference.columns.filter(column => this.initialColumnsData.findIndex(columnData => columnData.id === column.id) > -1);
+    this.currentPreference.groups = this.currentPreference.groups.filter(column => this.initialColumnsToGroupData.findIndex(columnData => columnData === column) > -1);
+    this.currentPreference.functions = this.currentPreference.functions.filter(column => this.initialFunctionsData.findIndex(columnData => columnData.columnName === column.columnName) > -1);
+    this.currentPreference.orderBy = this.currentPreference.orderBy.filter(column => this.columnsOrderBy.findIndex(columnData => columnData.columnId === column.columnId) > -1);
+  }
+
   applyConfiguration(configuration: any) {
     this.clearCurrentPreferences();
     this.currentConfiguration = configuration;
-    let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
-    this.currentPreference = preference;
+    this.currentPreference = JSON.parse(this.currentConfiguration.PREFERENCES);
     this.currentPreference.columns.forEach((column: OReportColumn) => this.updateColumnsOrderByData(column.id));
-    this.columnsData = this.parseReportColumn(this.columnsArray);
 
+    this.checkPreferenceData();
     // Set the functionsData with the data that is loaded from the configuration because it changes
     this.functionsData = this.functionsData.map((functionData: OReportFunction) => {
       const index = this.currentPreference.functions.findIndex(x => x.columnName === functionData.columnName);
