@@ -1,4 +1,4 @@
-import { Inject, Injectable, Injector } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { DialogService, IReportService, OTableComponent } from 'ontimize-web-ngx';
 import { ReportOnDemandComponent } from '../components/report-on-demand/report-on-demand/report-on-demand.component';
@@ -7,19 +7,19 @@ import { Constants } from '../util/constants';
 import { OReportService } from './o-report.service';
 
 
+
 @Injectable({ providedIn: 'root' })
-export class OReportOnDemandService implements IReportService {
+export class OntimizeReportService implements IReportService {
   protected dialogService: DialogService;
   protected dialog: MatDialog;
+  protected reportService: OReportService;
 
   constructor(
-    private injector: Injector,
-    @Inject('report') private reportService: OReportService,
-
+    private injector: Injector
   ) {
     this.dialogService = this.injector.get(DialogService);
     this.dialog = this.injector.get(MatDialog);
-//    this.reportService = this.injector.get(OReportService)
+    this.reportService = this.injector.get(OReportService)
   }
 
   openReportOnDemand(table: OTableComponent) {

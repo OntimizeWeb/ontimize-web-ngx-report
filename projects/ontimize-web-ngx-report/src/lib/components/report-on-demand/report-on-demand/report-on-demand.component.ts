@@ -4,7 +4,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AppConfig, DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
-import { ReportsService } from '../../../services/reports.service';
+import { OReportService } from '../../../services/o-report.service';
 import { OReportColumnStyle } from '../../../types/report-column-style.type';
 import { OReportColumn } from '../../../types/report-column.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
@@ -71,7 +71,7 @@ export class ReportOnDemandComponent implements OnInit {
   public translateService: OTranslateService;
   protected appConfig: AppConfig;
   protected snackBarService: SnackBarService;
-  protected reportsService: ReportsService;
+  protected reportService: OReportService;
   protected dialogService: DialogService;
   public dialog: MatDialog;
 
@@ -83,7 +83,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.appConfig = this.injector.get(AppConfig);
     this.translateService = this.injector.get<OTranslateService>(OTranslateService);
     this.snackBarService = this.injector.get<SnackBarService>(SnackBarService);
-    this.reportsService = this.injector.get<ReportsService>(ReportsService);
+    this.reportService = this.injector.get<OReportService>(OReportService);
     this.dialogService = this.injector.get<DialogService>(DialogService);
     this.dialog = this.injector.get<MatDialog>(MatDialog);
   }
@@ -186,7 +186,7 @@ export class ReportOnDemandComponent implements OnInit {
     if (Util.isObject(serviceConfiguration) && Object.hasOwnProperty(serviceConfiguration.path)) {
       pathService = serviceConfiguration.path;
     }
-    this.reportsService.createReport({
+    this.reportService.createReport({
       "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentPreference.entity, "path": pathService,
       "service": this.currentPreference.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
       "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
@@ -200,7 +200,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   getFunctions() {
-    this.reportsService.getFunctions({
+    this.reportService.getFunctions({
       "columns": this.columnsArray, "entity": this.currentPreference.entity,
       "service": this.currentPreference.service, "language": this.language
     }).subscribe(res => {
@@ -453,11 +453,11 @@ export class ReportOnDemandComponent implements OnInit {
     }
 
     if (update) {
-      this.reportsService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
+      this.reportService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
         this.showConfirmOperatinInSnackBar(res);
       });
     } else {
-      this.reportsService.saveAsPreferences(preference).subscribe(res => {
+      this.reportService.saveAsPreferences(preference).subscribe(res => {
         if (res && res.code === 0) {
           this.showConfirmOperatinInSnackBar(res);
         }

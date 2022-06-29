@@ -2,7 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSelectionList, MatListOption } from '@angular/material';
 import { DialogService, Util } from 'ontimize-web-ngx';
-import { ReportsService } from '../../../services/reports.service';
+import { OReportService } from '../../../services/o-report.service';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
 
 
@@ -20,7 +20,7 @@ export class ApplyConfigurationDialogComponent implements OnInit {
 
   constructor(
     private dialogService: DialogService,
-    private reportsService: ReportsService,
+    private reportsService: OReportService,
     public dialogo: MatDialogRef<ApplyConfigurationDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
     this.getConfigurations();
