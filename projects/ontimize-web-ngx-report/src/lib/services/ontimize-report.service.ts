@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material';
 import { DialogService, IReportService, OTableComponent } from 'ontimize-web-ngx';
 import { ReportOnDemandComponent } from '../components/report-on-demand/report-on-demand/report-on-demand.component';
 import { OReportViewerComponent } from '../components/report/o-report-viewer/o-report-viewer.component';
-import { Constants } from '../util/constants';
+import { Utils } from '../util/utils';
 import { OReportService } from './o-report.service';
 
 
@@ -23,14 +23,7 @@ export class OntimizeReportService implements IReportService {
   }
 
   openReportOnDemand(table: OTableComponent) {
-    this.dialog.open(ReportOnDemandComponent, {
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      height: Constants.DEFAULT_HEIGHT_DIALOG,
-      width: Constants.DEFAULT_WIDTH_DIALOG,
-      panelClass: ['o-dialog-class', 'o-table-dialog', 'report-on-demand'],
-      data: table
-    });
+    Utils.openModalVisor(this.dialog, ReportOnDemandComponent, table);
   }
 
   openFillReport(reportId: string, parametersValues: object, filter: object) {
@@ -42,17 +35,19 @@ export class OntimizeReportService implements IReportService {
         if (res && res.data.length && res.code === 0) {
           let parameters = res.data[0].PARAMETERS;
           let name = res.data[0].NAME;
+          let av = [];
           if (parameters.length > 0) {
-            let av = [reportId];
+            av = [reportId];
             let values = Object.values(parametersValues);
             for (let value of values) {
               av.push(value);
             }
-            this.openDialog(av, filter, name);
           } else {
-            let av = [reportId];
-            this.openDialog(av, filter, name);
+            av = [reportId];
           }
+          const data = { 'params': av, 'filter': filter, 'name': name };
+          Utils.openModalVisor(this.dialog, OReportViewerComponent, data)
+
         }
       },
       err => {
@@ -65,18 +60,5 @@ export class OntimizeReportService implements IReportService {
     );
 
   }
-  openDialog(av: any, filter: any, name: any) {
-    this.dialog.open(OReportViewerComponent, {
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      height: Constants.DEFAULT_HEIGHT_DIALOG,
-      width: Constants.DEFAULT_WIDTH_DIALOG,
-      panelClass: ['o-dialog-class', 'o-table-dialog'],
-      data: {
-        'params': av,
-        'filter': filter,
-        'name': name
-      }
-    });
-  }
+
 }
