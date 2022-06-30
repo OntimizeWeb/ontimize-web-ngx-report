@@ -489,8 +489,10 @@ export class ReportOnDemandComponent implements OnInit {
     this.updateColumnsOrderByData(groupSelected, event);
     if (event.option.selected &&
       this.currentPreference.columns.findIndex(x => x.id === groupSelected) === -1) {
-      const columnStyleSelected: OReportColumn = { id: groupSelected, name: this.translateService.get(groupSelected) };
-      this.addColumnData(columnStyleSelected);
+      const columnStyleSelected: OReportColumn[] = this.columnsData.filter((x: OReportColumn) => x.id === groupSelected)
+      if (columnStyleSelected.length > 0) {
+        this.addColumnData(columnStyleSelected[0]);
+      }
     }
   }
 
