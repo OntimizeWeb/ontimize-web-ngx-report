@@ -1,3 +1,4 @@
+import { MatDialog } from "@angular/material";
 import { Constants } from "./constants";
 
 export class Utils {
@@ -10,5 +11,16 @@ export class Utils {
   }
   static cloneObject(data: Object) {
     return JSON.parse(JSON.stringify(data));
+  }
+
+  static openModalVisor(dialog: MatDialog, component: any, data: object) {
+    dialog.open(component, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      height: Constants.DEFAULT_HEIGHT_DIALOG,
+      width: Constants.DEFAULT_WIDTH_DIALOG,
+      panelClass: ['o-dialog-class', 'o-table-dialog', 'o-report'],
+      data: data
+    });
   }
 }
