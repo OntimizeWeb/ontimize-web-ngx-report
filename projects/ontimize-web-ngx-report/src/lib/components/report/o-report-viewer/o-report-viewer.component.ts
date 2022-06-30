@@ -17,7 +17,7 @@ export class OReportViewerComponent {
 
   constructor(
     public dialogRef: MatDialogRef<OReportViewerComponent>,
-    @Inject('report') private reportService: OReportService,
+    private reportService: OReportService,
     protected dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     this.reportService.configureService(this.reportService.getDefaultServiceConfiguration());

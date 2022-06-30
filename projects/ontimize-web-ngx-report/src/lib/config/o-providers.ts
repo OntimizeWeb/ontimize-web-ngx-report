@@ -1,6 +1,7 @@
 import { Injector } from "@angular/core";
 import { O_REPORT_SERVICE } from "ontimize-web-ngx";
 import { OAlertService } from "../services/o-alert.service";
+import { OReportStoreService } from "../services/o-report-store.service";
 import { OReportService } from "../services/o-report.service";
 import { OntimizeReportService } from "../services/ontimize-report.service";
 
@@ -14,5 +15,5 @@ export const OREPORT_PROVIDERS: any = [{ provide: O_REPORT_SERVICE, useClass: On
   useFactory: reportServiceFactory,
   deps: [Injector]
 },
-  OAlertService
+  OAlertService, OReportStoreService
 ];

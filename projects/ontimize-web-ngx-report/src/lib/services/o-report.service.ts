@@ -4,13 +4,15 @@ import { Observable, OErrorDialogManager, OntimizeEEService, ServiceRequestParam
 import { HttpEventType, HttpHeaders, HttpRequest } from "@angular/common/http";
 import { share } from 'rxjs/operators';
 
+
 @Injectable({ providedIn: 'root' })
 export class OReportService extends OntimizeEEService {
-  public oErrorDialogManager: OErrorDialogManager;
+  protected oErrorDialogManager: OErrorDialogManager;
+
   constructor(protected injector: Injector) {
     super(injector);
     super.configureService(this.getDefaultServiceConfiguration());
-    this.oErrorDialogManager = injector.get(OErrorDialogManager);
+    this.oErrorDialogManager = injector.get<OErrorDialogManager>(OErrorDialogManager);
   }
 
   public createReport(reportparams: OReportParam): Observable<any> {
