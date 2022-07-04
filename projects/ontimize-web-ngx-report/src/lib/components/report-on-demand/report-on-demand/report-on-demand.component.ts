@@ -4,7 +4,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AppConfig, DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
-import { ReportsService } from '../../../services/reports.service';
+import { OReportService } from '../../../services/o-report.service';
 import { OReportColumnStyle } from '../../../types/report-column-style.type';
 import { OReportColumn } from '../../../types/report-column.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
@@ -71,7 +71,7 @@ export class ReportOnDemandComponent implements OnInit {
   public translateService: OTranslateService;
   protected appConfig: AppConfig;
   protected snackBarService: SnackBarService;
-  protected reportsService: ReportsService;
+  protected reportService: OReportService;
   protected dialogService: DialogService;
   public dialog: MatDialog;
 
@@ -83,7 +83,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.appConfig = this.injector.get(AppConfig);
     this.translateService = this.injector.get<OTranslateService>(OTranslateService);
     this.snackBarService = this.injector.get<SnackBarService>(SnackBarService);
-    this.reportsService = this.injector.get<ReportsService>(ReportsService);
+    this.reportService = this.injector.get<OReportService>(OReportService);
     this.dialogService = this.injector.get<DialogService>(DialogService);
     this.dialog = this.injector.get<MatDialog>(MatDialog);
   }
@@ -147,7 +147,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   protected parseColumnsVisible() {
     const visibleColumns = Util.parseArray(this.table.visibleColumns, true);
-    return this.table.oTableOptions.columns.filter(oCol => visibleColumns.indexOf(oCol.attr) !== -1 || oCol.definition !== undefined).map(
+    return this.table.oTableOptions.columns.filter(oCol => oCol.type !== "image" && (visibleColumns.indexOf(oCol.attr) !== -1 || oCol.definition !== undefined)).map(
       (x: OColumn) => x.attr
     )
   }
@@ -186,7 +186,7 @@ export class ReportOnDemandComponent implements OnInit {
     if (Util.isObject(serviceConfiguration) && Object.hasOwnProperty(serviceConfiguration.path)) {
       pathService = serviceConfiguration.path;
     }
-    this.reportsService.createReport({
+    this.reportService.createReport({
       "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentPreference.entity, "path": pathService,
       "service": this.currentPreference.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
       "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
@@ -200,13 +200,13 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   getFunctions() {
-    this.reportsService.getFunctions({
+    this.reportService.getFunctions({
       "columns": this.columnsArray, "entity": this.currentPreference.entity,
       "service": this.currentPreference.service, "language": this.language
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.functionsData = this.parseDefaultFunctionsData(res.data[0].functions);
-        this.initialFunctionsData = this.functionsData;
+        this.initialFunctionsData = Utils.cloneObject(this.functionsData);
       }
     });
   }
@@ -220,14 +220,23 @@ export class ReportOnDemandComponent implements OnInit {
     );
   }
 
+  /**
+   * Checks preference data is consistent with the table data
+   */
+  private checkPreferenceData() {
+    this.currentPreference.columns = this.currentPreference.columns.filter(column => this.initialColumnsData.findIndex(columnData => columnData.id === column.id) > -1);
+    this.currentPreference.groups = this.currentPreference.groups.filter(column => this.initialColumnsToGroupData.findIndex(columnData => columnData === column) > -1);
+    this.currentPreference.functions = this.currentPreference.functions.filter(column => this.initialFunctionsData.findIndex(columnData => columnData.columnName === column.columnName) > -1);
+    this.currentPreference.orderBy = this.currentPreference.orderBy.filter(column => this.columnsOrderBy.findIndex(columnData => columnData.columnId === column.columnId) > -1);
+  }
+
   applyConfiguration(configuration: any) {
     this.clearCurrentPreferences();
     this.currentConfiguration = configuration;
-    let preference = JSON.parse(this.currentConfiguration.PREFERENCES);
-    this.currentPreference = preference;
+    this.currentPreference = JSON.parse(this.currentConfiguration.PREFERENCES);
     this.currentPreference.columns.forEach((column: OReportColumn) => this.updateColumnsOrderByData(column.id));
-    this.columnsData = this.parseReportColumn(this.columnsArray);
 
+    this.checkPreferenceData();
     // Set the functionsData with the data that is loaded from the configuration because it changes
     this.functionsData = this.functionsData.map((functionData: OReportFunction) => {
       const index = this.currentPreference.functions.findIndex(x => x.columnName === functionData.columnName);
@@ -444,11 +453,11 @@ export class ReportOnDemandComponent implements OnInit {
     }
 
     if (update) {
-      this.reportsService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
+      this.reportService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
         this.showConfirmOperatinInSnackBar(res);
       });
     } else {
-      this.reportsService.saveAsPreferences(preference).subscribe(res => {
+      this.reportService.saveAsPreferences(preference).subscribe(res => {
         if (res && res.code === 0) {
           this.showConfirmOperatinInSnackBar(res);
         }
@@ -480,8 +489,10 @@ export class ReportOnDemandComponent implements OnInit {
     this.updateColumnsOrderByData(groupSelected, event);
     if (event.option.selected &&
       this.currentPreference.columns.findIndex(x => x.id === groupSelected) === -1) {
-      const columnStyleSelected: OReportColumn = { id: groupSelected, name: this.translateService.get(groupSelected) };
-      this.addColumnData(columnStyleSelected);
+      const columnStyleSelected: OReportColumn[] = this.columnsData.filter((x: OReportColumn) => x.id === groupSelected)
+      if (columnStyleSelected.length > 0) {
+        this.addColumnData(columnStyleSelected[0]);
+      }
     }
   }
 
