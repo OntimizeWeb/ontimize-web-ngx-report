@@ -18,7 +18,7 @@ on:
         default: 'release-type/current'
 
 env:
-  NPM_REGISTRY: https://registry.npmjs.org
+  NPM_REGISTRY: https://registry.npmjs.com
 
 jobs:
   build:
