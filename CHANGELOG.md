@@ -1,4 +1,4 @@
-## 8.0.1
+## 8.0.1 (2022-07-15)
 ### Bug Fixes
   * Fixed error when the table has an additional column defined that is not defined in columns ([79d2068](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/79d2068)) Closes [#73](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/73)
   * Fixed that the path is not sent when creating a report ([b25c6c7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b25c6c7))
