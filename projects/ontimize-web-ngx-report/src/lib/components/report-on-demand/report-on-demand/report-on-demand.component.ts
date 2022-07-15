@@ -183,7 +183,7 @@ export class ReportOnDemandComponent implements OnInit {
   protected openReport() {
     const serviceConfiguration = this.getDefaultServiceConfiguration(this.currentPreference.service);
     let pathService: string;
-    if (Util.isObject(serviceConfiguration) && Object.hasOwnProperty(serviceConfiguration.path)) {
+    if (Util.isObject(serviceConfiguration) && serviceConfiguration.hasOwnProperty('path')) {
       pathService = serviceConfiguration.path;
     }
     this.reportService.createReport({
