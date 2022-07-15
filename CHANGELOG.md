@@ -1,6 +1,6 @@
 ## 8.0.1
 ### Bug Fixes
-* Fixed that the path is not sent when creating a report ([b25c6c7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b25c6c7))
+  * Fixed that the path is not sent when creating a report ([b25c6c7](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/b25c6c7))
 
 ## 8.0.0 (2022-07-04)
 ### Features

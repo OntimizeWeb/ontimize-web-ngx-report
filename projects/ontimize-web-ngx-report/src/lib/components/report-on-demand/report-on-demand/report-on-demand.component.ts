@@ -146,8 +146,8 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   protected parseColumnsVisible() {
-    const visibleColumns = Util.parseArray(this.table.visibleColumns, true);
-    return this.table.oTableOptions.columns.filter(oCol => oCol.type !== "image" && (visibleColumns.indexOf(oCol.attr) !== -1 || oCol.definition !== undefined)).map(
+    const columnsArray = Util.parseArray(this.table.columns);
+    return this.table.oTableOptions.columns.filter(oCol => oCol.type !== "image" && oCol.visible && columnsArray.findIndex(column => column === oCol.attr) > -1).map(
       (x: OColumn) => x.attr
     )
   }
