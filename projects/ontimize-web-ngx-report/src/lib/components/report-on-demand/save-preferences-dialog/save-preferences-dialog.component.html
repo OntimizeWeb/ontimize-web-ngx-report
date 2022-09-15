@@ -4,8 +4,9 @@
   <div mat-subheader>{{ 'TABLE.DIALOG.SAVE_CONFIGURATION' | oTranslate }}</div>
   <form #form [formGroup]="formGroup" fxLayout="column">
     <mat-form-field>
-      <input [(ngModel)]="name" matInput placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_NAME' | oTranslate }}" formControlName="name" required>
-      <mat-error *ngIf="formGroup.controls['name'].hasError('required')" text="{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}"></mat-error>
+      <input [(ngModel)]="name" matInput [matTooltip]="tooltipText" [matTooltipClass]="tooltipClass"
+        placeholder="{{ 'TABLE.DIALOG.CONFIGURATION_NAME' | oTranslate }}" formControlName="name" required>
+      <mat-error *oMatError="formGroup.controls['name'].hasError('required')">{{ 'FORM_VALIDATION.REQUIRED' | oTranslate }}</mat-error>
     </mat-form-field>
 
     <mat-form-field>
