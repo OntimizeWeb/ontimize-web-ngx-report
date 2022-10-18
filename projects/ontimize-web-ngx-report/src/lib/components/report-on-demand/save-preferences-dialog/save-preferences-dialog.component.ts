@@ -1,28 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
+import { OTableBaseDialogClass } from 'ontimize-web-ngx';
 
 @Component({
   selector: 'app-save-preferences-dialog',
   templateUrl: './save-preferences-dialog.component.html'
 })
-export class SavePreferencesDialogComponent {
-  public formGroup: FormGroup
+
+export class SavePreferencesDialogComponent extends OTableBaseDialogClass {
   public name: string;
   public description: string;
 
-  constructor(
-    public dialogo: MatDialogRef<SavePreferencesDialogComponent>) {
-    this.initialize();
-  }
+  public formGroup: FormGroup = new FormGroup({
+    name: new FormControl('', [
+      Validators.required
+    ]),
+    description: new FormControl('')
+  });
 
-  initialize() {
-    this.formGroup = new FormGroup({
-      name: new FormControl('', [
-        Validators.required
-      ]),
-      description: new FormControl('')
-    });
+  constructor(
+    public dialogo: MatDialogRef<SavePreferencesDialogComponent>,
+    protected injector: Injector) {
+    super(injector);
+    this.setFormControl(this.formGroup.get('name'));
   }
 
   save(): void {
