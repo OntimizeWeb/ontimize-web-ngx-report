@@ -1,4 +1,4 @@
-## 8.0.2
+## 8.0.2 (2022-10-25)
 ### Bug Fixes
 * Made breaking change in `mat-error` component ([d5f82fe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d5f82fe)) Closes [#84](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/84)
 
