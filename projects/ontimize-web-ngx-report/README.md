@@ -1,24 +1,58 @@
-# OntimizeWebNgxReport
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.14.
+<h1 align="center">
+  <div style="display:inline-block;vertical-align: middle;">
+    <a name="logo" href="https://ontimizeweb.github.io/docs/v8/report/">
+      Ontimize Web Report
+    </a>
+  </div>
+</h1>
 
-## Code scaffolding
+<p align="center">
+  <a href="#-introduction">Introduction</a> •
+  <a href="#-ideas">Ideas</a> •
+  <a href="#gear-development">Development</a>
+</p>
 
-Run `ng generate component component-name --project ontimize-web-ngx-report` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ontimize-web-ngx-report`.
-> Note: Don't forget to add `--project ontimize-web-ngx-report` or else it will be added to the default project in your `angular.json` file. 
+## 📜 Introduction
 
-## Build
+The module Ontimize Web Report is a set of reporting tools for web applications based in [OntimizeWeb](https://github.com/OntimizeWeb/ontimize-web-ngx), allowing stored and on-demand reporting to be generated.
 
-Run `ng build ontimize-web-ngx-report` to build the project. The build artifacts will be stored in the `dist/` directory.
+### 📖 Documentation
 
-## Publishing
+Check out our [documentation site](https://ontimizeweb.github.io/docs/v8/report/) to know more details.
 
-After building your library with `ng build ontimize-web-ngx-report`, go to the dist folder `cd dist/ontimize-web-ngx-report` and run `npm publish`.
+## 💡 Ideas
 
-## Running unit tests
+We would love any feedback you have or to know when you encounter issues, by filing an issue report on this repo.
 
-Run `ng test ontimize-web-ngx-report` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Further help
+## :gear: Development
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
+
+### Installation
+
+Follow the next steps:
+
+  - cd repository root
+```bash
+npm install
+```
+  - cd projects/ontimize-web-ngx-report
+```bash
+npm install
+```
+
+### Build
+
+We have a script to build the library.
+
+`npm run build`
+
+It will create the distribution folder and pack this to use it as a npm package in a .tgz file but you can run those tasks separately.
+
+The script `build` executes the following commands:
+
+    - ng build
+    - cd dist && npm pack (From the distribution folder we create a .tgz file to import in our project)
+
