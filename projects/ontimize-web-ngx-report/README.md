@@ -45,14 +45,6 @@ npm install
 
 ### Build
 
-We have a script to build the library.
-
-`npm run build`
-
-It will create the distribution folder and pack this to use it as a npm package in a .tgz file but you can run those tasks separately.
-
-The script `build` executes the following commands:
-
-    - ng build
-    - cd dist && npm pack (From the distribution folder we create a .tgz file to import in our project)
+Run `npm run build` to execute the build process that will generate the `dist` folder and a .tgz file.
+You can use this .tgz file to install the library in your project through the package.json file.
 
