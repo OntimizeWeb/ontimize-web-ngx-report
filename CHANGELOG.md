@@ -1,3 +1,10 @@
+## 8.0.2 (2022-10-25)
+### Bug Fixes
+* Made breaking change in `mat-error` component ([d5f82fe](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/d5f82fe)) Closes [#84](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/84)
+
+### DEPENDENCY UPDATES
+Updated: ontimize-web-ngx@8.8.0
+
 ## 8.0.1 (2022-07-15)
 ### Bug Fixes
   * Fixed error when the table has an additional column defined that is not defined in columns ([79d2068](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/79d2068)) Closes [#73](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/73)
