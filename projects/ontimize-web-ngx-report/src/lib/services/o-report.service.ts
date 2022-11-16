@@ -57,7 +57,7 @@ export class OReportService extends OntimizeEEService {
 
   public getPreferences(entity?: string, service?: string): Observable<any> {
 
-    const url = this.urlBase + '/preferences/preferences?entity=' + entity + '&service=' + service;
+    const url = this.urlBase + '/preferences/preferences?entity=' + entity + '&service=' + service + "&type=report";
 
     return this.doRequest({
       method: 'GET',
