@@ -445,7 +445,7 @@ export class ReportOnDemandComponent implements OnInit {
   savePreferences(data: any, update?: boolean) {
     let preference = {
       "name": data.name, "description": data.description,
-      "entity": this.currentPreference.entity, "service": this.currentPreference.service, "reportParams": {
+      "entity": this.currentPreference.entity, "service": this.currentPreference.service, "type": "REPORT", "params": {
         "title": this.currentPreference.title, "groups": this.currentPreference.groups,
         "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions, "style": this.currentPreference.style,
         "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy, "entity": this.currentPreference.entity, "service": this.currentPreference.service
