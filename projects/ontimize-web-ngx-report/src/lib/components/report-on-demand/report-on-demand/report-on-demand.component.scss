@@ -3,6 +3,7 @@
   height: 100%;
   overflow: hidden;
 
+
   .mat-sidenav {
     visibility: visible !important;
     transform: none;
@@ -10,6 +11,9 @@
     left: 0;
     padding: 8px 16px;
     border: 1px solid transparent;
+
+
+
 
     .mat-drawer-inner-container {
       overflow: hidden;
@@ -89,5 +93,13 @@
       height: 100%;
     }
 
+  }
+
+
+}
+
+.dialog-title {
+  .title_text {
+    font-size: 16px;
   }
 }
