@@ -1,4 +1,6 @@
 ## 8.1.0
+### Features
+* Changed the style of the window title ([1306d65](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/1306d65)) Closes[#91](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/91)
 ### Bug Fixes
 * Modified preferences system by adding the type attribute ([7fb3ffc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7fb3ffc)) Closes[#95](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/95)
 ## 8.0.2 (2022-10-25)
