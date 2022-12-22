@@ -1,5 +1,6 @@
 ## 8.1.0
 ### Features
+* Modified the report window style ([087c0c3](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/087c0c3)) Closes[#92](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/92)
 * Modified the style of the configuration menu ([01af193](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/01af193)) Closes[#97](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/97)
 ### Bug Fixes
 * Modified preferences system by adding the type attribute ([7fb3ffc](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/7fb3ffc)) Closes[#95](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/95)
