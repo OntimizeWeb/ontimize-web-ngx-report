@@ -11,7 +11,7 @@
     <button mat-icon-button [mat-dialog-close]="true">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
-    <mat-menu #configurationMenu="matMenu">
+    <mat-menu #configurationMenu="matMenu" class="o-mat-menu">
       <button type="button" [disabled]="!appliedConfiguration" mat-menu-item (click)="openSavePreferences()">
         {{ 'BUTTONS.SAVE_CONFIGURATION' | oReportsTranslate }}
       </button>
