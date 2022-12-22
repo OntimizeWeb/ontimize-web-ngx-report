@@ -1,5 +1,5 @@
 <div mat-dialog-title class="dialog-title" fxLayout="row" fxLayoutAlign="space-between center">
-  <h2 class="h2_title">{{ 'REPORT_ON_DEMAND_TITLE' | oReportsTranslate }}</h2>
+  <h2 class="report_title">{{ 'REPORT_ON_DEMAND_TITLE' | oReportsTranslate }}</h2>
   <div>
     <button mat-icon-button #configurationMenuButton [matMenuTriggerFor]="configurationMenu">
       <mat-icon svgIcon="ontimize:settings"></mat-icon>
@@ -11,7 +11,7 @@
     <button mat-icon-button [mat-dialog-close]="true">
       <mat-icon svgIcon="ontimize:close"></mat-icon>
     </button>
-    <mat-menu #configurationMenu="matMenu">
+    <mat-menu #configurationMenu="matMenu" class="o-mat-menu">
       <button type="button" [disabled]="!appliedConfiguration" mat-menu-item (click)="openSavePreferences()">
         {{ 'BUTTONS.SAVE_CONFIGURATION' | oReportsTranslate }}
       </button>
