@@ -1,4 +1,6 @@
 ## 8.1.0
+### Features
+* Modified the style of the configuration menu ([01af193](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/01af193)) Closes[#97](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/97)
 ### Bug Fixes
 * Modified preferences system by adding the type attribute ([7fb3ffc](https://github.com/OntimizeWeb/ontimize-web-ngx/commit/7fb3ffc)) Closes[#95](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/95)
 ## 8.0.2 (2022-10-25)
