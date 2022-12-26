@@ -1,7 +1,11 @@
 .o-dialog-class .mat-dialog-container .mat-dialog-content {
-  max-height: calc(100% - 82px);
+  //height - toolbar-height - paddings
+  max-height: calc(100% - 36px - 32px);
   height: 100%;
-  overflow: hidden;
+
+  .mat-icon {
+    cursor: pointer;
+  }
 
   .mat-sidenav {
     visibility: visible !important;

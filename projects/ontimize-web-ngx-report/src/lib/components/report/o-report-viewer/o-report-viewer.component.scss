@@ -1,4 +1,10 @@
-.dialog-container {
-  max-height: calc(100% - 82px);
-  overflow: hidden;
+.o-dialog-class .mat-dialog-container .mat-dialog-content {
+  //height - toolbar-height - paddings
+  max-height: calc(100% - 36px - 32px);
+  height: 100%;
+
+  .mat-icon {
+    cursor: pointer;
+  }
+
 }
