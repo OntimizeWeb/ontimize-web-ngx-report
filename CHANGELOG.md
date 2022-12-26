@@ -5,6 +5,7 @@
 * Modified the style of the configuration menu ([01af193](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/01af193)) Closes[#97](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/97)
 ### Bug Fixes
 * Modified preferences system by adding the type attribute ([7fb3ffc](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/7fb3ffc)) Closes[#95](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/95)
+* Included ngx-extended-pdf-viewer/assets/ files in the library ([60989a9](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/60989a9)) Closes[#101](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/101)
 ## 8.0.2 (2022-10-25)
 ### Bug Fixes
 * Made breaking change in `mat-error` component ([d5f82fe](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/d5f82fe)) Closes [#84](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/84)
