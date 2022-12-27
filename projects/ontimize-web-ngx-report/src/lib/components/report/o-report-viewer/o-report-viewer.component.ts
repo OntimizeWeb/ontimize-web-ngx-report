@@ -8,7 +8,10 @@ import { Utils } from '../../../util/utils';
   selector: 'o-report-viewer',
   templateUrl: './o-report-viewer.component.html',
   styleUrls: ['./o-report-viewer.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-report-viewer]': 'true'
+  }
 })
 export class OReportViewerComponent {
 
