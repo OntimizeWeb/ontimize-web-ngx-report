@@ -1,4 +1,4 @@
-.o-dialog-class .mat-dialog-container {
+.o-dialog-class .mat-dialog-container .o-report-on-demand {
   .mat-dialog-title {
     .mat-icon {
       cursor: pointer;
@@ -6,10 +6,18 @@
   }
 
   .mat-dialog-content {
-    //height - toolbar-height
-    max-height: calc(100% - 36px);
+    //height - toolbar-height - padding-top
+    max-height: calc(100% - 36px - 16px);
     height: 100%;
-    padding: 0;
+    padding-top: 16px;
+    padding-bottom: 0;
+
+    ngx-extended-pdf-viewer {
+      .zoom {
+        height: 100%;
+      }
+    }
+
 
     .mat-icon {
       cursor: pointer;
@@ -93,7 +101,7 @@
 
       &.opened {
         .sidenav-container-content {
-          margin-left: 24px;
+          margin-left: 16px;
         }
       }
     }

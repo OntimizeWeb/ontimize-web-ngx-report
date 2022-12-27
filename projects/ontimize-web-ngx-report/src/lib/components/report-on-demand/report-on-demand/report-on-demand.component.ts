@@ -19,10 +19,13 @@ import { SelectFunctionDialogComponent } from '../select-function-dialog/select-
 import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 
 @Component({
-  selector: 'app-customers-dialog',
+  selector: 'o-report-on-demand',
   templateUrl: './report-on-demand.component.html',
   styleUrls: ['./report-on-demand.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-report-on-demand]': 'true'
+  }
 })
 
 export class ReportOnDemandComponent implements OnInit {
