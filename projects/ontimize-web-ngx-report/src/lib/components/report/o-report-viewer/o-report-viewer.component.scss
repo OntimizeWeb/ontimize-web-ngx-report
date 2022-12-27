@@ -1,10 +1,20 @@
-.o-dialog-class .mat-dialog-container .mat-dialog-content {
-  //height - toolbar-height - paddings
-  max-height: calc(100% - 36px - 32px);
-  height: 100%;
-
-  .mat-icon {
-    cursor: pointer;
+.o-dialog-class .mat-dialog-container {
+  .mat-dialog-title {
+    .mat-icon {
+      cursor: pointer;
+    }
   }
 
+  .mat-dialog-content {
+    //height - toolbar-height
+    max-height: calc(100% - 36px);
+    height: 100%;
+    padding: 0;
+  }
+
+  ngx-extended-pdf-viewer {
+    .zoom {
+      height: 100%;
+    }
+  }
 }
