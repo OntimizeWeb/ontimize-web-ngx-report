@@ -1,16 +1,14 @@
 <div mat-dialog-title class="dialog-title" fxLayout="row" fxLayoutAlign="space-between center">
-  <h2 class="report_title"> {{ name }}</h2>
+  {{ name }}
   <div>
-    <button mat-icon-button aria-label="fullscreen dialog" (click)="setFullscreenDialog()">
-      <mat-icon *ngIf="fullscreen">fullscreen_exit</mat-icon>
-      <mat-icon *ngIf="!fullscreen">fullscreen</mat-icon>
-    </button>
-    <button mat-icon-button [mat-dialog-close]="true">
-      <mat-icon svgIcon="ontimize:close"></mat-icon>
-    </button>
+    <mat-icon aria-label="fullscreen dialog" (click)="setFullscreenDialog()">
+      <ng-container *ngIf="fullscreen">fullscreen_exit</ng-container>
+      <ng-container *ngIf="!fullscreen">fullscreen</ng-container>
+    </mat-icon>
+    <mat-icon svgIcon="ontimize:close" [mat-dialog-close]="true"></mat-icon>
   </div>
 </div>
 <div #dialog mat-dialog-content class="dialog-container">
   <ngx-extended-pdf-viewer [base64Src]="pdf" [filenameForDownload]="name" [showBookmarkButton]="false" [showPropertiesButton]="false"
-    [showOpenFileButton]="false" useBrowserLocale="true" delayFirstView="1000" height="80vh" [textLayer]="true"></ngx-extended-pdf-viewer>
+    [showOpenFileButton]="false" useBrowserLocale="true" delayFirstView="1000" [textLayer]="true"></ngx-extended-pdf-viewer>
 </div>

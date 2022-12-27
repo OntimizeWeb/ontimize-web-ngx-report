@@ -1,8 +1,20 @@
-.dialog-container {
-  max-height: calc(100% - 82px);
-  overflow: hidden;
-}
+.o-dialog-class .mat-dialog-container {
+  .mat-dialog-title {
+    .mat-icon {
+      cursor: pointer;
+    }
+  }
 
-.report_title {
-  margin: 0
+  .mat-dialog-content {
+    //height - toolbar-height
+    max-height: calc(100% - 36px);
+    height: 100%;
+    padding: 0;
+  }
+
+  ngx-extended-pdf-viewer {
+    .zoom {
+      height: 100%;
+    }
+  }
 }
