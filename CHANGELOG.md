@@ -1,4 +1,4 @@
-## 8.1.0
+## 8.1.0 (2022-12-29)
 ### Features
 * Modified the report window style ([087c0c3](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/087c0c3)) Closes[#92](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/92)
 * Changed the style of the window title ([1306d65](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/1306d65)) Closes[#91](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/91)
