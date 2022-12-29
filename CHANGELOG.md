@@ -21,6 +21,7 @@ Updated: ontimize-web-ngx@8.8.0
 
 ## 8.0.0 (2022-07-04)
 ### Features
+  * **Report on demand:** Added new feature that allow you to create reports on demand from table data ([bb6287ad](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/bb6287ad)) Closes [#793](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/793)
   * Export OReportRoutingModule module ([9e2eb672](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/9e2eb672)) Closes [#69](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/69)
 ### Bug Fixes
   * Fix image type columns not being available to generate the on-demand report ([9ed1724](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/9ed1724)) Closes [#66](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/66)
