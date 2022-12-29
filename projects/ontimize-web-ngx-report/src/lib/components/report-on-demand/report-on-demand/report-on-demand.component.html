@@ -1,17 +1,14 @@
 <div mat-dialog-title class="dialog-title" fxLayout="row" fxLayoutAlign="space-between center">
   {{ 'REPORT_ON_DEMAND_TITLE' | oReportsTranslate }}
   <div>
-    <button mat-icon-button #configurationMenuButton [matMenuTriggerFor]="configurationMenu">
-      <mat-icon svgIcon="ontimize:settings"></mat-icon>
-    </button>
-    <button mat-icon-button aria-label="fullscreen dialog" (click)="setFullscreenDialog()">
-      <mat-icon *ngIf="fullscreen">fullscreen_exit</mat-icon>
-      <mat-icon *ngIf="!fullscreen">fullscreen</mat-icon>
-    </button>
-    <button mat-icon-button [mat-dialog-close]="true">
-      <mat-icon svgIcon="ontimize:close"></mat-icon>
-    </button>
-    <mat-menu #configurationMenu="matMenu">
+    <mat-icon svgIcon="ontimize:settings" #configurationMenuButton [matMenuTriggerFor]="configurationMenu"></mat-icon>
+    <mat-icon aria-label="fullscreen dialog" (click)="setFullscreenDialog()">
+      <ng-container *ngIf="fullscreen">fullscreen_exit</ng-container>
+      <ng-container *ngIf="!fullscreen">fullscreen</ng-container>
+    </mat-icon>
+    <mat-icon svgIcon="ontimize:close" [mat-dialog-close]="true"></mat-icon>
+
+    <mat-menu #configurationMenu="matMenu" class="o-mat-menu">
       <button type="button" [disabled]="!appliedConfiguration" mat-menu-item (click)="openSavePreferences()">
         {{ 'BUTTONS.SAVE_CONFIGURATION' | oReportsTranslate }}
       </button>
@@ -28,7 +25,7 @@
   <mat-sidenav-container class="mat-sidenav-container" [class.opened]="openedSidenav" fxFill>
     <mat-sidenav #sidenav [(opened)]="openedSidenav" mode="side" class="report-on-demand-sidenav">
       <div fxLayout="column" fxFill fxLayoutGap="20px">
-        <o-button (click)="openedSidenav=!openedSidenav" icon="dehaze" type="ICON" label=""
+        <o-button (click)="openedSidenav=!openedSidenav" svg-icon="ontimize:menu" type="ICON" label=""
           [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
         </o-button>
 
@@ -177,7 +174,7 @@
     <mat-sidenav-content>
       <div class="sidenav-container-content">
         <ngx-extended-pdf-viewer #pdfViewer [base64Src]="pdf" [filenameForDownload]="currentPreference.title" [showBookmarkButton]="false"
-          [showPropertiesButton]="false" [showOpenFileButton]="false" useBrowserLocale="true" delayFirstView="1000" width [textLayer]="true">
+          [showPropertiesButton]="false" [showOpenFileButton]="false" useBrowserLocale="true" delayFirstView="1000" [textLayer]="true">
         </ngx-extended-pdf-viewer>
       </div>
     </mat-sidenav-content>

@@ -19,10 +19,13 @@ import { SelectFunctionDialogComponent } from '../select-function-dialog/select-
 import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 
 @Component({
-  selector: 'app-customers-dialog',
+  selector: 'o-report-on-demand',
   templateUrl: './report-on-demand.component.html',
   styleUrls: ['./report-on-demand.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-report-on-demand]': 'true'
+  }
 })
 
 export class ReportOnDemandComponent implements OnInit {
@@ -445,7 +448,7 @@ export class ReportOnDemandComponent implements OnInit {
   savePreferences(data: any, update?: boolean) {
     let preference = {
       "name": data.name, "description": data.description,
-      "entity": this.currentPreference.entity, "service": this.currentPreference.service, "reportParams": {
+      "entity": this.currentPreference.entity, "service": this.currentPreference.service, "type": "REPORT", "params": {
         "title": this.currentPreference.title, "groups": this.currentPreference.groups,
         "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions, "style": this.currentPreference.style,
         "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy, "entity": this.currentPreference.entity, "service": this.currentPreference.service
