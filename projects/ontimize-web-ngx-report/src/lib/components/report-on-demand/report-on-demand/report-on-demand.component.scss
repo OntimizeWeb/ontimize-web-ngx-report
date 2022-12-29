@@ -1,93 +1,119 @@
-.o-dialog-class .mat-dialog-container .mat-dialog-content {
-  max-height: calc(100% - 82px);
-  height: 100%;
-  overflow: hidden;
-
-  .mat-sidenav {
-    visibility: visible !important;
-    transform: none;
-    top: 0;
-    left: 0;
-    padding: 8px 16px;
-    border: 1px solid transparent;
-
-    .mat-drawer-inner-container {
-      overflow: hidden;
+.o-dialog-class .mat-dialog-container .o-report-on-demand {
+  .mat-dialog-title {
+    .mat-icon {
+      cursor: pointer;
     }
+  }
 
-    .mat-dialog-actions {
-      min-height: auto;
+  .mat-dialog-content {
+    //height - toolbar-height - padding-top
+    max-height: calc(100% - 36px - 16px);
+    height: 100%;
+    padding-top: 16px;
+    padding-bottom: 0;
 
-      button.o-report-on-demand-clear-button {
-        min-width: 80px;
+    ngx-extended-pdf-viewer {
+      .zoom {
+        height: 100%;
       }
     }
 
-    .mat-radio-group {
-      margin: 0 12px;
+
+    .mat-icon {
+      cursor: pointer;
     }
 
-    .mat-accordion {
-      overflow-y: scroll;
+    .mat-sidenav {
+      visibility: visible !important;
+      transform: none;
+      top: 0;
+      left: 0;
+      padding: 8px 16px;
+      border: 1px solid transparent;
 
-      .acordions.mat-expansion-panel {
-        border-radius: 0;
-        box-shadow: none;
-        margin-bottom: 8px;
+      .mat-drawer-inner-container {
+        overflow: hidden;
+      }
 
-        .mat-expansion-panel-header {
-          padding: 0 8px;
-        }
+      .mat-dialog-actions {
+        min-height: auto;
+        padding-top: 0;
 
-        .mat-expansion-panel-body {
-          padding: 0;
+        button.o-report-on-demand-clear-button {
+          min-width: 80px;
         }
       }
 
-      .mat-list-option {
-        .button-edit {
-          cursor: pointer;
-        }
+      .mat-radio-group {
+        margin: 0 12px;
+      }
 
-        &.cdk-drag {
-          cursor: move;
-        }
+      .mat-accordion {
+        overflow-y: scroll;
 
-        .mat-list-item-content {
-          padding: 0 0 0 8px;
+        .acordions.mat-expansion-panel {
+          border-radius: 0;
+          box-shadow: none;
+          margin-bottom: 8px;
 
-          .mat-list-text {
-            padding-right: 8px;
+          &:last-of-type {
+            margin-bottom: 0;
+          }
+
+          .mat-expansion-panel-header {
+            padding: 0 8px;
+          }
+
+          .mat-expansion-panel-body {
+            padding: 0;
           }
         }
+
+        .mat-list-option {
+          .button-edit {
+            cursor: pointer;
+          }
+
+          &.cdk-drag {
+            cursor: move;
+          }
+
+          .mat-list-item-content {
+            padding: 0 0 0 8px;
+
+            .mat-list-text {
+              padding-right: 8px;
+            }
+          }
+        }
+
       }
 
+      &.mat-drawer-opened {
+        border: 1px solid #DEE1E6;
+        border-radius: 4px;
+        width: 256px;
+      }
     }
 
-    &.mat-drawer-opened {
-      border: 1px solid #DEE1E6;
-      border-radius: 4px;
-      width: 256px;
+    .mat-sidenav-container {
+      background-color: transparent;
+
+      &.opened {
+        .sidenav-container-content {
+          margin-left: 16px;
+        }
+      }
     }
-  }
 
-  .mat-sidenav-container {
-    background-color: transparent;
+    .mat-sidenav-content {
+      overflow: hidden;
 
-    &.opened {
       .sidenav-container-content {
-        margin-left: 24px;
+        margin-left: 66px;
+        height: 100%;
       }
+
     }
-  }
-
-  .mat-sidenav-content {
-    overflow: hidden;
-
-    .sidenav-container-content {
-      margin-left: 66px;
-      height: 100%;
-    }
-
   }
 }

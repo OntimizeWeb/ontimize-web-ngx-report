@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService } from 'ontimize-web-ngx';
 import { OReportService } from '../../../services/o-report.service';
@@ -7,7 +7,11 @@ import { Utils } from '../../../util/utils';
 @Component({
   selector: 'o-report-viewer',
   templateUrl: './o-report-viewer.component.html',
-  styleUrls: ['./o-report-viewer.component.scss']
+  styleUrls: ['./o-report-viewer.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class.o-report-viewer]': 'true'
+  }
 })
 export class OReportViewerComponent {
 
