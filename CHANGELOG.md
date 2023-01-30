@@ -1,5 +1,5 @@
 ## 8.1.1 (2023-01-31)
-### Bug fixes
+### Bug Fixes
 * Fixing compatibility with globstars in script `copy-files` ([913775b](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/913775b))
 
 ## 8.1.0 (2022-12-29)
