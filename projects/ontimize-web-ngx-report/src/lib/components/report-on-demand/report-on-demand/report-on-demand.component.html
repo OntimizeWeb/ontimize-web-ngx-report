@@ -1,0 +1,182 @@
+<div mat-dialog-title class="dialog-title" fxLayout="row" fxLayoutAlign="space-between center">
+  {{ 'REPORT_ON_DEMAND_TITLE' | oReportsTranslate }}
+  <div>
+    <mat-icon svgIcon="ontimize:settings" #configurationMenuButton [matMenuTriggerFor]="configurationMenu"></mat-icon>
+    <mat-icon aria-label="fullscreen dialog" (click)="setFullscreenDialog()">
+      <ng-container *ngIf="fullscreen">fullscreen_exit</ng-container>
+      <ng-container *ngIf="!fullscreen">fullscreen</ng-container>
+    </mat-icon>
+    <mat-icon svgIcon="ontimize:close" [mat-dialog-close]="true"></mat-icon>
+
+    <mat-menu #configurationMenu="matMenu" class="o-mat-menu">
+      <button type="button" [disabled]="!appliedConfiguration" mat-menu-item (click)="openSavePreferences()">
+        {{ 'BUTTONS.SAVE_CONFIGURATION' | oReportsTranslate }}
+      </button>
+      <button type="button" mat-menu-item (click)="openSaveAsPreferences()">
+        {{ 'BUTTONS.SAVEAS_CONFIGURATION' | oReportsTranslate }}
+      </button>
+      <button type="button" mat-menu-item (click)="onApplyConfigurationClicked()">
+        {{'BUTTONS.APPLY_CONFIGURATION'| oReportsTranslate }}
+      </button>
+    </mat-menu>
+  </div>
+</div>
+<div #dialog mat-dialog-content class="dialog-container">
+  <mat-sidenav-container class="mat-sidenav-container" [class.opened]="openedSidenav" fxFill>
+    <mat-sidenav #sidenav [(opened)]="openedSidenav" mode="side" class="report-on-demand-sidenav">
+      <div fxLayout="column" fxFill fxLayoutGap="20px">
+        <o-button (click)="openedSidenav=!openedSidenav" svg-icon="ontimize:menu" type="ICON" label=""
+          [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
+        </o-button>
+
+        <div fxLayout="column" *ngIf="openedSidenav" class="container-title" fxLayoutGap="10px">
+          <mat-form-field>
+            <input [(ngModel)]="currentPreference.title" matInput placeholder="{{ 'TITLE' | oReportsTranslate }}">
+          </mat-form-field>
+          <mat-form-field>
+            <input [(ngModel)]="currentPreference.subtitle" matInput placeholder="{{ 'SUBTITLE' | oReportsTranslate }}">
+          </mat-form-field>
+        </div>
+
+        <mat-accordion multi="true" displayMode="flat" fxFlex="1 1 auto" *ngIf="openedSidenav" [@.disabled]="true">
+          <mat-expansion-panel class="acordions">
+            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+              <mat-panel-title>
+                {{ 'ORIENTATION' | oReportsTranslate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-radio-group name="Orientation" [(ngModel)]="currentPreference.vertical" fxLayout="column" fxLayoutGap="12px">
+              <mat-radio-button *ngFor="let orientation of orientations" name="Orientation" [value]="orientation.value"
+                [checked]="currentPreference.vertical === orientation.value">
+                {{ orientation.text | oReportsTranslate}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel class="acordions">
+            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+              <mat-panel-title>
+                {{ 'STYLE' | oReportsTranslate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-selection-list dense #settings>
+              <mat-list-option checkboxPosition="before" [selected]="currentPreference.style[choice.value]" *ngFor="let choice of stylesArray"
+                [value]="choice.value" (click)="onCheckboxStyleClick(choice.value)">
+                <div fxLayout="row">
+                  <span fxFlex>
+                    {{choice.viewValue | oReportsTranslate}}
+                  </span>
+                </div>
+              </mat-list-option>
+            </mat-selection-list>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel class="acordions" expanded="true">
+            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+              <mat-panel-title>
+                {{ 'COLUMNS' | oReportsTranslate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-selection-list dense #columnsList cdkDropList [cdkDropListData]="columnsData" (cdkDropListDropped)="dropColumns($event)"
+              class="columns" [(ngModel)]="currentPreference.columns" (selectionChange)="onSelectionChangeColumns($event)"
+              [compareWith]="columnsCompareFunction">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [value]="column" cdkDrag>
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                  <span mat-line fxFlex>
+                    {{column.id | oReportsTranslate}}
+                  </span>
+                  <mat-icon mat-list-icon *ngIf="isCheckedColumn(column)" (click)="showColumnStyleDialog($event, column.id)" class="button-edit">
+                    edit
+                  </mat-icon>
+                  <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
+                </div>
+              </mat-list-option>
+            </mat-selection-list>
+          </mat-expansion-panel>
+          <mat-expansion-panel class="acordions" *ngIf="columnsOrderBy.length > 0">
+            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+              <mat-panel-title>
+                {{ 'ORDER_BY' | oReportsTranslate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-selection-list dense #orderByList cdkDropList [cdkDropListData]="columnsOrderBy" (cdkDropListDropped)="dropColumnsOrderBy($event)"
+              class="columns" [(ngModel)]="currentPreference.orderBy" [compareWith]="columnsOrderByCompareFunction">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsOrderBy" [value]="column" cdkDrag>
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                  <span mat-line fxFlex>
+                    {{column.columnId | oReportsTranslate}}
+                  </span>
+                  <mat-icon *ngIf="column.ascendent" (click)="changeOrder(column, $event)" mat-list-icon svgIcon="ontimize:sort_by_alpha_asc"
+                    class="button-edit"></mat-icon>
+                  <mat-icon *ngIf="!column.ascendent" (click)="changeOrder(column, $event)" mat-list-icon svgIcon="ontimize:sort_by_alpha_desc"
+                    class="button-edit"></mat-icon>
+                  <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
+                </div>
+              </mat-list-option>
+            </mat-selection-list>
+          </mat-expansion-panel>
+          <mat-expansion-panel class="acordions">
+            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+              <mat-panel-title>
+                {{ 'GROUPS' | oReportsTranslate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-selection-list dense cdkDropList [cdkDropListData]="columnsToGroupData" (cdkDropListDropped)="dropGroups($event)"
+              [(ngModel)]="currentPreference.groups" (selectionChange)="onSelectionChangeGroups($event)">
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsToGroupData" [value]="column" cdkDrag>
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                  <span mat-line fxFlex>
+                    {{ column | oTranslate }}
+                  </span>
+                  <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
+                </div>
+              </mat-list-option>
+            </mat-selection-list>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel class="acordions" *ngIf="functionsData.length>0">
+            <mat-expansion-panel-header collapsedHeight="32px" expandedHeight="32px">
+              <mat-panel-title>
+                {{ 'FUNCTIONS' | oReportsTranslate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-selection-list #functionsList dense [(ngModel)]="currentPreference.functions" [compareWith]="functionsCompareFunction"
+              (selectionChange)="onSelectionChangeFunctions($event)">
+              <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData" [value]="function">
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                  <span mat-line fxFlex>
+                    <ng-container *ngIf="function.columnName==='TOTAL'; else functionColumnTemplate">
+                      {{function.type | oReportsTranslate}}
+                    </ng-container>
+                  </span>
+                  <ng-template #functionColumnTemplate>
+                    {{function.type | oReportsTranslate }}({{function.columnName | oReportsTranslate }})
+                  </ng-template>
+
+                  <mat-icon *ngIf="isCheckedFunction(function)" mat-list-icon (click)="selectFunction($event, function)" class="button-edit">
+                    edit
+                  </mat-icon>
+                </div>
+              </mat-list-option>
+            </mat-selection-list>
+          </mat-expansion-panel>
+        </mat-accordion>
+
+        <div mat-dialog-actions fxLayout="row" fxLayoutAlign="center center" *ngIf="openedSidenav">
+          <button type="button" mat-stroked-button class="o-report-on-demand-clear-button" (click)="clearCurrentPreferences()">
+            {{'CLEAR' | oReportsTranslate }}</button>
+          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="currentPreference.columns.length===0">
+            {{'PREVIEW' | oReportsTranslate }}</button>
+        </div>
+
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="sidenav-container-content">
+        <ngx-extended-pdf-viewer #pdfViewer [base64Src]="pdf" [filenameForDownload]="currentPreference.title" [showBookmarkButton]="false"
+          [showPropertiesButton]="false" [showOpenFileButton]="false" useBrowserLocale="true" delayFirstView="1000" [textLayer]="true">
+        </ngx-extended-pdf-viewer>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

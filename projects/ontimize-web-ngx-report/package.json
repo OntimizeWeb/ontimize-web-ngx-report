@@ -1,0 +1,28 @@
+{
+  "name": "ontimize-web-ngx-report",
+  "version": "8.1.1",
+  "description": "Authomatic reports implementation for Ontimize Web",
+  "keywords": [
+    "angular",
+    "ontimize-web-ngx",
+    "ontimize-web-ngx-report",
+    "report"
+  ],
+  "author": "IMATIA S.L.",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:OntimizeWeb/ontimize-web-ngx-report.git"
+  },
+  "license": "Apache-2.0",
+  "main": "./bundles/ontimize-web-ngx-report.umd.js",
+  "scripts": {
+    "test": "karma start",
+    "test-watch": "karma start --singleRun=false --autoWatch=true"
+  },
+  "peerDependencies": {
+    "ontimize-web-ngx": "8.9.0"
+  },
+  "dependencies": {
+    "ngx-extended-pdf-viewer": "9.0.0-alpha.1"
+  }
+}

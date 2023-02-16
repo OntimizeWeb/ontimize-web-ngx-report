@@ -1,0 +1,11 @@
+<o-form-layout-manager attr="report" title="{{'REPORTS' | oTranslate }}" separator=" " mode="tab" label-columns="NAME">
+  <div fxLayout="column" fxLayoutAlign="start start" fxFill>
+    <o-table #table fxFlex attr="report" service-type="report" entity="listReports" keys="UUID"
+      columns="UUID;NAME;DESCRIPTION;REPORT_TYPE;MAIN_REPORT_FILENAME"
+      visible-columns="NAME;DESCRIPTION;REPORT_TYPE" query-rows="20" show-report-on-demand-option="no">
+      <o-table-column attr="NAME" title="{{'REPORT_NAME' | oTranslate }}" orderable="yes" searchable="yes" class="o-table-column-centered"></o-table-column>
+      <o-table-column attr="DESCRIPTION" title="{{'REPORT_DESCRIPTION' | oTranslate }}" orderable="yes" searchable="no" class="o-table-column-centered"></o-table-column>
+      <o-table-column attr="REPORT_TYPE" title="{{'REPORT_TYPE' | oTranslate }}" orderable="yes" searchable="no" class="o-table-column-centered"></o-table-column>
+    </o-table>
+  </div>
+</o-form-layout-manager>
