@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatSelectionList, MatSelectionListChange } from '@angular/material';
+import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AppConfig, DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { OReportService } from '../../../services/o-report.service';

@@ -1,5 +1,5 @@
 import { Injectable, Injector } from "@angular/core";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { DialogService } from "ontimize-web-ngx";
 import { OReportViewerComponent } from "../components/report/o-report-viewer/o-report-viewer.component";
 import { Utils } from "../util/utils";

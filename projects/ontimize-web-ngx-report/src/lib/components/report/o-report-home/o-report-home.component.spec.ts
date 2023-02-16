@@ -1,6 +1,6 @@
 import { Injector } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule } from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppConfig, appConfigFactory, APP_CONFIG, OntimizeWebModule, ONTIMIZE_PROVIDERS, OPermissionsModule } from 'ontimize-web-ngx';

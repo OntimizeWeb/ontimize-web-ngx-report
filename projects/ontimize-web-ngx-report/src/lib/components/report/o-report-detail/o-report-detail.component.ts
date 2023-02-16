@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogService, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
 import { Constants } from '../../../util/constants';
 import { OReportViewerComponent } from '../o-report-viewer/o-report-viewer.component';
