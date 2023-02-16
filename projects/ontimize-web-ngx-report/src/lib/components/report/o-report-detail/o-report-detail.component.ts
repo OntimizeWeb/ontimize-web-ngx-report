@@ -12,7 +12,7 @@ export class OReportDetailComponent {
 
   @ViewChild('id', { static: true })
   id: OTextInputComponent;
-  @ViewChild('paramForm', { static: false })
+  @ViewChild('paramForm')
   paramForm: OFormComponent;
 
   private values: string[];

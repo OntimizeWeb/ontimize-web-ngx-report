@@ -30,9 +30,9 @@ import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 
 export class ReportOnDemandComponent implements OnInit {
 
-  @ViewChild('columnsList', { static: false }) columnsList: MatSelectionList;
-  @ViewChild('functionsList', { static: false }) functionsList: MatSelectionList;
-  @ViewChild('orderByList', { static: false }) orderByList: MatSelectionList;
+  @ViewChild('columnsList') columnsList: MatSelectionList;
+  @ViewChild('functionsList') functionsList: MatSelectionList;
+  @ViewChild('orderByList') orderByList: MatSelectionList;
 
   public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
   public functionsData: OReportFunction[] = [];
