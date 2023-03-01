@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogService, IReportService, OTableComponent } from 'ontimize-web-ngx';
 import { ReportOnDemandComponent } from '../components/report-on-demand/report-on-demand/report-on-demand.component';
 import { Utils } from '../util/utils';

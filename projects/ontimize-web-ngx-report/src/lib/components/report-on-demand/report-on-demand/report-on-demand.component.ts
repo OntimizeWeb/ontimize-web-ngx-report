@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatSelectionList, MatSelectionListChange } from '@angular/material';
+import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AppConfig, DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { OReportService } from '../../../services/o-report.service';
@@ -30,9 +30,9 @@ import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 
 export class ReportOnDemandComponent implements OnInit {
 
-  @ViewChild('columnsList', { static: false }) columnsList: MatSelectionList;
-  @ViewChild('functionsList', { static: false }) functionsList: MatSelectionList;
-  @ViewChild('orderByList', { static: false }) orderByList: MatSelectionList;
+  @ViewChild('columnsList') columnsList: MatSelectionList;
+  @ViewChild('functionsList') functionsList: MatSelectionList;
+  @ViewChild('orderByList') orderByList: MatSelectionList;
 
   public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
   public functionsData: OReportFunction[] = [];

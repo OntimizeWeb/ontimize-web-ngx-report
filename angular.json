@@ -14,6 +14,11 @@
           "options": {
             "tsConfig": "projects/ontimize-web-ngx-report/tsconfig.lib.json",
             "project": "projects/ontimize-web-ngx-report/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ontimize-web-ngx-report/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {

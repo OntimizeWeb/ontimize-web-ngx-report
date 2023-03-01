@@ -1,6 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatSelectionList, MatListOption } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSelectionList, MatListOption } from '@angular/material/list';
 import { DialogService, Util } from 'ontimize-web-ngx';
 import { OReportService } from '../../../services/o-report.service';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
