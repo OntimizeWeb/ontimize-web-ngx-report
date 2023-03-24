@@ -23,6 +23,7 @@
     "ontimize-web-ngx": "8.9.0"
   },
   "dependencies": {
-    "ngx-extended-pdf-viewer": "9.0.0"
+    "ngx-extended-pdf-viewer": "9.0.0",
+    "tslib": "^2.0.0"
   }
 }
