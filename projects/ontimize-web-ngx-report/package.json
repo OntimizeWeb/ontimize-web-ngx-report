@@ -1,6 +1,6 @@
 {
   "name": "ontimize-web-ngx-report",
-  "version": "9.0.0",
+  "version": "10.0.0",
   "description": "Authomatic reports implementation for Ontimize Web",
   "keywords": [
     "angular",
@@ -20,9 +20,10 @@
     "test-watch": "karma start --singleRun=false --autoWatch=true"
   },
   "peerDependencies": {
-    "ontimize-web-ngx": "8.9.0"
+    "ontimize-web-ngx": "file:../ontimize-web-ngx/dist/ontimize-web-ngx-10.0.0.tgz"
   },
   "dependencies": {
-    "ngx-extended-pdf-viewer": "9.0.0"
+    "ngx-extended-pdf-viewer": "9.0.0",
+    "tslib": "^2.0.0"
   }
 }
