@@ -1,6 +1,6 @@
 {
   "name": "ontimize-web-ngx-report",
-  "version": "10.0.0",
+  "version": "11.0.0",
   "description": "Automatic reports implementation for Ontimize Web",
   "keywords": [
     "angular",
@@ -39,7 +39,7 @@
     "@angular/platform-browser-dynamic": "~10.2.5",
     "@angular/router": "~10.2.5",
     "ngx-extended-pdf-viewer": "9.0.0",
-    "ontimize-web-ngx": "file:../ontimize-web-ngx/dist/ontimize-web-ngx-10.0.0.tgz",
+    "ontimize-web-ngx": "file:../ontimize-web-ngx/dist/ontimize-web-ngx-11.0.0.tgz",
     "rxjs": "~6.6.7",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
