@@ -16,7 +16,7 @@
         layout-direction="column">
         <ng-container *ngFor="let elem of parameters; let i = index">
           <o-row fxFlex>
-            <ng-template [ngIf]="elem.valueClass == 'java.sql.Date' || elem.valueClass == 'java.sql.Timestamp'" [ngIfElse]="textInput">
+            <ng-template [ngIf]="elem.valueClass === 'java.sql.Date' || elem.valueClass === 'java.sql.Timestamp'" [ngIfElse]="textInput">
               <o-date-input [attr]="'value' + i" [label]="elem.name" required="yes" value-type="string" format="YYYY-MM-DD" fxFlex></o-date-input>
             </ng-template>
             <ng-template #textInput>
