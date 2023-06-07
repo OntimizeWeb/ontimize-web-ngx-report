@@ -30,19 +30,19 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "projects/ontimize-web-ngx-report/tsconfig.lib.json",
-              "projects/ontimize-web-ngx-report/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "projects/ontimize-web-ngx-report/**/*.ts",
+              "projects/ontimize-web-ngx-report/**/*.html"
             ]
           }
         }
       }
     }
   },
-  "defaultProject": "ontimize-web-ngx-report"
+  "defaultProject": "ontimize-web-ngx-report",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
