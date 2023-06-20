@@ -480,17 +480,17 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   onSelectionChangeColumns(event: MatSelectionListChange) {
-    const selectedColumn: OReportColumn = event.option.value;
+    const selectedColumn: OReportColumn = event.options[0].value;
     const selectColumnId = selectedColumn.id;
     this.updateColumnsOrderByData(selectColumnId, event);
 
   }
 
   onSelectionChangeGroups(event: MatSelectionListChange) {
-    if (!event.option.selected) return;
-    let groupSelected: string = event.option.value;
+    if (!event.options[0].selected) return;
+    let groupSelected: string = event.options[0].value;
     this.updateColumnsOrderByData(groupSelected, event);
-    if (event.option.selected &&
+    if (event.options[0].selected &&
       this.currentPreference.columns.findIndex(x => x.id === groupSelected) === -1) {
       const columnStyleSelected: OReportColumn[] = this.columnsData.filter((x: OReportColumn) => x.id === groupSelected)
       if (columnStyleSelected.length > 0) {
@@ -512,7 +512,7 @@ export class ReportOnDemandComponent implements OnInit {
 
     const columnGroupBySelected: OReportOrderBy = { columnId: columnId, ascendent: true }
     let index = this.columnsOrderBy.findIndex(x => x.columnId === columnId);
-    if ((!event) || (event && event.option.selected)) {
+    if ((!event) || (event && event.options[0].selected)) {
       if (index === -1) {
         this.columnsOrderBy.push(columnGroupBySelected);
       }
@@ -533,11 +533,11 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   onSelectionChangeFunctions(event: MatSelectionListChange) {
-    if (!event.option.selected || event.option.value.columnName === 'TOTAL') return;
-    const functionSelect = event.option.value;
+    if (!event.options[0].selected || event.options[0].value.columnName === 'TOTAL') return;
+    const functionSelect = event.options[0].value;
     const columnSelectedToGroup = functionSelect.columnName;
 
-    if (event.option.selected &&
+    if (event.options[0].selected &&
       this.currentPreference.columns.findIndex(x => x.id === columnSelectedToGroup) === -1) {
       const column = this.columnsData.find(x => x.id === columnSelectedToGroup);
       this.addColumnData(column);
