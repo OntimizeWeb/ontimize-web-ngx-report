@@ -10,6 +10,7 @@ import { OReportColumn } from '../../../types/report-column.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
 import { OReportFunction } from '../../../types/report-function.type';
 import { OReportOrderBy } from '../../../types/report-orderBy.type';
+import { OFilterParameter } from '../../../types/filter-parameter.type';
 import { DefaultOReportPreferences, OReportPreferences } from '../../../types/report-preferences.type';
 import { Utils } from '../../../util/utils';
 import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
@@ -189,11 +190,17 @@ export class ReportOnDemandComponent implements OnInit {
     if (Util.isObject(serviceConfiguration) && serviceConfiguration.hasOwnProperty('path')) {
       pathService = serviceConfiguration.path;
     }
+    let filters: OFilterParameter = {
+      columns: this.table.oTableOptions.visibleColumns.filter(c => this.table.getColumnsNotIncluded().indexOf(c) === -1),
+      sqltypes: this.table.getSqlTypes(),
+      filter: this.table.getComponentFilter(),
+    };
+
     this.reportService.createReport({
       "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentPreference.entity, "path": pathService,
       "service": this.currentPreference.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
       "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
-      "language": this.language
+      "language": this.language, "filters": filters
 
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {

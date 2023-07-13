@@ -1,3 +1,4 @@
+import { OFilterParameter } from './filter-parameter.type';
 import { OReportColumn } from './report-column.type';
 import { OReportFunction } from './report-function.type';
 import { OReportOrderBy } from './report-orderBy.type';
@@ -15,5 +16,6 @@ export type OReportParam = {
   style: OReportStyleParams,
   subtitle: string,
   language: string,
-  path: string
+  path: string,
+  filters: OFilterParameter
 }
