@@ -194,13 +194,16 @@ export class ReportOnDemandComponent implements OnInit {
       columns: this.table.oTableOptions.visibleColumns.filter(c => this.table.getColumnsNotIncluded().indexOf(c) === -1),
       sqltypes: this.table.getSqlTypes(),
       filter: this.table.getComponentFilter(),
+      offset: this.table.pageable ? this.table.currentPage * this.table.queryRows : -1,
+      pageSize: this.table.queryRows,
+
     };
 
     this.reportService.createReport({
       "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentPreference.entity, "path": pathService,
       "service": this.currentPreference.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
       "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
-      "language": this.language, "filters": filters
+      "language": this.language, "filters": filters, "advQuery": (this.table.pageable ? true : false)
 
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
