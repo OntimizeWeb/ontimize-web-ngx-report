@@ -261,7 +261,7 @@ export class ReportOnDemandComponent implements OnInit {
       "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentPreference.entity, "path": pathService,
       "service": this.currentPreference.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
       "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
-      "language": this.language, "filters": filters, "advQuery": (this.table.pageable ? true : false)
+      "language": this.language, "filters": filters, "advQuery": this.table.pageable
 
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
