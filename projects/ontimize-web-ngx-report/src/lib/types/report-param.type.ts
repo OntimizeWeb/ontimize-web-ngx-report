@@ -17,6 +17,6 @@ export type OReportParam = {
   subtitle: string,
   language: string,
   path: string,
-  filters: OFilterParameter,
-  advQuery: boolean
+  filters?: OFilterParameter,
+  advQuery?: boolean
 }

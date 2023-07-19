@@ -3,7 +3,7 @@ import { Injector, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AppConfig, DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
+import { AppConfig, ColumnValueFilterOperator, DialogService, Expression, FilterExpressionUtils, OColumn, OColumnValueFilter, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { OReportService } from '../../../services/o-report.service';
 import { OReportColumnStyle } from '../../../types/report-column-style.type';
 import { OReportColumn } from '../../../types/report-column.type';
@@ -183,6 +183,64 @@ export class ReportOnDemandComponent implements OnInit {
       return { columnId: column.columnId, columnName: column.name, ascendent: column.ascendent }
     });
   }
+  protected getColumnFiltersExpression(): Expression {
+    // Apply column filters
+    const columnFilters: OColumnValueFilter[] = this.table.dataSource.getColumnValueFilters();
+    const beColumnFilters: Array<Expression> = [];
+    columnFilters.forEach(colFilter => {
+      // Prepare basic expressions
+      switch (colFilter.operator) {
+        case ColumnValueFilterOperator.IN:
+          if (Util.isArray(colFilter.values)) {
+            const besIn: Array<Expression> = colFilter.values.map(value => FilterExpressionUtils.buildExpressionEquals(colFilter.attr, value));
+            let beIn: Expression = besIn.pop();
+            besIn.forEach(be => {
+              beIn = FilterExpressionUtils.buildComplexExpression(beIn, be, FilterExpressionUtils.OP_OR);
+            });
+            beColumnFilters.push(beIn);
+          }
+          break;
+        case ColumnValueFilterOperator.BETWEEN:
+          if (Util.isArray(colFilter.values) && colFilter.values.length === 2) {
+            const beFrom = FilterExpressionUtils.buildExpressionMoreEqual(colFilter.attr, colFilter.values[0]);
+            const beTo = FilterExpressionUtils.buildExpressionLessEqual(colFilter.attr, colFilter.values[1]);
+            beColumnFilters.push(FilterExpressionUtils.buildComplexExpression(beFrom, beTo, FilterExpressionUtils.OP_AND));
+          }
+          break;
+        case ColumnValueFilterOperator.EQUAL:
+          beColumnFilters.push(FilterExpressionUtils.buildExpressionLike(colFilter.attr, colFilter.values));
+          break;
+        case ColumnValueFilterOperator.LESS_EQUAL:
+          beColumnFilters.push(FilterExpressionUtils.buildExpressionLessEqual(colFilter.attr, colFilter.values));
+          break;
+        case ColumnValueFilterOperator.MORE_EQUAL:
+          beColumnFilters.push(FilterExpressionUtils.buildExpressionMoreEqual(colFilter.attr, colFilter.values));
+          break;
+      }
+
+    });
+    // Build complete column filters basic expression
+    let beColFilter: Expression = beColumnFilters.pop();
+    beColumnFilters.forEach(be => {
+      beColFilter = FilterExpressionUtils.buildComplexExpression(beColFilter, be, FilterExpressionUtils.OP_AND);
+    });
+    return beColFilter;
+  }
+  protected getFilters(): any {
+    let filter = {};
+    const parentItemExpr = FilterExpressionUtils.buildExpressionFromObject(filter);
+    filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = parentItemExpr;
+
+    const beColFilter = this.getColumnFiltersExpression();
+    // Add column filters basic expression to current filter
+    if (beColFilter && !Util.isDefined(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY])) {
+      filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = beColFilter;
+    } else if (beColFilter) {
+      filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] =
+        FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.FILTER_EXPRESSION_KEY], beColFilter, FilterExpressionUtils.OP_AND);
+    }
+    return filter;
+  }
 
   protected openReport() {
     const serviceConfiguration = this.getDefaultServiceConfiguration(this.currentPreference.service);
@@ -193,7 +251,7 @@ export class ReportOnDemandComponent implements OnInit {
     let filters: OFilterParameter = {
       columns: this.table.oTableOptions.visibleColumns.filter(c => this.table.getColumnsNotIncluded().indexOf(c) === -1),
       sqltypes: this.table.getSqlTypes(),
-      filter: this.table.getComponentFilter(),
+      filter: this.table.getComponentFilter(this.getFilters()),
       offset: this.table.pageable ? this.table.currentPage * this.table.queryRows : -1,
       pageSize: this.table.queryRows,
 
