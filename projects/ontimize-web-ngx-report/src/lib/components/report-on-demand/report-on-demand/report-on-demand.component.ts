@@ -183,54 +183,11 @@ export class ReportOnDemandComponent implements OnInit {
     });
   }
 
-  protected getColumnFiltersExpression(): Expression {
-    // Apply column filters
-    const columnFilters: OColumnValueFilter[] = this.table.dataSource.getColumnValueFilters();
-    const beColumnFilters: Array<Expression> = [];
-    columnFilters.forEach(colFilter => {
-      // Prepare basic expressions
-      switch (colFilter.operator) {
-        case ColumnValueFilterOperator.IN:
-          if (Util.isArray(colFilter.values)) {
-            const besIn: Array<Expression> = colFilter.values.map(value => FilterExpressionUtils.buildExpressionEquals(colFilter.attr, value));
-            let beIn: Expression = besIn.pop();
-            besIn.forEach(be => {
-              beIn = FilterExpressionUtils.buildComplexExpression(beIn, be, FilterExpressionUtils.OP_OR);
-            });
-            beColumnFilters.push(beIn);
-          }
-          break;
-        case ColumnValueFilterOperator.BETWEEN:
-          if (Util.isArray(colFilter.values) && colFilter.values.length === 2) {
-            const beFrom = FilterExpressionUtils.buildExpressionMoreEqual(colFilter.attr, colFilter.values[0]);
-            const beTo = FilterExpressionUtils.buildExpressionLessEqual(colFilter.attr, colFilter.values[1]);
-            beColumnFilters.push(FilterExpressionUtils.buildComplexExpression(beFrom, beTo, FilterExpressionUtils.OP_AND));
-          }
-          break;
-        case ColumnValueFilterOperator.EQUAL:
-          beColumnFilters.push(FilterExpressionUtils.buildExpressionLike(colFilter.attr, colFilter.values));
-          break;
-        case ColumnValueFilterOperator.LESS_EQUAL:
-          beColumnFilters.push(FilterExpressionUtils.buildExpressionLessEqual(colFilter.attr, colFilter.values));
-          break;
-        case ColumnValueFilterOperator.MORE_EQUAL:
-          beColumnFilters.push(FilterExpressionUtils.buildExpressionMoreEqual(colFilter.attr, colFilter.values));
-          break;
-      }
-
-    });
-    // Build complete column filters basic expression
-    let beColFilter: Expression = beColumnFilters.pop();
-    beColumnFilters.forEach(be => {
-      beColFilter = FilterExpressionUtils.buildComplexExpression(beColFilter, be, FilterExpressionUtils.OP_AND);
-    });
-    return beColFilter;
-  }
   getComponentFilter(): any {
     let firstFilter = {};
     let filter = {};
 
-    const beColFilter = this.getColumnFiltersExpression();
+    const beColFilter = this.table.getColumnFiltersExpression();
     // Add column filters basic expression to current filter
     if (beColFilter && !Util.isDefined(firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY])) {
       firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = beColFilter;
