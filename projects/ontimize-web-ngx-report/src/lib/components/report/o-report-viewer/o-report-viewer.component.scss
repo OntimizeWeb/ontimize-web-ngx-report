@@ -1,11 +1,11 @@
-.o-dialog-class .mat-dialog-container .o-report-viewer {
-  .mat-dialog-title {
+.o-dialog-class .mat-mdc-dialog-container .o-report-viewer {
+  .mat-mdc-dialog-title {
     .mat-icon {
       cursor: pointer;
     }
   }
 
-  .mat-dialog-content {
+  .mat-mdc-dialog-content {
     //height - toolbar-height - padding-top
     max-height: calc(100% - 36px - 8px);
     height: 100%;
