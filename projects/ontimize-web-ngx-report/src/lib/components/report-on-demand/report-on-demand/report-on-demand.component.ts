@@ -1,10 +1,10 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Injector, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AppConfig, DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AppConfig, DialogService, FilterExpressionUtils, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 import { OReportService } from '../../../services/o-report.service';
+import { OFilterParameter } from '../../../types/filter-parameter.type';
 import { OReportColumnStyle } from '../../../types/report-column-style.type';
 import { OReportColumn } from '../../../types/report-column.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
@@ -77,7 +77,6 @@ export class ReportOnDemandComponent implements OnInit {
   protected reportService: OReportService;
   protected dialogService: DialogService;
   public dialog: MatDialog;
-
   constructor(
     public injector: Injector,
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
@@ -183,17 +182,61 @@ export class ReportOnDemandComponent implements OnInit {
     });
   }
 
+  getComponentFilter(): any {
+    let firstFilter = {};
+    let filter = {};
+
+    const beColFilter = this.table.getColumnFiltersExpression();
+    // Add column filters basic expression to current filter
+    if (beColFilter && !Util.isDefined(firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY])) {
+      firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = beColFilter;
+    } else if (beColFilter) {
+      firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] =
+        FilterExpressionUtils.buildComplexExpression(firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY], beColFilter, FilterExpressionUtils.OP_AND);
+    }
+
+    const filterParentKeys = this.table.getParentKeysValues();
+    filter = Object.assign(firstFilter || {}, filterParentKeys);
+
+    const quickFilterExpr = Util.isDefined(this.table.oTableQuickFilterComponent) ? this.table.oTableQuickFilterComponent.filterExpression : undefined;
+    const filterBuilderExpr = Util.isDefined(this.table.filterBuilder) ? this.table.filterBuilder.getExpression() : undefined;
+    let complexExpr = quickFilterExpr || filterBuilderExpr;
+    if (quickFilterExpr && filterBuilderExpr) {
+      complexExpr = FilterExpressionUtils.buildComplexExpression(quickFilterExpr, filterBuilderExpr, FilterExpressionUtils.OP_AND);
+    }
+
+    if (complexExpr && !Util.isDefined(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY])) {
+      filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = complexExpr;
+    } else if (complexExpr) {
+      filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] =
+        FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY], complexExpr, FilterExpressionUtils.OP_AND);
+    }
+
+    return filter;
+
+  }
+
+
   protected openReport() {
     const serviceConfiguration = this.getDefaultServiceConfiguration(this.currentPreference.service);
     let pathService: string;
     if (Util.isObject(serviceConfiguration) && serviceConfiguration.hasOwnProperty('path')) {
       pathService = serviceConfiguration.path;
     }
+    let filters: OFilterParameter = {
+      columns: this.table.oTableOptions.visibleColumns.filter(c => this.table.getColumnsNotIncluded().indexOf(c) === -1),
+      sqltypes: this.table.getSqlTypes(),
+      filter: this.getComponentFilter(),
+      offset: this.table.pageable ? this.table.currentPage * this.table.queryRows : -1,
+      pageSize: this.table.queryRows,
+
+    };
+
     this.reportService.createReport({
       "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentPreference.entity, "path": pathService,
       "service": this.currentPreference.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
       "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
-      "language": this.language
+      "language": this.language, "filters": filters, "advQuery": this.table.pageable
 
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
