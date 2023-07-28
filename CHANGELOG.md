@@ -1,5 +1,6 @@
-### 8.2.0
-
+### 8.2.0 (2023-07-28)
+### Features
+* Modified the parameters of the report to be able to add filters ([8637180](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/8637180)) Closes[#132](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/132)
 
 ## 8.1.1 (2023-01-31)
 ### Bug Fixes
