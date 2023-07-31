@@ -17,7 +17,7 @@ module.exports = function (config) {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, '../../coverage/ontimize-web-ngx'),
+      dir: require('path').join(__dirname, '../../coverage/ontimize-web-ngx-report'),
       subdir: '.',
       reporters: [
         { type: 'lcovonly' }
