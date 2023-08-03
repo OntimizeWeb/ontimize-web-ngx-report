@@ -20,10 +20,10 @@
     "test-watch": "karma start --singleRun=false --autoWatch=true"
   },
   "peerDependencies": {
-    "ontimize-web-ngx": "file:../ontimize-web-ngx/dist/ontimize-web-ngx-15.0.0.tgz"
+    "ontimize-web-ngx": "ontimize-web-ngx-15.0.0-SNAPSHOT-0.tgz"
   },
   "dependencies": {
-    "ngx-extended-pdf-viewer": "9.0.0",
-    "tslib": "^2.0.0"
+    "ngx-extended-pdf-viewer": "18.0.0-beta.0",
+    "tslib": "^2.3.0"
   }
 }
