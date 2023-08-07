@@ -70,6 +70,15 @@
         }
 
         .mat-mdc-list-option {
+          .mat-mdc-list-option-checkbox-before{
+            padding-right: 0px;
+            margin-right: 0px;
+          }
+
+          .mdc-list-item__content {
+            padding-left: 16px;
+          }
+
           .button-edit {
             cursor: pointer;
           }
@@ -80,10 +89,6 @@
 
           .mdc-list-item__content {
             padding: 0 0 0 8px;
-
-            .mdc-list-item__primary-text {
-              padding-right: 8px;
-            }
           }
         }
 
