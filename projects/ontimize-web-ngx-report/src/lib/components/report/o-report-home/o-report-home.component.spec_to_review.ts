@@ -5,7 +5,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppConfig, appConfigFactory, APP_CONFIG, OntimizeWebModule, ONTIMIZE_PROVIDERS, OPermissionsModule } from 'ontimize-web-ngx';
 
-import { OReportModule } from './../../../ontimize-web-ngx-report.module';
+import { OReportModule } from '../../../ontimize-web-ngx-report.module';
 import { OReportHomeComponent } from './o-report-home.component';
 
 describe('ReportComponent', () => {

@@ -1,7 +1,7 @@
 
 <h1 align="center">
   <div style="display:inline-block;vertical-align: middle;">
-    <a name="logo" href="https://ontimizeweb.github.io/docs/v8/report/">
+    <a name="logo" href="https://ontimizeweb.github.io/docs/v15/report/">
       Ontimize Web Report
     </a>
   </div>
@@ -19,7 +19,7 @@ The module Ontimize Web Report is a set of reporting tools for web applications 
 
 ### 📖 Documentation
 
-Check out our [documentation site](https://ontimizeweb.github.io/docs/v8/report/) to know more details.
+Check out our [documentation site](https://ontimizeweb.github.io/docs/v15/report/) to know more details.
 
 ## 💡 Ideas
 
@@ -28,7 +28,7 @@ We would love any feedback you have or to know when you encounter issues, by fil
 
 ## :gear: Development
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.9.
 
 ### Installation
 

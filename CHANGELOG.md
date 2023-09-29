@@ -1,3 +1,12 @@
+## 15.0.0-beta.0 (2023-09-29)
+### Features
+* Migration to Angular 15.
+* Migration to Angular Material 15.
+
+## 8.2.0 (2023-07-28)
+### Features
+* **Report on demand:** Modified the parameters to allow the creation of reports on-demand from the filtered data of the table ([8637180](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/8637180)) Closes[#132](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/132)
+
 ## 8.1.1 (2023-01-31)
 ### Bug Fixes
 * Fixing compatibility with globstars in script `copy-files` ([913775b](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/913775b))

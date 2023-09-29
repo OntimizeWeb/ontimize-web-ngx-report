@@ -1,10 +1,12 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Injector, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AppConfig, DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
+import { AppConfig, DialogService, FilterExpressionUtils, OColumn, OTableBase, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
+
+
 import { OReportService } from '../../../services/o-report.service';
+import { OFilterParameter } from '../../../types/filter-parameter.type';
 import { OReportColumnStyle } from '../../../types/report-column-style.type';
 import { OReportColumn } from '../../../types/report-column.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
@@ -15,7 +17,6 @@ import { Utils } from '../../../util/utils';
 import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
 import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-preferences-dialog.component';
 import { SelectFunctionDialogComponent } from '../select-function-dialog/select-function-dialog.component';
-
 import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 
 @Component({
@@ -64,7 +65,7 @@ export class ReportOnDemandComponent implements OnInit {
   protected service: string;
   protected language: string;
   protected columnsArray: Array<string>;
-  protected table: OTableComponent;
+  protected table: OTableBase;
   private blankPdf: string = 'JVBERi0xLjYKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0ZURlY29kZT4+CnN0cmVhbQp4nDPQM1Qo5ypUMFAw0DMwslAwtTTVMzI3VbAwMdSzMDNUKErlCtdSyOMKVAAAtxIIrgplbmRzdHJlYW0KZW5kb2JqCgozIDAgb2JqCjUwCmVuZG9iagoKNSAwIG9iago8PAo+PgplbmRvYmoKCjYgMCBvYmoKPDwvRm9udCA1IDAgUgovUHJvY1NldFsvUERGL1RleHRdCj4+CmVuZG9iagoKMSAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDQgMCBSL1Jlc291cmNlcyA2IDAgUi9NZWRpYUJveFswIDAgNTk1LjMwMzkzNzAwNzg3NCA4NDEuODg5NzYzNzc5NTI4XS9Hcm91cDw8L1MvVHJhbnNwYXJlbmN5L0NTL0RldmljZVJHQi9JIHRydWU+Pi9Db250ZW50cyAyIDAgUj4+CmVuZG9iagoKNCAwIG9iago8PC9UeXBlL1BhZ2VzCi9SZXNvdXJjZXMgNiAwIFIKL01lZGlhQm94WyAwIDAgNTk1IDg0MSBdCi9LaWRzWyAxIDAgUiBdCi9Db3VudCAxPj4KZW5kb2JqCgo3IDAgb2JqCjw8L1R5cGUvQ2F0YWxvZy9QYWdlcyA0IDAgUgovT3BlbkFjdGlvblsxIDAgUiAvWFlaIG51bGwgbnVsbCAwXQovTGFuZyhlcy1FUykKPj4KZW5kb2JqCgo4IDAgb2JqCjw8L0F1dGhvcjxGRUZGMDA1MDAwNjEwMDc0MDA3MjAwNjkwMDYzMDA2OTAwNjEwMDIwMDA0RDAwNjEwMDcyMDA3NDAwRUQwMDZFMDA2NTAwN0EwMDIwMDA1NDAwNjkwMDZDMDA3NjAwNjU+Ci9DcmVhdG9yPEZFRkYwMDU3MDA3MjAwNjkwMDc0MDA2NTAwNzI+Ci9Qcm9kdWNlcjxGRUZGMDA0QzAwNjkwMDYyMDA3MjAwNjUwMDRGMDA2NjAwNjYwMDY5MDA2MzAwNjUwMDIwMDAzNzAwMkUwMDMxPgovQ3JlYXRpb25EYXRlKEQ6MjAyMjA1MTAxNDUyMDYrMDInMDAnKT4+CmVuZG9iagoKeHJlZgowIDkKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMjM0IDAwMDAwIG4gCjAwMDAwMDAwMTkgMDAwMDAgbiAKMDAwMDAwMDE0MCAwMDAwMCBuIAowMDAwMDAwNDAyIDAwMDAwIG4gCjAwMDAwMDAxNTkgMDAwMDAgbiAKMDAwMDAwMDE4MSAwMDAwMCBuIAowMDAwMDAwNTAwIDAwMDAwIG4gCjAwMDAwMDA1OTYgMDAwMDAgbiAKdHJhaWxlcgo8PC9TaXplIDkvUm9vdCA3IDAgUgovSW5mbyA4IDAgUgovSUQgWyA8RDdBODhCRTRFREFDRkU1RDFGMTIwMzNFMDUyN0JERkU+CjxEN0E4OEJFNEVEQUNGRTVEMUYxMjAzM0UwNTI3QkRGRT4gXQovRG9jQ2hlY2tzdW0gLzgwNTA5NDU4QjgyN0RCRDQ2QzlEODdBMjY4NjdCNEFDCj4+CnN0YXJ0eHJlZgo4NzYKJSVFT0YK';
 
   public currentPreference: OReportPreferences;
@@ -77,11 +78,10 @@ export class ReportOnDemandComponent implements OnInit {
   protected reportService: OReportService;
   protected dialogService: DialogService;
   public dialog: MatDialog;
-
   constructor(
     public injector: Injector,
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OTableComponent
+    @Inject(MAT_DIALOG_DATA) public data: OTableBase
   ) {
     this.appConfig = this.injector.get(AppConfig);
     this.translateService = this.injector.get<OTranslateService>(OTranslateService);
@@ -183,17 +183,61 @@ export class ReportOnDemandComponent implements OnInit {
     });
   }
 
+  getComponentFilter(): any {
+    let firstFilter = {};
+    let filter = {};
+
+    const beColFilter = this.table.getColumnFiltersExpression();
+    // Add column filters basic expression to current filter
+    if (beColFilter && !Util.isDefined(firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY])) {
+      firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = beColFilter;
+    } else if (beColFilter) {
+      firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] =
+        FilterExpressionUtils.buildComplexExpression(firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY], beColFilter, FilterExpressionUtils.OP_AND);
+    }
+
+    const filterParentKeys = this.table.getParentKeysValues();
+    filter = Object.assign(firstFilter || {}, filterParentKeys);
+
+    const quickFilterExpr = Util.isDefined(this.table.oTableQuickFilterComponent) ? this.table.oTableQuickFilterComponent.filterExpression : undefined;
+    const filterBuilderExpr = Util.isDefined(this.table.filterBuilder) ? this.table.filterBuilder.getExpression() : undefined;
+    let complexExpr = quickFilterExpr || filterBuilderExpr;
+    if (quickFilterExpr && filterBuilderExpr) {
+      complexExpr = FilterExpressionUtils.buildComplexExpression(quickFilterExpr, filterBuilderExpr, FilterExpressionUtils.OP_AND);
+    }
+
+    if (complexExpr && !Util.isDefined(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY])) {
+      filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = complexExpr;
+    } else if (complexExpr) {
+      filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] =
+        FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY], complexExpr, FilterExpressionUtils.OP_AND);
+    }
+
+    return filter;
+
+  }
+
+
   protected openReport() {
     const serviceConfiguration = this.getDefaultServiceConfiguration(this.currentPreference.service);
     let pathService: string;
     if (Util.isObject(serviceConfiguration) && serviceConfiguration.hasOwnProperty('path')) {
       pathService = serviceConfiguration.path;
     }
+    let filters: OFilterParameter = {
+      columns: this.table.oTableOptions.visibleColumns.filter(c => this.table.getColumnsNotIncluded().indexOf(c) === -1),
+      sqltypes: this.table.getSqlTypes(),
+      filter: this.getComponentFilter(),
+      offset: this.table.pageable ? this.table.currentPage * this.table.queryRows : -1,
+      pageSize: this.table.queryRows,
+
+    };
+
     this.reportService.createReport({
       "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentPreference.entity, "path": pathService,
       "service": this.currentPreference.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
       "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
-      "language": this.language
+      "language": this.language, "filters": filters, "advQuery": this.table.pageable
 
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {

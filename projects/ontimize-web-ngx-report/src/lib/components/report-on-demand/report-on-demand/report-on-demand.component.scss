@@ -1,11 +1,11 @@
-.o-dialog-class .mat-dialog-container .o-report-on-demand {
-  .mat-dialog-title {
+.o-dialog-class .mat-mdc-dialog-container .o-report-on-demand {
+  .mat-mdc-dialog-title {
     .mat-icon {
       cursor: pointer;
     }
   }
 
-  .mat-dialog-content {
+  .mat-mdc-dialog-content {
     //height - toolbar-height - padding-top
     max-height: calc(100% - 36px - 16px);
     height: 100%;
@@ -35,7 +35,7 @@
         overflow: hidden;
       }
 
-      .mat-dialog-actions {
+      .mat-mdc-dialog-actions {
         min-height: auto;
         padding-top: 0;
 
@@ -44,7 +44,7 @@
         }
       }
 
-      .mat-radio-group {
+      .mat-mdc-radio-group {
         margin: 0 12px;
       }
 
@@ -69,7 +69,13 @@
           }
         }
 
-        .mat-list-option {
+        .mat-mdc-list-option {
+          .mat-mdc-list-option-checkbox-before {
+            padding-right: 0px;
+            margin-right: 0px;
+          }
+
+
           .button-edit {
             cursor: pointer;
           }
@@ -78,12 +84,8 @@
             cursor: move;
           }
 
-          .mat-list-item-content {
+          .mdc-list-item__content {
             padding: 0 0 0 8px;
-
-            .mat-list-text {
-              padding-right: 8px;
-            }
           }
         }
 
