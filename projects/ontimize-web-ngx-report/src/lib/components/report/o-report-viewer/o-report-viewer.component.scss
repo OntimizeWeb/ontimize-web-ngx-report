@@ -1,0 +1,21 @@
+.o-dialog-class .mat-mdc-dialog-container .o-report-viewer {
+  .mat-mdc-dialog-title {
+    .mat-icon {
+      cursor: pointer;
+    }
+  }
+
+  .mat-mdc-dialog-content {
+    //height - toolbar-height - padding-top
+    max-height: calc(100% - 36px - 8px);
+    height: 100%;
+    padding-top: 8px;
+    padding-bottom: 0;
+  }
+
+  ngx-extended-pdf-viewer {
+    .zoom {
+      height: 100%;
+    }
+  }
+}

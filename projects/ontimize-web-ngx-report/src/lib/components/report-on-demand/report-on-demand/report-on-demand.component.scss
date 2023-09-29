@@ -1,0 +1,121 @@
+.o-dialog-class .mat-mdc-dialog-container .o-report-on-demand {
+  .mat-mdc-dialog-title {
+    .mat-icon {
+      cursor: pointer;
+    }
+  }
+
+  .mat-mdc-dialog-content {
+    //height - toolbar-height - padding-top
+    max-height: calc(100% - 36px - 16px);
+    height: 100%;
+    padding-top: 16px;
+    padding-bottom: 0;
+
+    ngx-extended-pdf-viewer {
+      .zoom {
+        height: 100%;
+      }
+    }
+
+
+    .mat-icon {
+      cursor: pointer;
+    }
+
+    .mat-sidenav {
+      visibility: visible !important;
+      transform: none;
+      top: 0;
+      left: 0;
+      padding: 8px 16px;
+      border: 1px solid transparent;
+
+      .mat-drawer-inner-container {
+        overflow: hidden;
+      }
+
+      .mat-mdc-dialog-actions {
+        min-height: auto;
+        padding-top: 0;
+
+        button.o-report-on-demand-clear-button {
+          min-width: 80px;
+        }
+      }
+
+      .mat-mdc-radio-group {
+        margin: 0 12px;
+      }
+
+      .mat-accordion {
+        overflow-y: scroll;
+
+        .acordions.mat-expansion-panel {
+          border-radius: 0;
+          box-shadow: none;
+          margin-bottom: 8px;
+
+          &:last-of-type {
+            margin-bottom: 0;
+          }
+
+          .mat-expansion-panel-header {
+            padding: 0 8px;
+          }
+
+          .mat-expansion-panel-body {
+            padding: 0;
+          }
+        }
+
+        .mat-mdc-list-option {
+          .mat-mdc-list-option-checkbox-before {
+            padding-right: 0px;
+            margin-right: 0px;
+          }
+
+
+          .button-edit {
+            cursor: pointer;
+          }
+
+          &.cdk-drag {
+            cursor: move;
+          }
+
+          .mdc-list-item__content {
+            padding: 0 0 0 8px;
+          }
+        }
+
+      }
+
+      &.mat-drawer-opened {
+        border: 1px solid #DEE1E6;
+        border-radius: 4px;
+        width: 256px;
+      }
+    }
+
+    .mat-sidenav-container {
+      background-color: transparent;
+
+      &.opened {
+        .sidenav-container-content {
+          margin-left: 16px;
+        }
+      }
+    }
+
+    .mat-sidenav-content {
+      overflow: hidden;
+
+      .sidenav-container-content {
+        margin-left: 66px;
+        height: 100%;
+      }
+
+    }
+  }
+}
