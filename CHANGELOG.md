@@ -1,4 +1,13 @@
-### 8.2.0 (2023-07-28)
+## 15.0.0-beta.0 (2023-09-29)
+### Features
+> [!NOTE]
+> For the migration process, the guide available at the following URL has been followed:
+https://update.angular.io/?l=3&v=8.2-15.0.
+
+* Migration to Angular 15.
+* Migration to Angular Material 15.
+
+## 8.2.0 (2023-07-28)
 ### Features
 * **Report on demand:** Modified the parameters to allow the creation of reports on-demand from the filtered data of the table ([8637180](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/8637180)) Closes[#132](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/132)
 
