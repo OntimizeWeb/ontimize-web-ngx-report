@@ -112,7 +112,10 @@
       overflow: hidden;
 
       .sidenav-container-content {
-        margin-left: 66px;
+        .opened {
+          margin-left: 66px;
+        }
+
         height: 100%;
       }
 

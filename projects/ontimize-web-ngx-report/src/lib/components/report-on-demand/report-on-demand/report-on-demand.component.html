@@ -173,9 +173,27 @@
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="sidenav-container-content">
-        <ngx-extended-pdf-viewer #pdfViewer [base64Src]="pdf" [filenameForDownload]="currentPreference.title"
-          [showPropertiesButton]="false" [showOpenFileButton]="false" useBrowserLocale="true" delayFirstView="1000" [textLayer]="true">
-        </ngx-extended-pdf-viewer>
+        <ngx-extended-pdf-viewer [base64Src]="pdf" [filenameForDownload]="currentPreference.title" [customToolbar]="additionalButtons"
+          useBrowserLocale="true" delayFirstView="1000" [textLayer]="true"></ngx-extended-pdf-viewer>
+        <ng-template #additionalButtons>
+          <div id="toolbarViewer">
+            <div id="toolbarViewerLeft">
+              <o-button *ngIf="!openedSidenav" (click)="openedSidenav=!openedSidenav" svg-icon="ontimize:menu" type="ICON" label=""
+                [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
+              </o-button>
+              <div class="toolbarButtonSpacer"></div>
+              <pdf-find-button [showFindButton]="true" [textLayer]="true"></pdf-find-button>
+              <pdf-paging-area></pdf-paging-area>
+            </div>
+            <pdf-zoom-toolbar></pdf-zoom-toolbar> <!-- toolbar viewer middle -->
+            <div id="toolbarViewerRight">
+              <pdf-rotate-page></pdf-rotate-page>
+              <pdf-print></pdf-print>
+              <pdf-download></pdf-download>
+              <div class="verticalToolbarSeparator hiddenSmallView"></div>
+            </div>
+          </div>
+        </ng-template>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
