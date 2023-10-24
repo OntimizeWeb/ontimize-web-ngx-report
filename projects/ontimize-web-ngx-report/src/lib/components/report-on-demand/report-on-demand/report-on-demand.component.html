@@ -173,8 +173,9 @@
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="sidenav-container-content">
-        <ngx-extended-pdf-viewer #pdfViewer [base64Src]="pdf" [filenameForDownload]="currentPreference.title"
-          [showPropertiesButton]="false" [showOpenFileButton]="false" useBrowserLocale="true" delayFirstView="1000" [textLayer]="true">
+        <ngx-extended-pdf-viewer #pdfViewer [base64Src]="pdf" [filenameForDownload]="currentPreference.title" [showPropertiesButton]="false"
+          [showOpenFileButton]="false" useBrowserLocale="true" delayFirstView="1000" [textLayer]="true" [theme]="isDarkMode ? 'dark' : 'light'"
+          [backgroundColor]="isDarkMode ? '#5c5c5c' : 'initial'">
         </ngx-extended-pdf-viewer>
       </div>
     </mat-sidenav-content>
