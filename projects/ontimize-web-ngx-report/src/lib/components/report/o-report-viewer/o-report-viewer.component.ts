@@ -1,6 +1,6 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogService } from 'ontimize-web-ngx';
+import { AppearanceService, DialogService } from 'ontimize-web-ngx';
 import { OReportService } from '../../../services/o-report.service';
 import { Utils } from '../../../util/utils';
 
@@ -18,12 +18,12 @@ export class OReportViewerComponent {
   public pdf = '';
   public name = '';
   public fullscreen: boolean = false;
-
+  isDarkMode: boolean;
   constructor(
     public dialogRef: MatDialogRef<OReportViewerComponent>,
     private reportService: OReportService,
     protected dialogService: DialogService,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
+    @Inject(MAT_DIALOG_DATA) public data: any, private appearanceService: AppearanceService) {
     this.reportService.configureService(this.reportService.getDefaultServiceConfiguration());
     this.reportService.configureAdapter();
     this.name = this.data.name;
@@ -41,9 +41,11 @@ export class OReportViewerComponent {
         console.log(err);
       }
     );
+    this.isDarkMode = this.appearanceService.isDarkMode();
   }
   setFullscreenDialog(): void {
     Utils.setFullscreenDialog(this.fullscreen, this.dialogRef);
     this.fullscreen = !this.fullscreen;
   }
+
 }
