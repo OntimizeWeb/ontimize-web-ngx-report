@@ -1,6 +1,6 @@
 ### 8.2.1 (2023-10-26)
 ### Bug Fixes
-* **Report on demand:** Modified the columns so that they don't allow action type columns to be included in reports([d8e5b91](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/d8e5b91))Closes[#145](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/145)
+* **Report on demand:** Modified columns so that they don't allow action type columns to be included in reports([d8e5b91](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/d8e5b91))Closes[#145](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/145)
 
 ### 8.2.0 (2023-07-28)
 ### Features
