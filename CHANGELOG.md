@@ -3,11 +3,11 @@
 * Migration to Angular 15.
 * Migration to Angular Material 15.
 
-### 8.2.1 (2023-10-26)
+## 8.2.1 (2023-10-26)
 ### Bug Fixes
 * **Report on demand:** Modified columns so that they don't allow action type columns to be included in reports([d8e5b91](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/d8e5b91))Closes[#145](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/145)
 
-### 8.2.0 (2023-07-28)
+## 8.2.0 (2023-07-28)
 ### Features
 * **Report on demand:** Modified the parameters to allow the creation of reports on-demand from the filtered data of the table ([8637180](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/8637180)) Closes[#132](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/132)
 
