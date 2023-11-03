@@ -25,7 +25,7 @@
   <mat-sidenav-container class="mat-sidenav-container" [class.opened]="openedSidenav" fxFill>
     <mat-sidenav #sidenav [(opened)]="openedSidenav" mode="side" class="report-on-demand-sidenav">
       <div fxLayout="column" fxFill fxLayoutGap="20px">
-        <o-button (click)="openedSidenav=!openedSidenav" svg-icon="ontimize:menu" type="ICON" label=""
+        <o-button *ngIf="openedSidenav" (click)="openedSidenav=!openedSidenav" svg-icon="ontimize:menu" type="ICON" label=""
           [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
         </o-button>
 
