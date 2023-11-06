@@ -30,10 +30,10 @@
         </o-button>
 
         <div fxLayout="column" *ngIf="openedSidenav" class="container-title" fxLayoutGap="10px">
-          <mat-form-field>
+          <mat-form-field subscriptSizing='dynamic'>
             <input [(ngModel)]="currentPreference.title" matInput placeholder="{{ 'TITLE' | oReportsTranslate }}">
           </mat-form-field>
-          <mat-form-field>
+          <mat-form-field subscriptSizing='dynamic'>
             <input [(ngModel)]="currentPreference.subtitle" matInput placeholder="{{ 'SUBTITLE' | oReportsTranslate }}">
           </mat-form-field>
         </div>
