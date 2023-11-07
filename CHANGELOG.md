@@ -1,3 +1,8 @@
+## 15.0.0-beta.1
+### Bug Fixes
+* Replaced matLine directive by matListItemTitle and matListItemLine ([d651851](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/d651851))Closes[#158](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/158)
+* Added subscriptSizing='dynamic' in mat-form-field. This will not reserve spacing for the subscript below the mat-form-field.([372dd97](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/372dd97))Closes[#159](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/159)
+
 ## 15.0.0-beta.0 (2023-09-29)
 ### Features
 * Migration to Angular 15.
