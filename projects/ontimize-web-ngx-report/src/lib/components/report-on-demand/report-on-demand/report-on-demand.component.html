@@ -63,7 +63,7 @@
               <mat-list-option checkboxPosition="before" [selected]="currentPreference.style[choice.value]" *ngFor="let choice of stylesArray"
                 [value]="choice.value" (click)="onCheckboxStyleClick(choice.value)">
                 <div fxLayout="row">
-                  <span fxFlex>
+                  <span matListItemLine fxFlex>
                     {{choice.viewValue | oReportsTranslate}}
                   </span>
                 </div>
@@ -82,7 +82,7 @@
               [compareWith]="columnsCompareFunction">
               <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
-                  <span mat-line fxFlex>
+                  <span matListItemLine fxFlex>
                     {{column.id | oReportsTranslate}}
                   </span>
                   <mat-icon mat-list-icon *ngIf="isCheckedColumn(column)" (click)="showColumnStyleDialog($event, column.id)" class="button-edit">
@@ -103,7 +103,7 @@
               class="columns" [(ngModel)]="currentPreference.orderBy" [compareWith]="columnsOrderByCompareFunction">
               <mat-list-option checkboxPosition="before" *ngFor="let column of columnsOrderBy" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
-                  <span mat-line fxFlex>
+                  <span matListItemLine fxFlex>
                     {{column.columnId | oReportsTranslate}}
                   </span>
                   <mat-icon *ngIf="column.ascendent" (click)="changeOrder(column, $event)" mat-list-icon svgIcon="ontimize:sort_by_alpha_asc"
@@ -125,7 +125,7 @@
               [(ngModel)]="currentPreference.groups" (selectionChange)="onSelectionChangeGroups($event)">
               <mat-list-option checkboxPosition="before" *ngFor="let column of columnsToGroupData" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
-                  <span mat-line fxFlex>
+                  <span matListItemLine fxFlex>
                     {{ column | oTranslate }}
                   </span>
                   <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
@@ -144,7 +144,7 @@
               (selectionChange)="onSelectionChangeFunctions($event)">
               <mat-list-option checkboxPosition="before" *ngFor="let function of functionsData" [value]="function">
                 <div fxLayout="row" fxLayoutAlign="space-around center">
-                  <span mat-line fxFlex>
+                  <span matListItemLine fxFlex>
                     <ng-container *ngIf="function.columnName==='TOTAL'; else functionColumnTemplate">
                       {{function.type | oReportsTranslate}}
                     </ng-container>
