@@ -4,7 +4,7 @@
   <mat-selection-list #configurationList dense class="apply-configuration-dialog-list">
     <mat-list-option (click)="onClickConfigurationList(configuration)" checkboxPosition="before"
       *ngFor="let configuration of configurationListData" [value]="configuration">
-      <span matListItemLine>{{ configuration.NAME }}</span>
+      <span matListItemTitle>{{ configuration.NAME }}</span>
       <span matListItemLine>{{ configuration.DESCRIPTION }}</span>
     </mat-list-option>
   </mat-selection-list>
