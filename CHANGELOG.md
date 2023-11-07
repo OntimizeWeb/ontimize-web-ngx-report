@@ -1,7 +1,9 @@
 ## 15.0.0-beta.1
 ### Bug Fixes
 * Replaced matLine directive by matListItemTitle and matListItemLine ([d651851](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/d651851))Closes[#158](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/158)
-* Added subscriptSizing='dynamic' in mat-form-field. This will not reserve spacing for the subscript below the mat-form-field.([372dd97](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/372dd97))Closes[#159](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/159)
+* Added subscriptSizing='dynamic' in mat-form-field. This will not reserve spacing for the subscript below the mat-form-field.([372dd97](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/372dd97))Closes[#159](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/159).
+* Added dark mode ([39bbe5a](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/39bbe5a))Closes[#150](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/150).
+* Fixed bug that makes the menu button disappear ([e9cfc9a](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/e9cfc9a))Closes[#148](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/148).
 
 ## 15.0.0-beta.0 (2023-09-29)
 ### Features
