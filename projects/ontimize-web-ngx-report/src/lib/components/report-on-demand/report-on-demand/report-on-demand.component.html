@@ -25,15 +25,15 @@
   <mat-sidenav-container class="mat-sidenav-container" [class.opened]="openedSidenav" fxFill>
     <mat-sidenav #sidenav [(opened)]="openedSidenav" mode="side" class="report-on-demand-sidenav">
       <div fxLayout="column" fxFill fxLayoutGap="20px">
-        <o-button (click)="openedSidenav=!openedSidenav" svg-icon="ontimize:menu" type="ICON" label=""
+        <o-button *ngIf="openedSidenav" (click)="openedSidenav=!openedSidenav" svg-icon="ontimize:menu" type="ICON" label=""
           [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
         </o-button>
 
         <div fxLayout="column" *ngIf="openedSidenav" class="container-title" fxLayoutGap="10px">
-          <mat-form-field>
+          <mat-form-field subscriptSizing='dynamic'>
             <input [(ngModel)]="currentPreference.title" matInput placeholder="{{ 'TITLE' | oReportsTranslate }}">
           </mat-form-field>
-          <mat-form-field>
+          <mat-form-field subscriptSizing='dynamic'>
             <input [(ngModel)]="currentPreference.subtitle" matInput placeholder="{{ 'SUBTITLE' | oReportsTranslate }}">
           </mat-form-field>
         </div>
@@ -173,9 +173,28 @@
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="sidenav-container-content">
-        <ngx-extended-pdf-viewer #pdfViewer [base64Src]="pdf" [filenameForDownload]="currentPreference.title" [showPropertiesButton]="false"
-          [showOpenFileButton]="false" useBrowserLocale="true" delayFirstView="1000" [textLayer]="true">
-        </ngx-extended-pdf-viewer>
+        <ngx-extended-pdf-viewer [base64Src]="pdf" [filenameForDownload]="currentPreference.title" [customToolbar]="additionalButtons"
+          useBrowserLocale="true" delayFirstView="1000" [textLayer]="true" [theme]="isDarkMode ? 'dark' : 'light'"
+          [backgroundColor]="isDarkMode ? '#5c5c5c' : '#e4e6e8'"></ngx-extended-pdf-viewer>
+        <ng-template #additionalButtons>
+          <div id="toolbarViewer">
+            <div id="toolbarViewerLeft">
+              <o-button *ngIf="!openedSidenav" (click)="openedSidenav=!openedSidenav" svg-icon="ontimize:menu" type="ICON" label=""
+                [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
+              </o-button>
+              <div class="toolbarButtonSpacer"></div>
+              <pdf-find-button [showFindButton]="true" [textLayer]="true"></pdf-find-button>
+              <pdf-paging-area></pdf-paging-area>
+            </div>
+            <pdf-zoom-toolbar></pdf-zoom-toolbar> <!-- toolbar viewer middle -->
+            <div id="toolbarViewerRight">
+              <pdf-rotate-page></pdf-rotate-page>
+              <pdf-print></pdf-print>
+              <pdf-download></pdf-download>
+              <div class="verticalToolbarSeparator hiddenSmallView"></div>
+            </div>
+          </div>
+        </ng-template>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
