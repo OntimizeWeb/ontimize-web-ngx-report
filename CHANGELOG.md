@@ -1,4 +1,4 @@
-## 15.0.0-beta.1
+## 15.0.0-beta.1 (2023-11-08)
 ### Bug Fixes
 * **Report on demand:** Fixed bug that causes a vertical scroll ([afceb5f](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/afceb5f))Closes[#163](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/163)
 * Replaced matLine directive by matListItemTitle and matListItemLine ([d651851](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/d651851))Closes[#158](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/158)
