@@ -3,12 +3,12 @@
   <div mat-subheader>{{ 'SAVE_COLUMN_CONFIGURATION' | oReportsTranslate }}</div>
   <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="12px">
     <form #form>
-      <mat-form-field fxFill>
+      <mat-form-field subscriptSizing='dynamic' fxFill>
         <mat-label>{{ 'COLUMN_NAME' | oReportsTranslate }}</mat-label>
         <input id="columnNameInput" name="columnNameInput" matInput placeholder="{{ 'COLUMN_NAME' | oReportsTranslate }}" required
           [(ngModel)]="reportColumn.name" #columnNameInput="ngModel" [ngModelOptions]="{standalone: true}">
       </mat-form-field>
-      <mat-form-field fxFill>
+      <mat-form-field subscriptSizing='dynamic' fxFill>
         <input id="widthColumnInput" name="widthColumnInput" matInput type="number" placeholder="{{ 'COLUMN_WIDTH' | oReportsTranslate }}" required
           [(ngModel)]="reportColumn.columnStyle.width" #widthColumnInput="ngModel" [ngModelOptions]="{standalone: true}">
         <span matSuffix>px</span>
@@ -16,7 +16,8 @@
       </mat-form-field>
       <mat-radio-group [(ngModel)]="reportColumn.columnStyle.alignment" fxFill fxLayout="row" fxLayoutAlign="space-between center"
         [ngModelOptions]="{standalone: true}">
-        <mat-radio-button *ngFor="let aligmentItem of dataAlignment" [value]="aligmentItem.name" [checked]="reportColumn.columnStyle.alignment === aligmentItem">
+        <mat-radio-button *ngFor="let aligmentItem of dataAlignment" [value]="aligmentItem.name"
+          [checked]="reportColumn.columnStyle.alignment === aligmentItem">
           <mat-icon fxFlex>
             {{ aligmentItem.icon }}
           </mat-icon>

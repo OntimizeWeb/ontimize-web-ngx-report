@@ -5,6 +5,12 @@
     }
   }
 
+  .mat-drawer-transition {
+    .mat-drawer-content {
+      transition-duration: 800ms
+    }
+  }
+
   .mat-mdc-dialog-content {
     //height - toolbar-height - padding-top
     max-height: calc(100% - 36px - 16px);
@@ -49,7 +55,7 @@
       }
 
       .mat-accordion {
-        overflow-y: scroll;
+        overflow-y: auto;
 
         .acordions.mat-expansion-panel {
           border-radius: 0;
@@ -112,7 +118,10 @@
       overflow: hidden;
 
       .sidenav-container-content {
-        margin-left: 66px;
+        .opened {
+          margin-left: 66px;
+        }
+
         height: 100%;
       }
 

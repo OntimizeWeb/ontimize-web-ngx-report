@@ -2,7 +2,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Inject, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
-import { AppConfig, DialogService, FilterExpressionUtils, OColumn, OTableBase, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
+import { AppConfig, AppearanceService, DialogService, FilterExpressionUtils, OColumn, OTableBase, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 
 
 import { OReportService } from '../../../services/o-report.service';
@@ -40,7 +40,7 @@ export class ReportOnDemandComponent implements OnInit {
   private initialFunctionsData: OReportFunction[] = [];
   public appliedConfiguration: boolean = false;
   public selectedFunctions = [];
-
+  isDarkMode: boolean;
   public stylesArray = [
     { value: 'grid', viewValue: 'GRID' },
     { value: 'rowNumber', viewValue: 'ROW_NUMBER' },
@@ -81,7 +81,7 @@ export class ReportOnDemandComponent implements OnInit {
   constructor(
     public injector: Injector,
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OTableBase
+    @Inject(MAT_DIALOG_DATA) public data: OTableBase, private appearanceService: AppearanceService
   ) {
     this.appConfig = this.injector.get(AppConfig);
     this.translateService = this.injector.get<OTranslateService>(OTranslateService);
@@ -103,6 +103,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.initialColumnsData = this.parseReportColumn(this.columnsArray);
     this.initialColumnsToGroupData = this.columnsArray;
     this.currentConfiguration = { ENTITY: this.table.entity };
+    this.isDarkMode = this.appearanceService.isDarkMode();
     this.initializeReportPreferences();
 
     this.getFunctions();
@@ -150,7 +151,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   protected parseColumnsVisible() {
     const columnsArray = Util.parseArray(this.table.columns);
-    return this.table.oTableOptions.columns.filter(oCol => oCol.type !== "image" && oCol.visible && columnsArray.findIndex(column => column === oCol.attr) > -1).map(
+    return this.table.oTableOptions.columns.filter(oCol => oCol.type !== "image" && oCol.type !== "action" && oCol.visible && columnsArray.findIndex(column => column === oCol.attr) > -1).map(
       (x: OColumn) => x.attr
     )
   }
