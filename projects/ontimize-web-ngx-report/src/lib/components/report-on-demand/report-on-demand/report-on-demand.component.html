@@ -83,7 +83,7 @@
               <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [value]="column" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
-                    {{column.id | oReportsTranslate}}
+                    {{column.name | oReportsTranslate}}
                   </span>
                   <mat-icon mat-list-icon *ngIf="isCheckedColumn(column)" (click)="showColumnStyleDialog($event, column.id)" class="button-edit">
                     edit
@@ -101,10 +101,11 @@
             </mat-expansion-panel-header>
             <mat-selection-list dense #orderByList cdkDropList [cdkDropListData]="columnsOrderBy" (cdkDropListDropped)="dropColumnsOrderBy($event)"
               class="columns" [(ngModel)]="currentPreference.orderBy" [compareWith]="columnsOrderByCompareFunction">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsOrderBy" [value]="column" cdkDrag>
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsOrderBy"
+                [value]="{ columnId: column.columnId, ascendent: column.ascendent }" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
-                    {{column.columnId | oReportsTranslate}}
+                    {{column.columnName | oReportsTranslate}}
                   </span>
                   <mat-icon *ngIf="column.ascendent" (click)="changeOrder(column, $event)" mat-list-icon svgIcon="ontimize:sort_by_alpha_asc"
                     class="button-edit"></mat-icon>
@@ -123,10 +124,10 @@
             </mat-expansion-panel-header>
             <mat-selection-list dense cdkDropList [cdkDropListData]="columnsToGroupData" (cdkDropListDropped)="dropGroups($event)"
               [(ngModel)]="currentPreference.groups" (selectionChange)="onSelectionChangeGroups($event)">
-              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsToGroupData" [value]="column" cdkDrag>
+              <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [value]="column.id" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                   <span mat-line fxFlex>
-                    {{ column | oTranslate }}
+                    {{ column.name | oTranslate }}
                   </span>
                   <mat-icon mat-list-icon class="button-edit">drag_handle</mat-icon>
                 </div>
