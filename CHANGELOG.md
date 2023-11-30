@@ -1,3 +1,7 @@
+### 8.2.2 (2023-11-30)
+### Features
+* **Report on demand:**  Added title as column name ([c0a45cc](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/c0a45cc)) Closes[#167](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/167)
+
 ### 8.2.1 (2023-10-26)
 ### Bug Fixes
 * **Report on demand:** Modified columns so that they don't allow action type columns to be included in reports([d8e5b91](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/d8e5b91))Closes[#145](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/145)
