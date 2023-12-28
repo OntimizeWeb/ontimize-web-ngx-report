@@ -604,8 +604,8 @@ export class ReportOnDemandComponent implements OnInit {
         case 'boolean':
           newRenderer.type = type;
           newRenderer.renderType = 'string';
-          newRenderer.trueValue = this.translateService.get('REPORT.BOOLEANCOLUMN.TRUEVALUE');
-          newRenderer.falseVale = this.translateService.get('REPORT.BOOLEANCOLUMN.FALSEVALUE');
+          newRenderer.trueValue = this.translateService.get('REPORT.COLUMN.TRUEVALUE');
+          newRenderer.falseValue = this.translateService.get('REPORT.COLUMN.FALSEVALUE');
           break;
         case 'currency':
           newRenderer.type = type
