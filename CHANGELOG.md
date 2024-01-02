@@ -1,7 +1,7 @@
 ### 8.3.0 (2024-01-02)
 ### Features
-* New injection token **O_REPORT_DATA_SERVICE**
-* **Report on demand:** New boolean renderer in which you can set the true/false value that you want to render in the report on demand ([95306fa](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/95306fa)) Closes [#172](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/172)
+* New injection token **O_REPORT_DATA_SERVICE** that allows to override report data provider for customizing report parameters when report on demand
+* **Report on demand:** : New boolean renderer in which you can set the true/false value that you want to render in the report on demand ([95306fa](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/95306fa)) Closes [#172](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/172)
 
 ### DEPENDENCY AND PEER-DEPENDENCY UPDATES
 * **Updated**: ontimize-web-ngx@8.14.6
