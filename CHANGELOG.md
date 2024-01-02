@@ -1,3 +1,11 @@
+### 8.3.0 (2024-01-02)
+### Features
+* New injection token **O_REPORT_DATA_SERVICE** that allows to override report data provider for customizing report parameters when report on demand
+* **Report on demand:** : New boolean renderer in which you can set the true/false value that you want to render in the report on demand ([95306fa](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/95306fa)) Closes [#172](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/172)
+
+### DEPENDENCY AND PEER-DEPENDENCY UPDATES
+* **Updated**: ontimize-web-ngx@8.14.6
+
 ## 15.0.0-beta.1 (2023-11-08)
 ### Bug Fixes
 * **Report on demand:** Fixed bug that causes a vertical scroll ([afceb5f](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/afceb5f))Closes[#163](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/163)
@@ -11,17 +19,18 @@
 * Migration to Angular 15.
 * Migration to Angular Material 15.
 
+
 ### 8.2.2 (2023-11-30)
 ### Features
-* **Report on demand:**  Added title as column name ([c0a45cc](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/c0a45cc)) Closes[#167](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/167)
+* **Report on demand:**  Added title as column name ([c0a45cc](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/c0a45cc)) Closes [#167](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/167)
 
 ### 8.2.1 (2023-10-26)
 ### Bug Fixes
-* **Report on demand:** Modified columns so that they don't allow action type columns to be included in reports([d8e5b91](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/d8e5b91))Closes[#145](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/145)
+* **Report on demand:** Modified columns so that they don't allow action type columns to be included in reports([d8e5b91](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/d8e5b91)) Closes [#145](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/145)
 
 ## 8.2.0 (2023-07-28)
 ### Features
-* **Report on demand:** Modified the parameters to allow the creation of reports on-demand from the filtered data of the table ([8637180](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/8637180)) Closes[#132](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/132)
+* **Report on demand:** Modified the parameters to allow the creation of reports on-demand from the filtered data of the table ([8637180](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/8637180)) Closes [#132](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/132)
 
 ## 8.1.1 (2023-01-31)
 ### Bug Fixes
@@ -29,12 +38,12 @@
 
 ## 8.1.0 (2022-12-29)
 ### Features
-* Modified the report window style ([087c0c3](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/087c0c3)) Closes[#92](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/92)
-* Changed the style of the window title ([1306d65](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/1306d65)) Closes[#91](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/91)
+* Modified the report window style ([087c0c3](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/087c0c3)) Closes [#92](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/92)
+* Changed the style of the window title ([1306d65](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/1306d65)) Closes [#91](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/91)
 * Modified the style of the configuration menu ([01af193](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/01af193)) Closes[#97](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/97)
 ### Bug Fixes
-* Modified preferences system by adding the type attribute ([7fb3ffc](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/7fb3ffc)) Closes[#95](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/95)
-* Included ngx-extended-pdf-viewer/assets/ files in the library ([60989a9](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/60989a9)) Closes[#101](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/101)
+* Modified preferences system by adding the type attribute ([7fb3ffc](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/7fb3ffc)) Closes [#95](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/95)
+* Included ngx-extended-pdf-viewer/assets/ files in the library ([60989a9](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/60989a9)) Closes [#101](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/101)
 
 ## 8.0.2 (2022-10-25)
 ### Bug Fixes
