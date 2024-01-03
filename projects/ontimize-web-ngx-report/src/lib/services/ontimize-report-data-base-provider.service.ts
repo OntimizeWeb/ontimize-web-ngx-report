@@ -1,8 +1,9 @@
 import { Injectable, InjectionToken, Injector } from '@angular/core';
-import { AppConfig, FilterExpressionUtils, OTableComponent, OTranslateService, Util } from 'ontimize-web-ngx';
+import { AppConfig, FilterExpressionUtils, OTableBase, OTranslateService, Util } from 'ontimize-web-ngx';
+
+import { IReportDataProvider } from '../interfaces/report-data-provider.interface';
 import { OReportParam, OReportPreferences } from '../types';
 import { OFilterParameter } from '../types/filter-parameter.type';
-import { IReportDataProvider } from '../interfaces/report-data-provider.interface';
 
 export const O_REPORT_DATA_SERVICE = new InjectionToken<IReportDataProvider>('Report data provider');
 
@@ -29,7 +30,7 @@ export class OntimizeReportDataBaseProvider implements IReportDataProvider {
     return servConfig;
   }
 
-  getComponentFilter(table: OTableComponent): any {
+  getComponentFilter(table: OTableBase): any {
     let firstFilter = {};
     let filter = {};
 
@@ -63,7 +64,7 @@ export class OntimizeReportDataBaseProvider implements IReportDataProvider {
 
   }
 
-  getReportConfiguration(currentPreference: OReportPreferences, table: OTableComponent): OReportParam {
+  getReportConfiguration(currentPreference: OReportPreferences, table: OTableBase): OReportParam {
 
     let reportConfiguration: OReportParam;
 

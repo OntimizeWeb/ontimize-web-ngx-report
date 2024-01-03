@@ -2,8 +2,10 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Inject, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
-import { AppConfig, DialogService, OColumn, OTableComponent, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
+import { AppConfig, AppearanceService, DialogService, OColumn, OTableBase, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
+
 import { OReportService } from '../../../services/o-report.service';
+import { OntimizeReportDataProvider } from '../../../services/ontimize-report-data-provider.service';
 import { OReportColumnStyle } from '../../../types/report-column-style.type';
 import { OReportColumn } from '../../../types/report-column.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
@@ -16,7 +18,6 @@ import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-
 import { SelectFunctionDialogComponent } from '../select-function-dialog/select-function-dialog.component';
 import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
 import { OReportParam } from './../../../types/report-param.type';
-import { OntimizeReportDataProvider } from '../../../services/ontimize-report-data-provider.service';
 
 @Component({
   selector: 'o-report-on-demand',
@@ -82,7 +83,8 @@ export class ReportOnDemandComponent implements OnInit {
   constructor(
     public injector: Injector,
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OTableBase, private appearanceService: AppearanceService
+    @Inject(MAT_DIALOG_DATA) public data: OTableBase,
+    private appearanceService: AppearanceService
   ) {
     this.appConfig = this.injector.get(AppConfig);
     this.translateService = this.injector.get<OTranslateService>(OTranslateService);
