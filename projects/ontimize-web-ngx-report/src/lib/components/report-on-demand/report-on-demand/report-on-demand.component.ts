@@ -2,11 +2,10 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Inject, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
-import { AppConfig, AppearanceService, DialogService, FilterExpressionUtils, OColumn, OTableBase, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
-
+import { AppConfig, AppearanceService, DialogService, OColumn, OTableBase, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
 
 import { OReportService } from '../../../services/o-report.service';
-import { OFilterParameter } from '../../../types/filter-parameter.type';
+import { OntimizeReportDataProvider } from '../../../services/ontimize-report-data-provider.service';
 import { OReportColumnStyle } from '../../../types/report-column-style.type';
 import { OReportColumn } from '../../../types/report-column.type';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
@@ -18,6 +17,7 @@ import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-
 import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-preferences-dialog.component';
 import { SelectFunctionDialogComponent } from '../select-function-dialog/select-function-dialog.component';
 import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
+import { OReportParam } from './../../../types/report-param.type';
 
 @Component({
   selector: 'o-report-on-demand',
@@ -79,10 +79,12 @@ export class ReportOnDemandComponent implements OnInit {
   protected reportService: OReportService;
   protected dialogService: DialogService;
   public dialog: MatDialog;
+  reportDataProvider: OntimizeReportDataProvider;
   constructor(
     public injector: Injector,
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: OTableBase, private appearanceService: AppearanceService
+    @Inject(MAT_DIALOG_DATA) public data: OTableBase,
+    private appearanceService: AppearanceService
   ) {
     this.appConfig = this.injector.get(AppConfig);
     this.translateService = this.injector.get<OTranslateService>(OTranslateService);
@@ -90,6 +92,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.reportService = this.injector.get<OReportService>(OReportService);
     this.dialogService = this.injector.get<DialogService>(DialogService);
     this.dialog = this.injector.get<MatDialog>(MatDialog);
+    this.reportDataProvider = this.injector.get<OntimizeReportDataProvider>(OntimizeReportDataProvider);
   }
 
   ngOnInit() {
@@ -98,7 +101,6 @@ export class ReportOnDemandComponent implements OnInit {
 
   protected initialize() {
     this.table = this.data;
-    this.language = this.translateService.getCurrentLang();
     this.service = this.table.service;
     this.columnsArray = this.parseColumnsVisible();
     this.visibleColumnsArray = this.getVisibleColumns();
@@ -197,63 +199,12 @@ export class ReportOnDemandComponent implements OnInit {
     });
   }
 
-  getComponentFilter(): any {
-    let firstFilter = {};
-    let filter = {};
 
-    const beColFilter = this.table.getColumnFiltersExpression();
-    // Add column filters basic expression to current filter
-    if (beColFilter && !Util.isDefined(firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY])) {
-      firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] = beColFilter;
-    } else if (beColFilter) {
-      firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY] =
-        FilterExpressionUtils.buildComplexExpression(firstFilter[FilterExpressionUtils.FILTER_EXPRESSION_KEY], beColFilter, FilterExpressionUtils.OP_AND);
-    }
-
-    const filterParentKeys = this.table.getParentKeysValues();
-    filter = Object.assign(firstFilter || {}, filterParentKeys);
-
-    const quickFilterExpr = Util.isDefined(this.table.oTableQuickFilterComponent) ? this.table.oTableQuickFilterComponent.filterExpression : undefined;
-    const filterBuilderExpr = Util.isDefined(this.table.filterBuilder) ? this.table.filterBuilder.getExpression() : undefined;
-    let complexExpr = quickFilterExpr || filterBuilderExpr;
-    if (quickFilterExpr && filterBuilderExpr) {
-      complexExpr = FilterExpressionUtils.buildComplexExpression(quickFilterExpr, filterBuilderExpr, FilterExpressionUtils.OP_AND);
-    }
-
-    if (complexExpr && !Util.isDefined(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY])) {
-      filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] = complexExpr;
-    } else if (complexExpr) {
-      filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY] =
-        FilterExpressionUtils.buildComplexExpression(filter[FilterExpressionUtils.BASIC_EXPRESSION_KEY], complexExpr, FilterExpressionUtils.OP_AND);
-    }
-
-    return filter;
-
-  }
 
 
   protected openReport() {
-    const serviceConfiguration = this.getDefaultServiceConfiguration(this.currentPreference.service);
-    let pathService: string;
-    if (Util.isObject(serviceConfiguration) && serviceConfiguration.hasOwnProperty('path')) {
-      pathService = serviceConfiguration.path;
-    }
-    let filters: OFilterParameter = {
-      columns: this.table.oTableOptions.visibleColumns.filter(c => this.table.getColumnsNotIncluded().indexOf(c) === -1),
-      sqltypes: this.table.getSqlTypes(),
-      filter: this.getComponentFilter(),
-      offset: this.table.pageable ? this.table.currentPage * this.table.queryRows : -1,
-      pageSize: this.table.queryRows,
-
-    };
-
-    this.reportService.createReport({
-      "title": this.currentPreference.title, "groups": this.currentPreference.groups, "entity": this.currentPreference.entity, "path": pathService,
-      "service": this.currentPreference.service, "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions,
-      "style": this.currentPreference.style, "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy,
-      "language": this.language, "filters": filters, "advQuery": this.table.pageable
-
-    }).subscribe(res => {
+    const reportConfiguration:OReportParam = this.reportDataProvider.getReportConfiguration(this.currentPreference, this.table)
+    this.reportService.createReport(reportConfiguration).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.pdf = res.data[0].file;
       }
@@ -652,6 +603,12 @@ export class ReportOnDemandComponent implements OnInit {
 
       let columnRenderer: any = oColumn.renderer;
       switch (type) {
+        case 'boolean':
+          newRenderer.type = type;
+          newRenderer.renderType = 'string';
+          newRenderer.trueValue = this.translateService.get('REPORT.COLUMN.TRUEVALUE');
+          newRenderer.falseValue = this.translateService.get('REPORT.COLUMN.FALSEVALUE');
+          break;
         case 'currency':
           newRenderer.type = type
           newRenderer.currencySymbol = columnRenderer.currencySymbol;
