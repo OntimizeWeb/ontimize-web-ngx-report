@@ -29,7 +29,14 @@ jobs:
         with:
           node-version: 18.10.0
 
+      - name: update .npmrc
+        run: |
+          echo @ontimizeweb:registry=https://npm.pkg.github.com/ >> .npmrc
+          echo //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN} >> .npmrc
+
       - name: npm install and npm run test-ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.OWEB_GH_TOKEN_PUSH }}
         run: |
           npm i
           npm run test-ci
