@@ -33,12 +33,10 @@ jobs:
 
       - name: update .npmrc
         run: |
-          echo @ontimizeweb:registry=https://npm.pkg.github.com/ >> /home/runner/work/_temp/.npmrc
-          echo //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN} >> /home/runner/work/_temp/.npmrc
+          echo @ontimizeweb:registry=https://npm.pkg.github.com/ >> .npmrc
+          echo //npm.pkg.github.com/:_authToken=${{ secrets.OWEB_GH_TOKEN_PUSH }} >> .npmrc
 
       - name: npm install and npm run test-ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.OWEB_GH_TOKEN_PUSH }}
         run: |
           npm i
           npm run test-ci
