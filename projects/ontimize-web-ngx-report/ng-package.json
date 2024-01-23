@@ -6,6 +6,7 @@
   },
   "allowedNonPeerDependencies": [
     "ngx-extended-pdf-viewer",
+    "ngx-skeleton-loader",
     "zone.js"
   ]
 }
