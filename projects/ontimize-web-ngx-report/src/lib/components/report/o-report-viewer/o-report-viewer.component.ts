@@ -20,6 +20,7 @@ export class OReportViewerComponent {
 
   public name = '';
   public fullscreen: boolean = false;
+  public showReport: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<OReportViewerComponent>,
@@ -34,6 +35,7 @@ export class OReportViewerComponent {
       res => {
         if (res && res.data.length && res.code === 0) {
           this.pdf = res.data[0].file;
+          this.showReport = true;
         }
       },
       err => {
