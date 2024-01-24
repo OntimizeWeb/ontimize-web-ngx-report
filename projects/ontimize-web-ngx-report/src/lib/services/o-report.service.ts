@@ -213,18 +213,18 @@ export class OReportService extends OntimizeEEService {
     });
   }
 
-  public fillReport(av?: Array<string>, entity?: string, _sqltypes?: Object, filter?: Object): Observable<any> {
-    const identifier = av[0];
-    let params = '';
+  public fillReport(uuid: string, filter?: Object, av?: Array<string>, entity?: string, _sqltypes?: Object): Observable<any> {
+    // const identifier = av[0];
+    // let params = '';
 
-    for (let i = 1; i < av.length; i++)
-      params = params + av[i].toString() + ',';
+    // for (let i = 1; i < av.length; i++)
+    //   params = params + av[i].toString() + ',';
     let body = JSON.stringify({
-      params: params,
-      filter: filter
+      params: av,
+      filters: filter
     })
 
-    let url = `${this.urlBase}/reportstore/${entity}/` + identifier;
+    let url = `${this.urlBase}/reportstore/${entity}/` + uuid;
 
     return this.doRequest({
       method: 'POST',

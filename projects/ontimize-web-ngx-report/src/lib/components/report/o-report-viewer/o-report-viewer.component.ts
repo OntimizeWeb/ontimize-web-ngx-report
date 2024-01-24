@@ -1,6 +1,6 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { DialogService } from 'ontimize-web-ngx';
+import { DialogService, Util } from 'ontimize-web-ngx';
 import { OReportService } from '../../../services/o-report.service';
 import { Utils } from '../../../util/utils';
 
@@ -26,8 +26,12 @@ export class OReportViewerComponent {
     @Inject(MAT_DIALOG_DATA) public data: any) {
     this.reportService.configureService(this.reportService.getDefaultServiceConfiguration());
     this.reportService.configureAdapter();
-    this.name = this.data.name;
-    this.reportService.fillReport(this.data['params'], 'fillReport', {}, this.data['filter']).subscribe(
+    this.name = Util.isDefined(this.data['name']) ? this.data.name : '';
+
+    const uuid = this.data['id'];
+    const kv = Util.isDefined(this.data['filters']) ? this.data['filters'] : {};
+    const av = Util.isDefined(this.data['params']) ? this.data['params'] : [];
+    this.reportService.fillReport(uuid, kv, av, 'fillReport', {},).subscribe(
       res => {
         if (res && res.data.length && res.code === 0) {
           this.pdf = res.data[0].file;
