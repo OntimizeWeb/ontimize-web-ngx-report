@@ -4,7 +4,7 @@
 * **Report store:**
   * Added skeleton to report viewer to solved bug while report was not loaded ([b62a6ef](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/b62a6ef)) Closes [#185](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/185)
   * Modified the report window style ([832296c](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/832296c)) Closes [#188](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/188)
-
+  * Fixed bug with service provider ([7f64ecc](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/7f64ecc)) Closes [#191](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/191)
 
 ### 8.3.0 (2024-01-02)
 ### Features
