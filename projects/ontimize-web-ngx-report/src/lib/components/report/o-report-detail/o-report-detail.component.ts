@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material';
 import { DialogService, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
 import { Constants } from '../../../util/constants';
 import { OReportViewerComponent } from '../o-report-viewer/o-report-viewer.component';
+import { Utils } from '../../../util/utils';
 
 @Component({
   selector: 'o-report-detail',
@@ -14,6 +15,7 @@ export class OReportDetailComponent {
   id: OTextInputComponent;
   @ViewChild('paramForm', { static: false })
   paramForm: OFormComponent;
+  name: string;
 
   private values: string[];
 
@@ -43,21 +45,14 @@ export class OReportDetailComponent {
       for (let i = 0; i < size; i++)
         this.av.push(this.values.shift());
     }
+    const data = { 'params': this.av, 'filter': {}, name: this.name };
+    Utils.openModalVisor(this.dialog, OReportViewerComponent, data)
 
-
-    this.dialog.open(OReportViewerComponent, {
-      height: Constants.DEFAULT_HEIGHT_DIALOG,
-      width: Constants.DEFAULT_HEIGHT_DIALOG,
-      data: {
-        'params': this.av,
-        'filter': {}
-      }
-
-    });
   }
 
   onDataLoaded(e: object) {
     this.parameters = e['PARAMETERS'];
+    this.name = e['NAME'];
     if (this.parameters.length > 0) {
       this.hasParams = true;
     }
