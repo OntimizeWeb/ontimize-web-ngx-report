@@ -13,6 +13,8 @@ import { SelectFunctionDialogComponent } from '../components/report-on-demand/se
 import { SavePreferencesDialogComponent } from '../components/report-on-demand/save-preferences-dialog/save-preferences-dialog.component';
 import { ApplyConfigurationDialogComponent } from '../components/report-on-demand/apply-configuration/apply-configuration-dialog.component';
 import { OReportsTranslatePipe } from '../util/o-reports-translate.pipe';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { OReportSkeletonComponent } from '../components';
 
 
 export const OREPORT_DECLARATION_MODULES: any = [
@@ -20,6 +22,7 @@ export const OREPORT_DECLARATION_MODULES: any = [
   OReportNewComponent,
   OReportDetailComponent,
   OReportViewerComponent,
+  OReportSkeletonComponent,
   ReportOnDemandComponent,
   StyleDialogComponent,
   SelectFunctionDialogComponent,
@@ -31,6 +34,7 @@ export const OREPORT_IMPORTS_MODULES: any = [
   CommonModule,
   OntimizeWebModule,
   NgxExtendedPdfViewerModule,
+  NgxSkeletonLoaderModule.forRoot(),
   FlexLayoutModule,
   DragDropModule
 ]
