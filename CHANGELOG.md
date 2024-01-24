@@ -1,3 +1,11 @@
+### 8.3.1 (2024-01-24)
+### Bug Fixes
+* **Report on demand:** Fixed bug that prevents groups from being cleaned ([c6e7cb5](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/c6e7cb5)) Closes [#184](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/184)
+* **Report store:**
+  * Added skeleton to report viewer to solved bug while report was not loaded ([b62a6ef](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/b62a6ef)) Closes [#185](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/185)
+  * Modified the report window style ([832296c](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/832296c)) Closes [#188](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/188)
+
+
 ### 8.3.0 (2024-01-02)
 ### Features
 * New injection token **O_REPORT_DATA_SERVICE** that allows to override report data provider for customizing report parameters when report on demand
@@ -19,7 +27,6 @@
 * **Report on demand:** Modified the parameters to allow the creation of reports on-demand from the filtered data of the table ([8637180](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/8637180)) Closes [#132](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/132)
 
 ## 8.1.1 (2023-01-31)
-### Bug Fixes
 * Fixing compatibility with globstars in script `copy-files` ([913775b](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/913775b))
 
 ## 8.1.0 (2022-12-29)
