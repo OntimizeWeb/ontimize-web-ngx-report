@@ -14,6 +14,7 @@ import { SavePreferencesDialogComponent } from '../components/report-on-demand/s
 import { ApplyConfigurationDialogComponent } from '../components/report-on-demand/apply-configuration/apply-configuration-dialog.component';
 import { OReportsTranslatePipe } from '../util/o-reports-translate.pipe';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { OReportSkeletonComponent } from '../components/report/o-report-skeleton/o-report-skeleton.component';
 
 
 export const OREPORT_DECLARATION_MODULES: any = [
@@ -21,6 +22,7 @@ export const OREPORT_DECLARATION_MODULES: any = [
   OReportNewComponent,
   OReportDetailComponent,
   OReportViewerComponent,
+  OReportSkeletonComponent,
   ReportOnDemandComponent,
   StyleDialogComponent,
   SelectFunctionDialogComponent,
