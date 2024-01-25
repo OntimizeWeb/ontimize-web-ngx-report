@@ -1,3 +1,7 @@
+### 8.3.2 (2024-01-25)
+### Bug Fixes
+* Fixed bug caused by incorrect import of the OReportSkeletonComponent ([cb1b3fe](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/cb1b3fe)) Closes [#197](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/197)
+
 ### 8.3.1 (2024-01-24)
 ### Bug Fixes
 * **Report on demand:** Fixed bug that prevents groups from being cleaned ([c6e7cb5](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/c6e7cb5)) Closes [#184](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/184)
