@@ -32,6 +32,7 @@ import { OntimizeReportDataProvider } from '../../../services/ontimize-report-da
 export class ReportOnDemandComponent implements OnInit {
 
   @ViewChild('columnsList', { static: false }) columnsList: MatSelectionList;
+  @ViewChild('groupsList', { static: false }) groupsList: MatSelectionList;
   @ViewChild('functionsList', { static: false }) functionsList: MatSelectionList;
   @ViewChild('orderByList', { static: false }) orderByList: MatSelectionList;
 
@@ -129,6 +130,9 @@ export class ReportOnDemandComponent implements OnInit {
     if (this.columnsList) {
       this.columnsList.deselectAll();
     }
+    if (this.groupsList) {
+      this.groupsList.deselectAll();
+    }
     if (this.functionsList) {
       this.functionsList.deselectAll();
     }
@@ -201,7 +205,7 @@ export class ReportOnDemandComponent implements OnInit {
 
 
   protected openReport() {
-    const reportConfiguration:OReportParam = this.reportDataProvider.getReportConfiguration(this.currentPreference, this.table)
+    const reportConfiguration: OReportParam = this.reportDataProvider.getReportConfiguration(this.currentPreference, this.table)
     this.reportService.createReport(reportConfiguration).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.pdf = res.data[0].file;

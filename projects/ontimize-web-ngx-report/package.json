@@ -23,6 +23,7 @@
     "ontimize-web-ngx": "^8.14.6"
   },
   "dependencies": {
-    "ngx-extended-pdf-viewer": "9.0.0-alpha.1"
+    "ngx-extended-pdf-viewer": "9.0.0-alpha.1",
+    "ngx-skeleton-loader": "4.0.0"
   }
 }
