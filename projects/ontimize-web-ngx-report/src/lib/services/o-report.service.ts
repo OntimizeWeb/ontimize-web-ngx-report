@@ -3,6 +3,7 @@ import { OReportParam } from "../types/report-param.type";
 import { Observable, OErrorDialogManager, OntimizeEEService, ServiceRequestParam, ServiceResponse, Util } from 'ontimize-web-ngx';
 import { HttpEventType, HttpHeaders, HttpRequest } from "@angular/common/http";
 import { share } from 'rxjs/operators';
+import { OReportStoreParam } from "../types/report-store-param.type";
 
 
 @Injectable({ providedIn: 'root' })
@@ -213,17 +214,8 @@ export class OReportService extends OntimizeEEService {
     });
   }
 
-  public fillReport(uuid: string, filter?: Object, av?: Array<string>, entity?: string, _sqltypes?: Object): Observable<any> {
-    // const identifier = av[0];
-    // let params = '';
-
-    // for (let i = 1; i < av.length; i++)
-    //   params = params + av[i].toString() + ',';
-    let body = JSON.stringify({
-      params: av,
-      filters: filter
-    })
-
+  public fillReport(uuid: string, reportStoreParam: OReportStoreParam, entity?: string, _sqltypes?: Object): Observable<any> {
+    let body = JSON.stringify(reportStoreParam);
     let url = `${this.urlBase}/reportstore/${entity}/` + uuid;
 
     return this.doRequest({

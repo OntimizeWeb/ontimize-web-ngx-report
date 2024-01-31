@@ -1,9 +1,19 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { DialogService, OFormComponent, OTextInputComponent, Util } from 'ontimize-web-ngx';
-import { Constants } from '../../../util/constants';
+import { DialogService, OFormComponent, Util } from 'ontimize-web-ngx';
 import { OReportViewerComponent } from '../o-report-viewer/o-report-viewer.component';
 import { Utils } from '../../../util/utils';
+import { OReportStoreParam, OReportStoreParamValue } from '../../../types/report-store-param.type';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+
+
+export type JasperReportParameter = {
+  name: string,
+  description: string,
+  valueClass: string,
+  type?: string
+}
+
 
 @Component({
   selector: 'o-report-detail',
@@ -13,44 +23,78 @@ export class OReportDetailComponent {
 
   @ViewChild('form', { static: false })
   mainForm: OFormComponent;
-  @ViewChild('paramForm', { static: false })
   paramForm: OFormComponent;
   id: string;
   name: string;
 
-  // private values: string[];
-
-  public parameters: [];
-  // private av: string[];
+  public parameters: Array<JasperReportParameter>;
   public hasParams: boolean = false;
+
+  protected formCacheSubscription: Subscription;
+  protected existChangesSubject = new BehaviorSubject<boolean>(false);
+  public existsParameterChanges: Observable<boolean>;
 
   constructor(
     protected dialogService: DialogService,
     protected dialog: MatDialog,
-  ) { }
+  ) {
+    this.existsParameterChanges = this.existChangesSubject.asObservable();
+  }
 
+  @ViewChild('paramForm', { static: false }) set content(content: OFormComponent) {
+    if (content) { // initially setter gets called with undefined
+      this.paramForm = content;
+      this.doSubscription();
+    }
+  }
 
-  private getParameterValues(): Array<any> {
-    const values = [];
-    if(this.hasParams) {
-      for (let i = 0; i < this.parameters.length; i++) {
-        let v = this.paramForm.getFieldValue('value' + i);
-        values.push(v);
+  protected doSubscription(): void {
+    if (this.hasParams && !this.formCacheSubscription && this.paramForm) {
+      this.formCacheSubscription = this.paramForm.getFormCache().onCacheStateChanges.subscribe((value: any) => {
+        this.canFillReport();
+      });
+    }
+  }
+
+  public ngOnDestroy(): void {
+    if (this.formCacheSubscription) {
+      this.formCacheSubscription.unsubscribe();
+    }
+  }
+
+  private getParameterValues(): Array<OReportStoreParamValue> {
+    const parameterValues: Array<OReportStoreParamValue> = [];
+    if (this.hasParams) {
+      const formValues = this.paramForm.getAttributesValuesToInsert();
+      const sqlTypes = this.paramForm.getAttributesSQLTypes();
+      for (let currentParam of this.parameters) {
+        if (Util.isDefined(formValues[currentParam.name])) {
+          let current = {
+            name: currentParam.name,
+            value: formValues[currentParam.name]
+          };
+          if (Util.isDefined(sqlTypes[currentParam.name])) {
+            current["sqlType"] = sqlTypes[currentParam.name];
+          }
+          parameterValues.push(current);
+        }
       }
     }
-    return values;
+    return parameterValues;
   }
 
   public fillReport() {
-    let paramValues = [];
+    let paramValues:Array<OReportStoreParamValue> = [];
     if (this.hasParams) {
       paramValues = this.getParameterValues();
+    }
+    const reportStoreParam: OReportStoreParam = {
+      parameters: paramValues
     }
     const data = {
       'id': this.id,
       'name': this.name,
-      'params': paramValues,
-      'filters': {}
+      'param': reportStoreParam
     };
     Utils.openModalVisor(this.dialog, OReportViewerComponent, data)
 
@@ -63,12 +107,12 @@ export class OReportDetailComponent {
     this.id = Util.isDefined(e['UUID']) ? e['UUID'] : undefined;
   }
 
-  canFillReport(): boolean {
-    const result = this.mainForm && this.mainForm.formGroup && this.mainForm.formGroup.valid;
+  canFillReport(): void {
+    let result = this.mainForm && this.mainForm.formGroup && this.mainForm.formGroup.valid;
     if (this.hasParams) {
-      return result && this.paramForm && this.paramForm.formGroup && this.paramForm.formGroup.valid
+      result = result && this.paramForm && this.paramForm.formGroup && this.paramForm.formGroup.valid
     }
-    return result;
+    this.existChangesSubject.next(result);
   }
 
 }
