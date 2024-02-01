@@ -1,3 +1,15 @@
+### 8.3.2 (2024-01-25)
+### Bug Fixes
+* Fixed bug caused by incorrect import of the OReportSkeletonComponent ([cb1b3fe](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/cb1b3fe)) Closes [#197](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/197)
+
+### 8.3.1 (2024-01-24)
+### Bug Fixes
+* **Report on demand:** Fixed bug that prevents groups from being cleaned ([c6e7cb5](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/c6e7cb5)) Closes [#184](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/184)
+* **Report store:**
+  * Added skeleton to report viewer to solved bug while report was not loaded ([b62a6ef](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/b62a6ef)) Closes [#185](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/185)
+  * Modified the report window style ([832296c](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/832296c)) Closes [#188](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/188)
+  * Fixed bug with service provider ([7f64ecc](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/7f64ecc)) Closes [#191](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/191)
+
 ### 8.3.0 (2024-01-02)
 ### Features
 * New injection token **O_REPORT_DATA_SERVICE** that allows to override report data provider for customizing report parameters when report on demand
