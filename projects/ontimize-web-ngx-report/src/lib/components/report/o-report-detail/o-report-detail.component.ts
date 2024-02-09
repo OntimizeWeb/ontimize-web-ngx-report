@@ -105,6 +105,9 @@ export class OReportDetailComponent {
     this.hasParams = !Util.isArrayEmpty(this.parameters);
     this.name = Util.isDefined(e['NAME']) ? e['NAME'] : "";
     this.id = Util.isDefined(e['UUID']) ? e['UUID'] : undefined;
+    if(!this.hasParams) {
+      this.canFillReport();
+    }
   }
 
   canFillReport(): void {
