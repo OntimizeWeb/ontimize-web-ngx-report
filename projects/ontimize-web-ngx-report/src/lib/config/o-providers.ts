@@ -1,4 +1,4 @@
-import { Injector } from '@angular/core';
+import { InjectionToken, Injector } from '@angular/core';
 import { _getInjectionTokenValue, O_REPORT_SERVICE, Util } from 'ontimize-web-ngx';
 
 import { IReportDataProvider } from '../interfaces/report-data-provider.interface';
@@ -20,15 +20,20 @@ export function reportDataFactory(injector: Injector): IReportDataProvider {
   }
 
 }
-export const OREPORT_PROVIDERS: any = [{ provide: O_REPORT_SERVICE, useClass: OntimizeReportService },
-{
-  provide: 'report',
-  useValue: OReportService
-},
-{
-  provide: OntimizeReportDataProvider,
-  useFactory: reportDataFactory,
-  deps: [Injector]
-},
-  OAlertService, OReportStoreService
+export const OREPORT_PROVIDERS: any = [
+  { provide: O_REPORT_SERVICE, useClass: OntimizeReportService },
+  {
+    provide: 'report',
+    useValue: OReportService
+  },
+  {
+    provide: 'reportstore',
+    useValue: OReportStoreService
+  },
+  {
+    provide: OntimizeReportDataProvider,
+    useFactory: reportDataFactory,
+    deps: [Injector]
+  },
+  OAlertService
 ];
