@@ -1,10 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { DialogService, OFormComponent, Util } from 'ontimize-web-ngx';
+import { DialogService, OFileInputComponent, OFormComponent, OTextInputComponent, Util } from 'ontimize-web-ngx';
 import { OReportViewerComponent } from '../o-report-viewer/o-report-viewer.component';
 import { Utils } from '../../../util/utils';
 import { OReportStoreParam, OReportStoreParamValue } from '../../../types/report-store-param.type';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { OAlertService } from '../../../services/o-alert.service';
+import { OReportStoreService } from '../../../services/o-report-store.service';
 
 
 export type JasperReportParameter = {
@@ -25,7 +27,7 @@ export class OReportDetailComponent {
   mainForm: OFormComponent;
   paramForm: OFormComponent;
   id: string;
-  name: string;
+
 
   public parameters: Array<JasperReportParameter>;
   public hasParams: boolean = false;
@@ -33,10 +35,21 @@ export class OReportDetailComponent {
   protected formCacheSubscription: Subscription;
   protected existChangesSubject = new BehaviorSubject<boolean>(false);
   public existsParameterChanges: Observable<boolean>;
-
+  loading: boolean = false;
+  @ViewChild('form', { static: true })
+  form: OFormComponent;
+  @ViewChild('name', { static: true })
+  name: OTextInputComponent;
+  @ViewChild('type', { static: true })
+  type: OTextInputComponent;
+  @ViewChild('description', { static: true })
+  description: OTextInputComponent;
+  @ViewChild('file', { static: true })
+  file: OFileInputComponent;
   constructor(
     protected dialogService: DialogService,
     protected dialog: MatDialog,
+    private reportStoreService: OReportStoreService
   ) {
     this.existsParameterChanges = this.existChangesSubject.asObservable();
   }
@@ -84,7 +97,7 @@ export class OReportDetailComponent {
   }
 
   public fillReport() {
-    let paramValues:Array<OReportStoreParamValue> = [];
+    let paramValues: Array<OReportStoreParamValue> = [];
     if (this.hasParams) {
       paramValues = this.getParameterValues();
     }
@@ -105,8 +118,23 @@ export class OReportDetailComponent {
     this.hasParams = !Util.isArrayEmpty(this.parameters);
     this.name = Util.isDefined(e['NAME']) ? e['NAME'] : "";
     this.id = Util.isDefined(e['UUID']) ? e['UUID'] : undefined;
-    if(!this.hasParams) {
+    if (!this.hasParams) {
       this.canFillReport();
+    }
+  }
+
+  getFileData() {
+    return {
+      'name': this.name,
+      'type': "this.type",
+      'description': "this.description",
+    };
+  }
+  onError() {
+    if (this.dialogService) {
+      this.dialogService.error('ERROR',
+        'SERVER_ERROR_MESSAGE');
+      this.loading = false;
     }
   }
 
@@ -116,6 +144,18 @@ export class OReportDetailComponent {
       result = result && this.paramForm && this.paramForm.formGroup && this.paramForm.formGroup.valid
     }
     this.existChangesSubject.next(result);
+  }
+  onClickSave(e: Event) {
+    let av = this.form.getAttributesValuesToUpdate();
+    const reader = new FileReader();
+    reader.readAsDataURL(this.file.files[0].file);
+    reader.onload = () => {
+      av["FILES"] = reader.result;
+      this.reportStoreService.update({ UUID: this.id }, av).subscribe(response => {
+      });
+    };
+    this.file
+
   }
 
 }

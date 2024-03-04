@@ -65,7 +65,7 @@ export class OReportStoreService extends OReportService {
     });
   }
 
-  public update(kv?: Object, av?: Array<string>, _entity?: string, _sqltypes?: Object): Observable<any> {
+  public update(kv?: Object, av?: any, _entity?: string, _sqltypes?: Object): Observable<any> {
     const identifier = kv.valueOf()[Object.keys(kv)[0]];
     let url = `${this.urlBase}/reportstore/updateReport/` + identifier;
 
@@ -87,7 +87,7 @@ export class OReportStoreService extends OReportService {
     });
   }
 
-  openFillReport(uuid: string, parametersValues: Array<OReportStoreParamValue> = [], filter: OFilterParameter = {filter:{}}) {
+  openFillReport(uuid: string, parametersValues: Array<OReportStoreParamValue> = [], filter: OFilterParameter = { filter: {} }) {
     this.configureService(this.getDefaultServiceConfiguration());
     this.configureAdapter();
     let kv = { 'UUID': uuid };
@@ -139,8 +139,10 @@ export class OReportStoreService extends OReportService {
       if (data) {
         toUpload.append('data', JSON.stringify(data));
       }
+      let method = entity === 'addReport' ? 'POST' : 'PUT';
 
-      const request = new HttpRequest('POST', url, toUpload, {
+
+      const request = new HttpRequest(method, url, toUpload, {
         headers: this.buildHeadersReport(),
         reportProgress: true
       });

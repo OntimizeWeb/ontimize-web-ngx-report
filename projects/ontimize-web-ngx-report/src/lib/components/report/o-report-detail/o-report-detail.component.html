@@ -1,13 +1,23 @@
 <o-form #form attr="report" service-type="reportstore" entity="getReport" keys="UUID" header-actions="R;I;U;D" show-header="yes"
   show-header-navigation="yes" fxLayout="column" (onDataLoaded)="onDataLoaded($event)">
+  <div o-form-toolbar-buttons>
+    <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onClickSave($event)" attr="fillreport">
+      <mat-icon>save</mat-icon>
+      <span>{{ 'guardar'| oReportsTranslate}}</span>
+    </button>
+  </div>
   <o-column attr="row1" title="REPORT_DATA" icon="description" layout-gap="14px" fxFill>
     <o-text-input #id attr="UUID" label="REPORT_ID" enabled="no" fxFlex="100"></o-text-input>
     <div fxLayout="row wrap" fxLayoutGap="14px" fxLayoutAlign="start start" fxFlex>
       <o-text-input #name attr="NAME" label="REPORT_NAME" required="yes" fxFlex="50"></o-text-input>
-      <o-text-input attr="REPORT_TYPE" label="REPORT_TYPE" required="yes" fxFlex></o-text-input>
+      <o-text-input #type attr="REPORT_TYPE" label="REPORT_TYPE" required="yes" fxFlex></o-text-input>
     </div>
+    <o-file-input #file attr="ZIP" fxFlex="50" service="report" service-type="reportstore" entity="updateReport" label="REPORT_FILENAME"
+      show-info="yes" workspace-key="id" accept-file-type=".zip" [additional-data]="getFileData()" (onErrorFile)="onError()"
+      (onBeforeUploadFile)="before($event)">
+    </o-file-input>
     <o-text-input class="form-field" attr="MAIN_REPORT_FILENAME" label="REPORT_FILENAME" required="yes" fxFlex></o-text-input>
-    <o-textarea-input class="form-field" attr="DESCRIPTION" label="REPORT_DESCRIPTION" required="yes" fxFlex></o-textarea-input>
+    <o-textarea-input #description class="form-field" attr="DESCRIPTION" label="REPORT_DESCRIPTION" required="yes" fxFlex></o-textarea-input>
   </o-column>
 
   <div *ngIf="hasParams">
@@ -16,13 +26,16 @@
         layout-direction="column" query-on-init="no" confirm-exit="no">
         <div fxLayout="column wrap" fxLayoutGap="14px" fxLayoutAlign="start start" fxFlex>
           <ng-container *ngFor="let elem of parameters; let i = index" [ngSwitch]="elem.valueClass">
-            <o-date-input *ngSwitchCase="'java.util.Date'" [attr]="elem.name" [label]="elem.description" required="yes" value-type="string" format="YYYY-MM-DD" fxFill></o-date-input>
-            <o-time-input *ngSwitchCase="'java.sql.Timestamp'" [attr]="elem.name" [label]="elem.description" required="yes" value-type="string" date-placeholder="YYYY-MM-DD" hour-placeholder="hh:mm" fxFill></o-time-input>
-            <o-integer-input *ngSwitchCase="'java.lang.Integer'" [attr]="elem.name" [label]="elem.description" required="yes" fxFill></o-integer-input>
+            <o-date-input *ngSwitchCase="'java.util.Date'" [attr]="elem.name" [label]="elem.description" required="yes" value-type="string"
+              format="YYYY-MM-DD" fxFill></o-date-input>
+            <o-time-input *ngSwitchCase="'java.sql.Timestamp'" [attr]="elem.name" [label]="elem.description" required="yes" value-type="string"
+              date-placeholder="YYYY-MM-DD" hour-placeholder="hh:mm" fxFill></o-time-input>
+            <o-integer-input *ngSwitchCase="'java.lang.Integer'" [attr]="elem.name" [label]="elem.description" required="yes"
+              fxFill></o-integer-input>
             <o-integer-input *ngSwitchCase="'java.lang.Long'" [attr]="elem.name" [label]="elem.description" required="yes" fxFill></o-integer-input>
             <o-real-input *ngSwitchCase="'java.lang.Float'" [attr]="elem.name" [label]="elem.description" required="yes" fxFill></o-real-input>
             <o-real-input *ngSwitchCase="'java.lang.Double'" [attr]="elem.name" [label]="elem.description" required="yes" fxFill></o-real-input>
-            <o-checkbox  *ngSwitchCase="'java.lang.Boolean'" [attr]="elem.name" [label]="elem.description" required="yes" fxFill></o-checkbox >
+            <o-checkbox *ngSwitchCase="'java.lang.Boolean'" [attr]="elem.name" [label]="elem.description" required="yes" fxFill></o-checkbox>
             <o-text-input *ngSwitchDefault [attr]="elem.name" [label]="elem.description" required="yes" fxFill></o-text-input>
           </ng-container>
         </div>
