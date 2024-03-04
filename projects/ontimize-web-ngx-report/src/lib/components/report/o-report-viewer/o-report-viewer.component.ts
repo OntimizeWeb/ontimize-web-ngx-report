@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogService, Util } from 'ontimize-web-ngx';
 import { Utils } from '../../../util/utils';
 import { OReportStoreParam } from '../../../types/report-store-param.type';
-import { OReportStoreService } from '../../../services';
+import { OReportStoreService } from '../../../services/o-report-store.service';
 
 @Component({
   selector: 'o-report-viewer',

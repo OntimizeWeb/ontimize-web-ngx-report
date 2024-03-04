@@ -1,4 +1,4 @@
-<o-form #form service-type="report" entity="addReport" keys="UUID" header-actions="R;I;U;D" show-header-navigation="no">
+<o-form #form service-type="reportstore" entity="addReport" keys="UUID" header-actions="R;I;U;D" show-header-navigation="no">
   <div o-form-toolbar-buttons>
     <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onClickSave($event)" attr="fillreport">
       <mat-icon>save</mat-icon>
@@ -11,7 +11,7 @@
       <o-text-input #type class="input-padding" attr="REPORT_TYPE" label="REPORT_TYPE" fxFlex required="yes"></o-text-input>
     </div>
     <o-textarea-input #description attr="DESCRIPTION" label="REPORT_DESCRIPTION" fxFlex required="yes"></o-textarea-input>
-    <o-file-input #file attr="file" fxFlex="50" service="report" service-type="report" entity="addReport" label="REPORT_ZIPFOLDER" show-info="yes"
+    <o-file-input #file attr="file" fxFlex="50" service="report" service-type="reportstore" entity="addReport" label="REPORT_ZIPFOLDER" show-info="yes"
       workspace-key="id" required="yes" (onUploadFile)="onUploadFile()" accept-file-type=".zip" [additional-data]="getFileData()"
       (onErrorFile)="onError()">
     </o-file-input>
