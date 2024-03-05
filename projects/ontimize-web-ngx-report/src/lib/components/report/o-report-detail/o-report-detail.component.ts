@@ -1,12 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { DialogService, OFileInputComponent, OFormComponent, OTextInputComponent, Util } from 'ontimize-web-ngx';
-import { OReportViewerComponent } from '../o-report-viewer/o-report-viewer.component';
-import { Utils } from '../../../util/utils';
-import { OReportStoreParam, OReportStoreParamValue } from '../../../types/report-store-param.type';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { OAlertService } from '../../../services/o-alert.service';
 import { OReportStoreService } from '../../../services/o-report-store.service';
+import { OReportStoreParam, OReportStoreParamValue } from '../../../types/report-store-param.type';
+import { Utils } from '../../../util/utils';
+import { OReportViewerComponent } from '../o-report-viewer/o-report-viewer.component';
 
 
 export type JasperReportParameter = {
@@ -154,8 +153,6 @@ export class OReportDetailComponent {
       this.reportStoreService.update({ UUID: this.id }, av).subscribe(response => {
       });
     };
-    this.file
-
   }
 
 }
