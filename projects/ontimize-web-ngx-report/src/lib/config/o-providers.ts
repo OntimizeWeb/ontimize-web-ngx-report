@@ -1,4 +1,4 @@
-import { InjectionToken, Injector } from '@angular/core';
+import { Injector } from '@angular/core';
 import { _getInjectionTokenValue, O_REPORT_SERVICE, Util } from 'ontimize-web-ngx';
 
 import { IReportDataProvider } from '../interfaces/report-data-provider.interface';
