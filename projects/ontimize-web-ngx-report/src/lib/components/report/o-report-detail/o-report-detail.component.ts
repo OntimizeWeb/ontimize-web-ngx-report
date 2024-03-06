@@ -18,7 +18,10 @@ export type JasperReportParameter = {
 
 @Component({
   selector: 'o-report-detail',
-  templateUrl: './o-report-detail.component.html'
+  templateUrl: './o-report-detail.component.html',
+  providers: [
+    { provide: 'reportstore', useValue: OReportStoreService }
+  ]
 })
 export class OReportDetailComponent {
 

@@ -13,8 +13,7 @@
       <o-text-input #type attr="REPORT_TYPE" label="REPORT_TYPE" required="yes" fxFlex></o-text-input>
     </div>
     <o-file-input #file attr="ZIP" fxFlex="50" service="report" service-type="reportstore" entity="updateReport" label="REPORT_FILENAME"
-      show-info="yes" workspace-key="id" accept-file-type=".zip" [additional-data]="getFileData()" (onErrorFile)="onError()"
-      (onBeforeUploadFile)="before($event)">
+      show-info="yes" workspace-key="id" accept-file-type=".zip" [additional-data]="getFileData()" (onErrorFile)="onError()">
     </o-file-input>
     <o-text-input class="form-field" attr="MAIN_REPORT_FILENAME" label="REPORT_FILENAME" required="yes" fxFlex></o-text-input>
     <o-textarea-input #description class="form-field" attr="DESCRIPTION" label="REPORT_DESCRIPTION" required="yes" fxFlex></o-textarea-input>

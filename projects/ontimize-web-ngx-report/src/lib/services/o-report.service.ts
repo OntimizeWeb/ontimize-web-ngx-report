@@ -4,7 +4,7 @@ import { Observable, OErrorDialogManager, OntimizeEEService, ServiceRequestParam
 import { HttpHeaders } from "@angular/common/http";
 
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class OReportService extends OntimizeEEService {
   protected oErrorDialogManager: OErrorDialogManager;
 

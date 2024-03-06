@@ -9,7 +9,7 @@ import { share } from 'rxjs/operators';
 import { OReportStoreParam, OReportStoreParamValue } from "../types/report-store-param.type";
 import { OFilterParameter } from "../types/filter-parameter.type";
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class OReportStoreService extends OReportService {
   protected dialogService: DialogService;
   protected dialog: MatDialog
