@@ -1,32 +1,37 @@
-<o-form #form attr="report" service-type="report" entity="getReport" keys="UUID" header-actions="R;I;U;D" show-header="yes"
+<o-form #form attr="report" service-type="reportstore" entity="getReport" keys="UUID" header-actions="R;I;U;D" show-header="yes"
   show-header-navigation="yes" fxLayout="column" (onDataLoaded)="onDataLoaded($event)">
   <o-column attr="row1" title="REPORT_DATA" icon="description" layout-gap="14px" fxFill>
     <o-text-input #id attr="UUID" label="REPORT_ID" enabled="no" fxFlex="100"></o-text-input>
     <div fxLayout="row wrap" fxLayoutGap="14px" fxLayoutAlign="start start" fxFlex>
-      <o-text-input attr="NAME" label="REPORT_NAME" required="yes" fxFlex="50"></o-text-input>
-      <o-text-input attr="REPORT_TYPE" label="REPORT_TYPE" required="yes" fxFlex></o-text-input>
+      <o-text-input #name attr="NAME" label="REPORT_NAME" required="yes" fxFlex="50"></o-text-input>
+      <o-text-input #type attr="REPORT_TYPE" label="REPORT_TYPE" required="yes" fxFlex></o-text-input>
     </div>
     <o-text-input class="form-field" attr="MAIN_REPORT_FILENAME" label="REPORT_FILENAME" required="yes" fxFlex></o-text-input>
-    <o-textarea-input class="form-field" attr="DESCRIPTION" label="REPORT_DESCRIPTION" required="yes" fxFlex></o-textarea-input>
+    <o-textarea-input #description class="form-field" attr="DESCRIPTION" label="REPORT_DESCRIPTION" required="yes" fxFlex></o-textarea-input>
   </o-column>
 
   <div *ngIf="hasParams">
     <o-column #params title="PARAMETERS" icon="info" class="vertical-margin-10" layout-align="start stretch" appearance="outline">
-      <o-form #paramForm attr="report" service-type="report" entity="fillReport" keys="id" header-mode="none" show-header="no"
-        layout-direction="column">
-        <ng-container *ngFor="let elem of parameters; let i = index">
-          <o-row fxFlex>
-            <ng-template [ngIf]="elem.valueClass == 'java.sql.Date' || elem.valueClass == 'java.sql.Timestamp'" [ngIfElse]="textInput">
-              <o-date-input [attr]="'value' + i" [label]="elem.name" required="yes" value-type="string" format="YYYY-MM-DD" fxFlex></o-date-input>
-            </ng-template>
-            <ng-template #textInput>
-              <o-text-input [attr]="'value' + i" [label]="elem.description" required="yes" fxFlex></o-text-input>
-            </ng-template>
-          </o-row>
-        </ng-container>
+      <o-form #paramForm attr="reportParams" service-type="reportstore" entity="fillReport" keys="id" header-mode="none" show-header="no"
+        layout-direction="column" query-on-init="no" confirm-exit="no">
+        <div fxLayout="column wrap" fxLayoutGap="14px" fxLayoutAlign="start start" fxFlex>
+          <ng-container *ngFor="let elem of parameters; let i = index" [ngSwitch]="elem.valueClass">
+            <o-date-input *ngSwitchCase="'java.util.Date'" [attr]="elem.name" [label]="elem.description" required="yes" value-type="string"
+              format="YYYY-MM-DD" fxFill></o-date-input>
+            <o-time-input *ngSwitchCase="'java.sql.Timestamp'" [attr]="elem.name" [label]="elem.description" required="yes" value-type="string"
+              date-placeholder="YYYY-MM-DD" hour-placeholder="hh:mm" fxFill></o-time-input>
+            <o-integer-input *ngSwitchCase="'java.lang.Integer'" [attr]="elem.name" [label]="elem.description" required="yes"
+              fxFill></o-integer-input>
+            <o-integer-input *ngSwitchCase="'java.lang.Long'" [attr]="elem.name" [label]="elem.description" required="yes" fxFill></o-integer-input>
+            <o-real-input *ngSwitchCase="'java.lang.Float'" [attr]="elem.name" [label]="elem.description" required="yes" fxFill></o-real-input>
+            <o-real-input *ngSwitchCase="'java.lang.Double'" [attr]="elem.name" [label]="elem.description" required="yes" fxFill></o-real-input>
+            <o-checkbox *ngSwitchCase="'java.lang.Boolean'" [attr]="elem.name" [label]="elem.description" required="yes" fxFill></o-checkbox>
+            <o-text-input *ngSwitchDefault [attr]="elem.name" [label]="elem.description" required="yes" fxFill></o-text-input>
+          </ng-container>
+        </div>
       </o-form>
     </o-column>
   </div>
   <o-button type="RAISED" (click)="fillReport()" label="{{ 'FILL_REPORT' | oTranslate }}" icon="download" layout-padding color="accent"
-    [enabled]="form.formGroup?.valid && paramForm?.formGroup?.valid"></o-button>
+    [enabled]="existsParameterChanges | async"></o-button>
 </o-form>
