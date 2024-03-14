@@ -30,7 +30,6 @@ export class OReportDetailComponent {
   paramForm: OFormComponent;
   id: string;
 
-
   public parameters: Array<JasperReportParameter>;
   public hasParams: boolean = false;
 
@@ -146,16 +145,6 @@ export class OReportDetailComponent {
       result = result && this.paramForm && this.paramForm.formGroup && this.paramForm.formGroup.valid
     }
     this.existChangesSubject.next(result);
-  }
-  onClickSave(e: Event) {
-    let av = this.form.getAttributesValuesToUpdate();
-    const reader = new FileReader();
-    reader.readAsDataURL(this.file.files[0].file);
-    reader.onload = () => {
-      av["FILES"] = reader.result;
-      this.reportStoreService.update({ UUID: this.id }, av).subscribe(response => {
-      });
-    };
   }
 
 }
