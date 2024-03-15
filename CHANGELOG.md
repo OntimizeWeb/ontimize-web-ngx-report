@@ -1,3 +1,23 @@
+### 8.4.0 (2024-03-15)
+### BREAKING CHANGES
+* Modified the API for filling reports when using parameters. Now all primitive types are considered when using Jasper parameters. ([6c64162](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/6c64162)) Closes [#190](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/190)
+
+The method fillReport now has the following signature:
+
+```ts
+public fillReport(uuid: string, reportStoreParam: OReportStoreParam, entity?: string, _sqltypes?: Object): Observable<any>
+```
+
+Where:
+
+* uuid: a string representing the unique identifier of the report.
+* reportStoreParam: an object of type OReportStoreParam containing the parameters needed to fill the report. This object has two optional properties:
+  * filters: an object of type OFilterParameter representing the filters to be applied to the report.
+  * parameters: an array of objects of type OReportStoreParamValue containing the values of the report parameters. Each object in this array has the following properties:
+    * name: a string representing the name of the parameter.
+    * value: the value of the parameter.
+    * sqlType: (optional) a number representing the SQL type of the parameter.
+
 ### 8.3.2 (2024-01-25)
 ### Bug Fixes
 * Fixed bug caused by incorrect import of the OReportSkeletonComponent ([cb1b3fe](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/cb1b3fe)) Closes [#197](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/197)
