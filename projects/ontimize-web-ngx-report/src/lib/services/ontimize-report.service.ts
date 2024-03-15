@@ -6,7 +6,7 @@ import { ReportOnDemandComponent } from '../components/report-on-demand/report-o
 import { Utils } from '../util/utils';
 
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class OntimizeReportService implements IReportService {
   protected dialogService: DialogService;
   protected dialog: MatDialog;
