@@ -50,7 +50,7 @@ export class OReportDetailComponent {
   constructor(
     protected dialogService: DialogService,
     protected dialog: MatDialog,
-    private reportStoreService: OReportStoreService
+    protected reportStoreService: OReportStoreService
   ) {
     this.existsParameterChanges = this.existChangesSubject.asObservable();
   }

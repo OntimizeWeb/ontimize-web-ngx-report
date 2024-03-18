@@ -1,3 +1,8 @@
+### 8.4.1 (2024-03-18)
+### Bug Fixes
+* **Report detail component:** Changed scope of Report Store service into ReportDetailComponent constructor ([4f43e37](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/4f43e370a2c7295a0e56262c1ec6bb399c4b28b2))
+
+
 ### 8.4.0 (2024-03-15)
 ### BREAKING CHANGES
 * Modified the API for filling reports when using parameters. Now all primitive types are considered when using Jasper parameters. ([6c64162](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/6c64162)) Closes [#190](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/190)
