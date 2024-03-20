@@ -18,4 +18,42 @@
       height: 100%;
     }
   }
+
+  .item {
+    width: auto;
+    height: auto;
+    margin: 10px auto;
+    border: 1px solid #eaeaea;
+    padding: 10px;
+  }
+
+  .fb-item {
+    width: auto;
+    height: auto;
+    margin: 10px auto;
+    border: 1px solid #eaeaea;
+    padding: 10px;
+  }
+
+  .gravatar {
+    width: 100px;
+    height: 90px;
+  }
+
+  .gravatar-title {
+    width: 500px;
+    padding: 10px;
+    height: 80px;
+  }
+
+  .first-section-wrapper,
+  .second-section-wrapper {
+    width: 100%;
+    height: auto;
+    flex: 1;
+  }
+
+  .first-section-wrapper {
+    display: inline-flex;
+  }
 }

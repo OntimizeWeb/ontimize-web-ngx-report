@@ -10,11 +10,6 @@ import { OntimizeReportDataProvider } from '../services/ontimize-report-data-pro
 import { OntimizeReportService } from '../services/ontimize-report.service';
 
 
-export function reportServiceFactory(injector: Injector): OReportService {
-  return new OReportService(injector);
-}
-
-
 export function reportDataFactory(injector: Injector): IReportDataProvider {
   const provider = _getInjectionTokenValue(O_REPORT_DATA_SERVICE, injector);
   const service = Util.createServiceInstance(provider, injector);

@@ -122,7 +122,7 @@
                 {{ 'GROUPS' | oReportsTranslate }}
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <mat-selection-list dense cdkDropList [cdkDropListData]="columnsToGroupData" (cdkDropListDropped)="dropGroups($event)"
+            <mat-selection-list #groupsList dense cdkDropList [cdkDropListData]="columnsToGroupData" (cdkDropListDropped)="dropGroups($event)"
               [(ngModel)]="currentPreference.groups" (selectionChange)="onSelectionChangeGroups($event)">
               <mat-list-option checkboxPosition="before" *ngFor="let column of columnsData" [value]="column.id" cdkDrag>
                 <div fxLayout="row" fxLayoutAlign="space-around center">

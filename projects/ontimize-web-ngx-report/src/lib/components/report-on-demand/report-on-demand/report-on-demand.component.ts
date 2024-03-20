@@ -31,9 +31,10 @@ import { OReportParam } from './../../../types/report-param.type';
 
 export class ReportOnDemandComponent implements OnInit {
 
-  @ViewChild('columnsList') columnsList: MatSelectionList;
-  @ViewChild('functionsList') functionsList: MatSelectionList;
-  @ViewChild('orderByList') orderByList: MatSelectionList;
+  @ViewChild('columnsList', { static: false }) columnsList: MatSelectionList;
+  @ViewChild('groupsList', { static: false }) groupsList: MatSelectionList;
+  @ViewChild('functionsList', { static: false }) functionsList: MatSelectionList;
+  @ViewChild('orderByList', { static: false }) orderByList: MatSelectionList;
 
   public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
   public functionsData: OReportFunction[] = [];
@@ -131,6 +132,9 @@ export class ReportOnDemandComponent implements OnInit {
     if (this.columnsList) {
       this.columnsList.deselectAll();
     }
+    if (this.groupsList) {
+      this.groupsList.deselectAll();
+    }
     if (this.functionsList) {
       this.functionsList.deselectAll();
     }
@@ -203,7 +207,7 @@ export class ReportOnDemandComponent implements OnInit {
 
 
   protected openReport() {
-    const reportConfiguration:OReportParam = this.reportDataProvider.getReportConfiguration(this.currentPreference, this.table)
+    const reportConfiguration: OReportParam = this.reportDataProvider.getReportConfiguration(this.currentPreference, this.table)
     this.reportService.createReport(reportConfiguration).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.pdf = res.data[0].file;
