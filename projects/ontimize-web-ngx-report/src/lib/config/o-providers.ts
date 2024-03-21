@@ -20,15 +20,37 @@ export function reportDataFactory(injector: Injector): IReportDataProvider {
   }
 
 }
-export const OREPORT_PROVIDERS: any = [{ provide: O_REPORT_SERVICE, useClass: OntimizeReportService },
-{
-  provide: 'report',
-  useValue: OReportService
-},
-{
-  provide: OntimizeReportDataProvider,
-  useFactory: reportDataFactory,
-  deps: [Injector]
-},
-  OAlertService, OReportStoreService
+
+/**
+ * Creates a new instance of the report on demand service.
+ */
+export function getReportOnDemandServiceProvider(injector: Injector): OReportService {
+  // TODO modificar core para tener el Injection Token (Ojo, ya existe un O_REPORT_SERVICE para el servicio de abrir)
+  // const serviceClass = _getInjectionTokenValue(O_REPORT_SERVICE, injector);
+  // const service = Util.createServiceInstance(serviceClass, injector);
+  // return Util.isDefined(service) ? service : new OReportService(injector);
+  return new OReportService(injector);
+}
+
+/**
+ * Creates a new instance of the report store service.
+ */
+export function getReportStoreServiceProvider(injector: Injector): OReportStoreService {
+  // TODO modificar core para tener el Injection Token
+  // const serviceClass = _getInjectionTokenValue(O_REPORT_STORE_SERVICE, injector);
+  // const service = Util.createServiceInstance(serviceClass, injector);
+  // return Util.isDefined(service) ? service : new OReportStoreService(injector);
+  return new OReportStoreService(injector);
+}
+
+export const OREPORT_PROVIDERS: any = [
+  { provide: O_REPORT_SERVICE, useClass: OntimizeReportService },
+  { provide: OReportService, useFactory: getReportOnDemandServiceProvider, deps: [Injector] },
+  { provide: OReportStoreService, useFactory: getReportStoreServiceProvider, deps: [Injector] },
+  {
+    provide: OntimizeReportDataProvider,
+    useFactory: reportDataFactory,
+    deps: [Injector]
+  },
+  OAlertService
 ];
