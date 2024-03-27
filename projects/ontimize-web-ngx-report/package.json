@@ -1,6 +1,6 @@
 {
   "name": "ontimize-web-ngx-report",
-  "version": "15.0.0-beta.1",
+  "version": "15.0.0",
   "description": "Authomatic reports implementation for Ontimize Web",
   "keywords": [
     "angular",
@@ -20,10 +20,11 @@
     "test-watch": "karma start --singleRun=false --autoWatch=true"
   },
   "peerDependencies": {
-    "ontimize-web-ngx": "^15.0.0-beta.3"
+    "ontimize-web-ngx": "^15.0.3"
   },
   "dependencies": {
     "ngx-extended-pdf-viewer": "18.0.0-beta.0",
+    "ngx-skeleton-loader": "7.0.0",
     "tslib": "^2.3.0"
   }
 }
