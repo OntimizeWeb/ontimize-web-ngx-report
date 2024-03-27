@@ -1,3 +1,7 @@
+## 15.0.0 (2024-03-27)
+> [!NOTE]
+> In this version, the features and bugfixes of version [8.3.0](#830-2024-01-02), [8.3.1](#831-2024-01-24), [8.3.2](#832-2024-01-25), [8.4.0](#840-2024-03-15) and [8.4.1](#841-2024-03-18) were integrated
+
 ### 8.4.1 (2024-03-18)
 ### Bug Fixes
 * **Report detail component:** Changed scope of Report Store service into ReportDetailComponent constructor ([4f43e37](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/4f43e370a2c7295a0e56262c1ec6bb399c4b28b2))
