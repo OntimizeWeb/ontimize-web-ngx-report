@@ -1,6 +1,6 @@
 {
   "name": "ontimize-web-ngx-report",
-  "version": "15.0.0-SNAPSHOT-2",
+  "version": "15.0.0",
   "description": "Automatic reports implementation for Ontimize Web",
   "keywords": [
     "angular",
