@@ -2,7 +2,6 @@ import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DialogService, OFileInputComponent, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
 import { Subscription } from 'rxjs';
 import { OAlertService } from '../../../services/o-alert.service';
-import { OReportStoreService } from '../../../services';
 
 @Component({
   selector: 'o-report-new',
@@ -11,10 +10,7 @@ import { OReportStoreService } from '../../../services';
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.app-report-store-new]': 'true'
-  },
-  providers: [
-    { provide: 'reportstore', useValue: OReportStoreService }
-  ]
+  }
 })
 export class OReportNewComponent {
 

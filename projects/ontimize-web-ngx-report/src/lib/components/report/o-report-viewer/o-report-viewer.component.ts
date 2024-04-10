@@ -30,10 +30,11 @@ export class OReportViewerComponent {
     protected dialogService: DialogService,
     @Inject(MAT_DIALOG_DATA) public data: any, private appearanceService: AppearanceService) {
     this.pdf = this.blankPdf;
+
     this.reportStoreService.configureService(this.reportStoreService.getDefaultServiceConfiguration());
     this.reportStoreService.configureAdapter();
-    this.name = Util.isDefined(this.data['name']) ? this.data.name : '';
 
+    this.name = Util.isDefined(this.data['name']) ? this.data.name : '';
     const uuid = this.data['id'];
     const reportStoreParam: OReportStoreParam = Util.isDefined(this.data['param']) ? this.data['param'] : {};
     this.reportStoreService.fillReport(uuid, reportStoreParam, 'fillReport', {},).subscribe(
