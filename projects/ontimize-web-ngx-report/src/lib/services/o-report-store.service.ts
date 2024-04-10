@@ -96,9 +96,6 @@ export class OReportStoreService extends OReportService {
         if (res && res.data.length && res.code === 0) {
           let name = res.data[0].NAME;
 
-          // let parameters = res.data[0].PARAMETERS;
-          // TODO check if all passed parameters are correct
-
           const reportStoreParam: OReportStoreParam = {
             filters: filter,
             parameters: parametersValues

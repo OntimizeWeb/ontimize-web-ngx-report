@@ -45,6 +45,8 @@ export function getReportStoreServiceProvider(injector: Injector): OReportStoreS
 
 export const OREPORT_PROVIDERS: any = [
   { provide: O_REPORT_SERVICE, useClass: OntimizeReportService },
+  { provide: 'reportstore', useValue: OReportStoreService },
+  { provide: 'report', useValue: OReportService },
   { provide: OReportService, useFactory: getReportOnDemandServiceProvider, deps: [Injector] },
   { provide: OReportStoreService, useFactory: getReportStoreServiceProvider, deps: [Injector] },
   {
