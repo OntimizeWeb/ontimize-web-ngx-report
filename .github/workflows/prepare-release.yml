@@ -17,7 +17,7 @@ env:
   NPM_REGISTRY: https://registry.npmjs.org/
   CI_EMAIL: ontimize-web@imatia.com
   CI_USERNAME: ontimize-web
-  MAIN_BRANCH: main
+  MAIN_BRANCH: main.8.x
   DEVELOP_BRANCH: 8.x.x
   LIBRARY_PATH: projects/ontimize-web-ngx-report
 
@@ -40,13 +40,13 @@ jobs:
           echo "isHotfix=$isHotfix" >> $GITHUB_OUTPUT
 
       - name: Checkout merge commit
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ env.BASELINE_BRANCH }}
           fetch-depth: 0
 
       - name: Node 12.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 12.13.0
           registry-url: ${{ env.NPM_REGISTRY }}
