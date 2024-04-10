@@ -1,3 +1,24 @@
+### 8.4.2 (2024-04-10)
+### Bug Fixes
+* **Injectors and providers:** Solved problems with injectors and providers when application was built with aot=true ([c82eb4e](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/c82eb4e821b92b2f49fae6765b513e5dc2ba673d)) Closes [#223](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/223)
+
+> [!NOTE]
+> For using Ontimize Web Report services properly, it is necessary to add `OREPORT_PROVIDERS` into your modules (it can be into app.module or just the module that is using OReportModule)
+```ts
+import { OREPORT_PROVIDERS, OReportModule } from 'ontimize-web-ngx-report';
+
+@NgModule({
+  imports: [
+    OntimizeWebModule,
+    OReportModule
+  ],
+  providers: [
+    ...OREPORT_PROVIDERS
+  ]
+})
+```
+
+
 ### 8.4.1 (2024-03-18)
 ### Bug Fixes
 * **Report detail component:** Changed scope of Report Store service into ReportDetailComponent constructor ([4f43e37](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/4f43e370a2c7295a0e56262c1ec6bb399c4b28b2))
