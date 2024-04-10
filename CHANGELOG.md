@@ -1,3 +1,7 @@
+### 15.0.1 (2024-04-10)
+> [!NOTE]
+> In this version, the bugfixes of version [8.4.2](#842-2024-04-10) were integrated
+
 ### 8.4.2 (2024-04-10)
 ### Bug Fixes
 * **Injectors and providers:** Solved problems with injectors and providers when application was built with aot=true ([c82eb4e](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/c82eb4e821b92b2f49fae6765b513e5dc2ba673d)) Closes [#223](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/223)
