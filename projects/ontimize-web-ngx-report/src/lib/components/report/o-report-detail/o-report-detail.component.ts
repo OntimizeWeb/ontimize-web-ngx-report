@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogService, OFileInputComponent, OFormComponent, OTextInputComponent, Util } from 'ontimize-web-ngx';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { OReportStoreService } from '../../../services/o-report-store.service';
 import { OReportStoreParam, OReportStoreParamValue } from '../../../types/report-store-param.type';
 import { Utils } from '../../../util/utils';
 import { OReportViewerComponent } from '../o-report-viewer/o-report-viewer.component';
@@ -18,10 +17,7 @@ export type JasperReportParameter = {
 
 @Component({
   selector: 'o-report-detail',
-  templateUrl: './o-report-detail.component.html',
-  providers: [
-    { provide: 'reportstore', useValue: OReportStoreService }
-  ]
+  templateUrl: './o-report-detail.component.html'
 })
 export class OReportDetailComponent {
 
@@ -47,10 +43,10 @@ export class OReportDetailComponent {
   description: OTextInputComponent;
   @ViewChild('file', { static: true })
   file: OFileInputComponent;
+
   constructor(
     protected dialogService: DialogService,
-    protected dialog: MatDialog,
-    protected reportStoreService: OReportStoreService
+    protected dialog: MatDialog
   ) {
     this.existsParameterChanges = this.existChangesSubject.asObservable();
   }
