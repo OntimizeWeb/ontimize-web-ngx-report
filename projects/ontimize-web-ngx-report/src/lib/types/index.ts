@@ -7,3 +7,5 @@ export * from './report-column.type';
 export * from './report-param.type';
 export * from './report-service-renderer.type';
 export * from './report-style-params.type';
+export * from './report-store-param.type';
+export * from './filter-parameter.type'
