@@ -1,6 +1,6 @@
 {
   "name": "ontimize-web-ngx-report",
-  "version": "15.1.0-SNAPSHOT-0",
+  "version": "15.1.0-JSONAPI-SNAPSHOT-0",
   "description": "Automatic reports implementation for Ontimize Web",
   "keywords": [
     "angular",
@@ -41,7 +41,7 @@
     "@angular/router": "^15.2.9",
     "ngx-extended-pdf-viewer": "18.0.0-beta.0",
     "ngx-skeleton-loader": "7.0.0",
-    "ontimize-web-ngx": "15.0.3",
+    "ontimize-web-ngx": "^15.1.0-JSONAPI-SNAPSHOT-4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
