@@ -1,4 +1,8 @@
 name: Sonar
+
+env:
+  NEXUS_REGISTRY: https://nexus.imatia.com/repository/npm-group/
+
 on:
   push:
     branches:
@@ -28,8 +32,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.10.0
+          registry-url: ${{ env.NEXUS_REGISTRY }}
 
       - name: npm install and npm run test-ci
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_NEXUS_AUTH_TOKEN }}
         run: |
           npm i
           npm run test-ci
