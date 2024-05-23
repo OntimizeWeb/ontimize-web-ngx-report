@@ -32,12 +32,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.10.0
-          registry-url: ${{ env.NEXUS_REGISTRY }}
 
       - name: npm install and npm run test-ci
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_NEXUS_AUTH_TOKEN }}
         run: |
+          npm set registry=${{ env.NEXUS_REGISTRY }}
+          npm set _auth=$NPM_AUTH_TOKEN
           npm i
           npm run test-ci
 
