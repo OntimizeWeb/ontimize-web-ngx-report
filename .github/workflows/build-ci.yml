@@ -4,6 +4,9 @@ concurrency:
   group: build-ci-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
+env:
+  NEXUS_REGISTRY: https://nexus.imatia.com/repository/npm-group/
+
 on:
   push:
     branches: [15.x.x, hotfix/15.*]
@@ -35,6 +38,10 @@ jobs:
           node-version: 18.10.0
 
       - name: npm install and npm run build
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_NEXUS_AUTH_TOKEN }}
         run: |
+          npm set registry=${{ env.NEXUS_REGISTRY }}
+          npm set _auth=$NPM_AUTH_TOKEN
           npm i
           npm run build-prod
