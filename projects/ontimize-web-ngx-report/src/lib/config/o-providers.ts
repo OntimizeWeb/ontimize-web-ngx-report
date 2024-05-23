@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { _getInjectionTokenValue, O_REPORT_SERVICE, Util } from 'ontimize-web-ngx';
+import { _getInjectionTokenValue, O_REPORT_SERVICE, OntimizeServiceProvider, Util } from 'ontimize-web-ngx';
 
 import { IReportDataProvider } from '../interfaces/report-data-provider.interface';
 import { OAlertService } from '../services/o-alert.service';
@@ -44,6 +44,7 @@ export function getReportStoreServiceProvider(injector: Injector): OReportStoreS
 }
 
 export const OREPORT_PROVIDERS: any = [
+  OntimizeServiceProvider,
   { provide: O_REPORT_SERVICE, useClass: OntimizeReportService },
   { provide: 'reportstore', useValue: OReportStoreService },
   { provide: 'report', useValue: OReportService },

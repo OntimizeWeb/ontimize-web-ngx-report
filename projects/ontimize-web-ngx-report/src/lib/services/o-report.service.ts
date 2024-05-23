@@ -1,11 +1,12 @@
-import { Injectable, Injector } from "@angular/core";
-import { OReportParam } from "../types/report-param.type";
-import { Observable, OErrorDialogManager, OntimizeEEService, ServiceRequestParam, ServiceResponse, Util } from 'ontimize-web-ngx';
-import { HttpHeaders } from "@angular/common/http";
+import { HttpHeaders } from '@angular/common/http';
+import { Injectable, Injector } from '@angular/core';
+import { Observable, OErrorDialogManager, OntimizeService, Util } from 'ontimize-web-ngx';
+
+import { OReportParam } from '../types/report-param.type';
 
 
 @Injectable()
-export class OReportService extends OntimizeEEService {
+export class OReportService extends OntimizeService {
   protected oErrorDialogManager: OErrorDialogManager;
 
   constructor(protected injector: Injector) {
@@ -89,31 +90,31 @@ export class OReportService extends OntimizeEEService {
   }
 
   /** overridden method to add error callback for all requests */
-  doRequest(param: ServiceRequestParam): Observable<ServiceResponse> {
-    return super.doRequest({
-      method: param.method,
-      url: param.url,
-      body: param.body,
-      errorCallBack: this.errorCallBack
-    });
-  }
+  // doRequest(param: ServiceRequestParam<T>): Observable<T> {
+  //   return super.doRequest({
+  //     method: param.method,
+  //     url: param.url,
+  //     body: param.body,
+  //     errorCallBack: this.errorCallBack
+  //   });
+  // }
 
 
-  errorCallBack(httpErrorResponse: any) {
-    const error = httpErrorResponse.error;
-    if (Util.isObject(error)) {
-      if (error['code'] === 1 && Util.isDefined(error['message'])) {
-        this.showNotificationError(error['message']);
-        return;
-      }
-    }
-    this.showNotificationError('MESSAGES.ERROR_QUERY');
+  // errorCallBack(httpErrorResponse: any) {
+  //   const error = httpErrorResponse.error;
+  //   if (Util.isObject(error)) {
+  //     if (error['code'] === 1 && Util.isDefined(error['message'])) {
+  //       this.showNotificationError(error['message']);
+  //       return;
+  //     }
+  //   }
+  //   this.showNotificationError('MESSAGES.ERROR_QUERY');
 
-  }
+  // }
 
-  showNotificationError(error: string) {
-    this.oErrorDialogManager.openErrorDialog(error);
-  }
+  // showNotificationError(error: string) {
+  //   this.oErrorDialogManager.openErrorDialog(error);
+  // }
 
   protected bodyCode(resp, observer) {
     if (resp.body['code'] === 3) {
