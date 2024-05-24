@@ -1,5 +1,9 @@
 name: Sonar
 
+concurrency:
+  group: sonar-ci-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 env:
   NEXUS_REGISTRY: https://nexus.imatia.com/repository/npm-group/
 
