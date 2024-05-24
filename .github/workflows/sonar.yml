@@ -10,7 +10,7 @@ on:
       - 15.x.x
       - hotfix/15.*
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, labeled]
 jobs:
   sonarcloud:
     name: SonarCloud
