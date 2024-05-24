@@ -1,16 +1,17 @@
-import { HttpEventType, HttpRequest } from "@angular/common/http";
-import { Injectable, Injector } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { DialogService, Observable, Util } from "ontimize-web-ngx";
+import { HttpEventType, HttpRequest } from '@angular/common/http';
+import { Injectable, Injector } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogService, Observable, Util } from 'ontimize-web-ngx';
 import { share } from 'rxjs/operators';
-import { OReportViewerComponent } from "../components/report/o-report-viewer/o-report-viewer.component";
-import { OFilterParameter } from "../types/filter-parameter.type";
-import { OReportStoreParam, OReportStoreParamValue } from "../types/report-store-param.type";
-import { Utils } from "../util/utils";
-import { OReportService } from "./o-report.service";
+
+import { OReportViewerComponent } from '../components/report/o-report-viewer/o-report-viewer.component';
+import { OFilterParameter } from '../types/filter-parameter.type';
+import { OReportStoreParam, OReportStoreParamValue } from '../types/report-store-param.type';
+import { Utils } from '../util/utils';
+import { JSONAPIReportService } from './jsonapi-report.service';
 
 @Injectable()
-export class OReportStoreService extends OReportService {
+export class JSONAPIReportStoreService extends JSONAPIReportService {
   protected dialogService: DialogService;
   protected dialog: MatDialog
 
@@ -39,15 +40,16 @@ export class OReportStoreService extends OReportService {
 
 
   public advancedQuery(_kv?: Object, _av?: Array<string>, entity?: string, _sqltypes?: Object, offset?: number, _pagesize?: number, _orderby?: Array<Object>): Observable<any> {
-    offset = (Util.isDefined(offset)) ? offset : this.offset;
+    // offset = (Util.isDefined(offset)) ? offset : this.offset;
 
-    // Calculate page
-    let page = 0;
-    if (Util.isDefined(offset)) {
-      page = Math.trunc(offset / 10) + 1;
-    }
+    // // Calculate page
+    // let page = 0;
+    // if (Util.isDefined(offset)) {
+    //   page = Math.trunc(offset / 10) + 1;
+    // }
 
-    let url = this.urlBase + '/reportstore/' + entity + '/?format=json' + '&page=' + page;
+    let url = this.urlBase + '/reportstore/' + entity + '/?format=json';
+    //+ '&page=' + page;
 
     return this.doRequest({
       method: 'GET',

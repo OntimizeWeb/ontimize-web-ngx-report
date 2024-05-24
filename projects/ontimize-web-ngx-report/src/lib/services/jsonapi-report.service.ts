@@ -1,12 +1,12 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
-import { Observable, OErrorDialogManager, OntimizeEEService, Util } from 'ontimize-web-ngx';
+import { JSONAPIService, Observable, OErrorDialogManager, Util } from 'ontimize-web-ngx';
 
 import { OReportParam } from '../types/report-param.type';
 
 
 @Injectable()
-export class OReportService extends OntimizeEEService {
+export class JSONAPIReportService extends JSONAPIService {
   protected oErrorDialogManager: OErrorDialogManager;
 
   constructor(protected injector: Injector) {
