@@ -37,11 +37,15 @@ jobs:
         with:
           node-version: 18.10.0
 
-      - name: npm install and npm run build
+      - name: Setup Node registry
+        if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'snapshot')
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_NEXUS_AUTH_TOKEN }}
         run: |
           npm set registry=${{ env.NEXUS_REGISTRY }}
           npm set _auth=$NPM_AUTH_TOKEN
+
+      - name: npm install and npm run build
+        run: |
           npm i
           npm run build-prod
