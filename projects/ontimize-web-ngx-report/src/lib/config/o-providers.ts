@@ -20,7 +20,6 @@ export function reportDataFactory(injector: Injector): IReportDataProvider {
   } else {
     return new OntimizeReportDataProvider(injector);
   }
-
 }
 
 /**
@@ -35,7 +34,7 @@ export function getReportOnDemandServiceProvider(injector: Injector): OReportSer
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType) || 'OntimizeEE' === config.serviceType) {
     return new OReportService(injector);
-  }  else if ('JSONAPI' === config.serviceType) {
+  } else if ('JSONAPI' === config.serviceType) {
     return new JSONAPIReportService(injector);
   }
 
@@ -60,8 +59,6 @@ export function getReportStoreServiceProvider(injector: Injector): OReportStoreS
 
 export const OREPORT_PROVIDERS: any = [
   { provide: O_REPORT_SERVICE, useClass: OntimizeReportService },
-  { provide: 'reportstore', useValue: OReportStoreService },
-  { provide: 'report', useValue: OReportService },
   { provide: OReportService, useFactory: getReportOnDemandServiceProvider, deps: [Injector] },
   { provide: OReportStoreService, useFactory: getReportStoreServiceProvider, deps: [Injector] },
   {
@@ -69,7 +66,5 @@ export const OREPORT_PROVIDERS: any = [
     useFactory: reportDataFactory,
     deps: [Injector]
   },
- // { provide: OntimizeService, useFactory: dataServiceFactory, deps: [Injector] },
-  //OntimizeServiceProvider,
   OAlertService
 ];

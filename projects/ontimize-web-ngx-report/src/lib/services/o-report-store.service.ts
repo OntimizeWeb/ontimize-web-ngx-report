@@ -1,13 +1,14 @@
-import { HttpEventType, HttpRequest } from "@angular/common/http";
-import { Injectable, Injector } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { DialogService, Observable, Util } from "ontimize-web-ngx";
+import { HttpEventType, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { Injectable, Injector } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogService, Observable, Util } from 'ontimize-web-ngx';
 import { share } from 'rxjs/operators';
-import { OReportViewerComponent } from "../components/report/o-report-viewer/o-report-viewer.component";
-import { OFilterParameter } from "../types/filter-parameter.type";
-import { OReportStoreParam, OReportStoreParamValue } from "../types/report-store-param.type";
-import { Utils } from "../util/utils";
-import { OReportService } from "./o-report.service";
+
+import { OReportViewerComponent } from '../components/report/o-report-viewer/o-report-viewer.component';
+import { OFilterParameter } from '../types/filter-parameter.type';
+import { OReportStoreParam, OReportStoreParamValue } from '../types/report-store-param.type';
+import { Utils } from '../util/utils';
+import { OReportService } from './o-report.service';
 
 @Injectable()
 export class OReportStoreService extends OReportService {
@@ -22,13 +23,18 @@ export class OReportStoreService extends OReportService {
     this.dialog = this.injector.get<MatDialog>(MatDialog);
   }
 
+  configureService(config: any): void {
+    super.configureService(config);
+    this.path = '/reportstore' || this.path;
+  }
+
   public query(kv?: Object, _av?: Array<string>, entity?: string, _sqltypes?: Object): Observable<any> {
     const identifier = kv['UUID'];
     let url = '';
     if (Object.keys(kv).length === 0) {
-      url = `${this.urlBase}/reportstore/${entity}`;
+      url = `${this.urlBase}${this.path}${entity}`;
     } else {
-      url = `${this.urlBase}/reportstore/${entity}/` + identifier;
+      url = `${this.urlBase}${this.path}${entity}/` + identifier;
     }
 
     return this.doRequest({
@@ -47,7 +53,7 @@ export class OReportStoreService extends OReportService {
       page = Math.trunc(offset / 10) + 1;
     }
 
-    let url = this.urlBase + '/reportstore/' + entity + '/?format=json' + '&page=' + page;
+    let url = this.urlBase + this.path + '/' + entity + '/?format=json' + '&page=' + page;
 
     return this.doRequest({
       method: 'GET',
@@ -57,7 +63,7 @@ export class OReportStoreService extends OReportService {
 
   public delete(kv?: Object, _entity?: string, _sqltypes?: Object): Observable<any> {
     const identifier = kv.valueOf()[Object.keys(kv)[0]];
-    let url = `${this.urlBase}/reportstore/removeReport/` + identifier;
+    let url = `${this.urlBase}${this.path}/removeReport/` + identifier;
 
     return this.doRequest({
       method: 'DELETE',
@@ -67,7 +73,7 @@ export class OReportStoreService extends OReportService {
 
   public update(kv?: Object, av?: any, _entity?: string, _sqltypes?: Object): Observable<any> {
     const identifier = kv.valueOf()[Object.keys(kv)[0]];
-    let url = `${this.urlBase}/reportstore/updateReport/` + identifier;
+    let url = `${this.urlBase}${this.path}/updateReport/` + identifier;
 
     return this.doRequest({
       method: 'PUT',
@@ -78,7 +84,7 @@ export class OReportStoreService extends OReportService {
 
   public fillReport(uuid: string, reportStoreParam: OReportStoreParam, entity?: string, _sqltypes?: Object): Observable<any> {
     let body = JSON.stringify(reportStoreParam);
-    let url = `${this.urlBase}/reportstore/${entity}/` + uuid;
+    let url = `${this.urlBase}${this.path}/${entity}/` + uuid;
 
     return this.doRequest({
       method: 'POST',
@@ -123,7 +129,7 @@ export class OReportStoreService extends OReportService {
   upload(files: any[], entity: string, data?: object): Observable<any> {
     const dataObservable = new Observable(observer => {
 
-      let url = `${this.urlBase}/reportstore/${entity}`;
+      let url = `${this.urlBase}${this.path}/addReport`;
 
       const toUpload: any = new FormData();
       files.forEach(item => {
@@ -171,6 +177,29 @@ export class OReportStoreService extends OReportService {
         () => observer.complete());
     });
     return dataObservable.pipe(share());
+  }
+
+  protected buildHeadersReport(): HttpHeaders {
+    let headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*' });
+    const sessionId = this.authService.getSessionInfo().id;
+    if (Util.isDefined(sessionId)) {
+      headers = headers.append('Authorization', 'Bearer ' + sessionId);
+    }
+    return headers;
+  }
+
+  protected bodyCode(resp, observer) {
+    if (resp.body['code'] === 3) {
+      this.authService.logout();
+    } else if (resp.body['code'] === 1) {
+      observer.error(resp.body['message']);
+    } else if (resp.body['code'] === 0) {
+      // RESPONSE
+      observer.next(resp.body);
+    } else {
+      // Unknow state -> error
+      observer.error('Service unavailable');
+    }
   }
 
 

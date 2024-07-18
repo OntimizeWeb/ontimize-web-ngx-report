@@ -1,19 +1,22 @@
-import { HttpEventType, HttpRequest } from '@angular/common/http';
+import { HttpEventType, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogService, Observable, Util } from 'ontimize-web-ngx';
+import { JSONAPIResponse } from 'ontimize-web-ngx/lib/interfaces/jsonapi-response.interface';
 import { share } from 'rxjs/operators';
 
-import { OReportViewerComponent } from '../components/report/o-report-viewer/o-report-viewer.component';
-import { OFilterParameter } from '../types/filter-parameter.type';
 import { OReportStoreParam, OReportStoreParamValue } from '../types/report-store-param.type';
 import { Utils } from '../util/utils';
 import { JSONAPIReportService } from './jsonapi-report.service';
+import { OFilterParameter } from '../types/filter-parameter.type';
+import { JSONAPIQueryParameter } from 'ontimize-web-ngx/lib/types/json-query-parameter.type';
+import { OReportViewerComponent } from '../components/report/o-report-viewer/o-report-viewer.component';
 
 @Injectable()
 export class JSONAPIReportStoreService extends JSONAPIReportService {
   protected dialogService: DialogService;
-  protected dialog: MatDialog
+  protected dialog: MatDialog;
+  readonly DEFAULT_PATH = '/reportstore';
 
   constructor(
     protected injector: Injector
@@ -23,64 +26,16 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
     this.dialog = this.injector.get<MatDialog>(MatDialog);
   }
 
-  public query(kv?: Object, _av?: Array<string>, entity?: string, _sqltypes?: Object): Observable<any> {
-    const identifier = kv['UUID'];
-    let url = '';
-    if (Object.keys(kv).length === 0) {
-      url = `${this.urlBase}/reportstore/${entity}`;
-    } else {
-      url = `${this.urlBase}/reportstore/${entity}/` + identifier;
-    }
-
-    return this.doRequest({
-      method: 'GET',
-      url: url
-    });
-  }
-
-
-  public advancedQuery(_kv?: Object, _av?: Array<string>, entity?: string, _sqltypes?: Object, offset?: number, _pagesize?: number, _orderby?: Array<Object>): Observable<any> {
-    // offset = (Util.isDefined(offset)) ? offset : this.offset;
-
-    // // Calculate page
-    // let page = 0;
-    // if (Util.isDefined(offset)) {
-    //   page = Math.trunc(offset / 10) + 1;
-    // }
-
-    let url = this.urlBase + '/reportstore/' + entity + '/?format=json';
-    //+ '&page=' + page;
-
-    return this.doRequest({
-      method: 'GET',
-      url: url
-    });
-  }
-
-  public delete(kv?: Object, _entity?: string, _sqltypes?: Object): Observable<any> {
-    const identifier = kv.valueOf()[Object.keys(kv)[0]];
-    let url = `${this.urlBase}/reportstore/removeReport/` + identifier;
-
-    return this.doRequest({
-      method: 'DELETE',
-      url: url
-    });
-  }
-
-  public update(kv?: Object, av?: any, _entity?: string, _sqltypes?: Object): Observable<any> {
-    const identifier = kv.valueOf()[Object.keys(kv)[0]];
-    let url = `${this.urlBase}/reportstore/updateReport/` + identifier;
-
-    return this.doRequest({
-      method: 'PUT',
-      url: url,
-      body: av
-    });
+  public configureService(config: any): void {
+    super.configureService(config);
+    this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/auth/login';
+    this.path = config.path || this.DEFAULT_PATH;
+    this.context = config.context;
   }
 
   public fillReport(uuid: string, reportStoreParam: OReportStoreParam, entity?: string, _sqltypes?: Object): Observable<any> {
     let body = JSON.stringify(reportStoreParam);
-    let url = `${this.urlBase}/reportstore/${entity}/` + uuid;
+    let url = `${this.urlBase}${this.path}${entity}/` + uuid;
 
     return this.doRequest({
       method: 'POST',
@@ -92,10 +47,14 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
   openFillReport(uuid: string, parametersValues: Array<OReportStoreParamValue> = [], filter: OFilterParameter = { filter: {} }) {
     this.configureService(this.getDefaultServiceConfiguration());
     this.configureResponseAdapter();
-    let kv = { 'UUID': uuid };
-    this.query(kv, null, 'getReport', {}).subscribe(
-      res => {
-        if (res && res.data.length && res.code === 0) {
+    this.path = `${this.path}/getReport`;
+    let queryParams: JSONAPIQueryParameter = {
+      filter: { 'UUID': uuid }
+    };
+    this.query(queryParams).subscribe({
+
+      next: (res: JSONAPIResponse) => {
+        if (Util.isArray(res) && res.isSuccessful()) {
           let name = res.data[0].NAME;
 
           const reportStoreParam: OReportStoreParam = {
@@ -111,21 +70,21 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
 
         }
       },
-      err => {
+      error: (err) => {
         if (this.dialogService) {
           this.dialogService.error('ERROR',
             'SERVER_ERROR_MESSAGE');
         }
         console.log(err);
       }
-    );
+    });
 
   }
 
   upload(files: any[], entity: string, data?: object): Observable<any> {
     const dataObservable = new Observable(observer => {
 
-      let url = `${this.urlBase}/reportstore/${entity}`;
+      let url = `${this.urlBase}${this.path}${entity}`;
 
       const toUpload: any = new FormData();
       files.forEach(item => {
@@ -175,5 +134,27 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
     return dataObservable.pipe(share());
   }
 
+  protected buildHeadersReport(): HttpHeaders {
+    let headers = new HttpHeaders({ 'Access-Control-Allow-Origin': '*' });
+    const sessionId = this.authService.getSessionInfo().id;
+    if (Util.isDefined(sessionId)) {
+      headers = headers.append('Authorization', 'Bearer ' + sessionId);
+    }
+    return headers;
+  }
+
+  protected bodyCode(resp, observer) {
+    if (resp.body['code'] === 3) {
+      this.authService.logout();
+    } else if (resp.body['code'] === 1) {
+      observer.error(resp.body['message']);
+    } else if (resp.body['code'] === 0) {
+      // RESPONSE
+      observer.next(resp.body);
+    } else {
+      // Unknow state -> error
+      observer.error('Service unavailable');
+    }
+  }
 
 }
