@@ -1,4 +1,5 @@
-<o-form #form service-type="reportstore" entity="addReport" keys="UUID" header-actions="R;I;U;D" show-header-navigation="no">
+<o-form #form service="reportstore" entity="report" keys="REPORTID" header-actions="R;I;U;D" show-header-navigation="no"
+  [configure-service-args]="configureServiceReportStore()">
   <div o-form-toolbar-buttons>
     <button type="button" class="o-form-toolbar-button" mat-stroked-button (click)="onClickSave($event)" attr="fillreport">
       <mat-icon>save</mat-icon>
@@ -7,13 +8,13 @@
   </div>
   <o-column attr="row1" title="REPORT_DATA" icon="description" layout-gap="14px" fxFill>
     <div fxLayout="row wrap" fxLayoutGap="14px" fxLayoutAlign="start start" fxFlex>
-      <o-text-input #name class="input-padding" attr="NAME" label="REPORT_NAME" fxFlex="50" required="yes"></o-text-input>
-      <o-text-input #type class="input-padding" attr="REPORT_TYPE" label="REPORT_TYPE" fxFlex required="yes"></o-text-input>
+      <o-text-input #name class="input-padding" attr="REPORTNAME" label="REPORT_NAME" fxFlex="50" required="yes"></o-text-input>
+      <o-text-input #type class="input-padding" attr="REPORTTYPE" label="REPORT_TYPE" fxFlex required="yes"></o-text-input>
     </div>
-    <o-textarea-input #description attr="DESCRIPTION" label="REPORT_DESCRIPTION" fxFlex required="yes"></o-textarea-input>
-    <o-file-input #file attr="file" fxFlex="50" service="report" service-type="reportstore" entity="addReport" label="REPORT_ZIPFOLDER" show-info="yes"
-      workspace-key="id" required="yes" (onUploadFile)="onUploadFile()" accept-file-type=".zip" [additional-data]="getFileData()"
-      (onErrorFile)="onError()">
+    <o-textarea-input #description attr="REPORTDESCRIPTION" label="REPORT_DESCRIPTION" fxFlex required="yes"></o-textarea-input>
+    <o-file-input #file attr="file" fxFlex="50" service="reportstore" entity="report" label="REPORT_ZIPFOLDER" show-info="yes" workspace-key="id"
+      required="yes" (onUploadFile)="onUploadFile()" accept-file-type=".zip" [additional-data]="getFileData()" (onErrorFile)="onError()"
+      [configure-service-args]="configureServiceReportStore()">
     </o-file-input>
   </o-column>
 </o-form>

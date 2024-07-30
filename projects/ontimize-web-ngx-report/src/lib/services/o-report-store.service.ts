@@ -14,6 +14,7 @@ import { OReportService } from './o-report.service';
 export class OReportStoreService extends OReportService {
   protected dialogService: DialogService;
   protected dialog: MatDialog
+  readonly DEFAULT_PATH = '/reportstore';
 
   constructor(
     protected injector: Injector
@@ -25,16 +26,16 @@ export class OReportStoreService extends OReportService {
 
   configureService(config: any): void {
     super.configureService(config);
-    this.path = '/reportstore' || this.path;
+    this.path = config.path || this.DEFAULT_PATH;
   }
 
   public query(kv?: Object, _av?: Array<string>, entity?: string, _sqltypes?: Object): Observable<any> {
-    const identifier = kv['UUID'];
+    const identifier = kv['REPORTUUID'];
     let url = '';
     if (Object.keys(kv).length === 0) {
-      url = `${this.urlBase}${this.path}${entity}`;
+      url = `${this.urlBase}${this.path}/listReports`;
     } else {
-      url = `${this.urlBase}${this.path}${entity}/` + identifier;
+      url = `${this.urlBase}${this.path}/getReport/` + identifier;
     }
 
     return this.doRequest({
@@ -96,7 +97,7 @@ export class OReportStoreService extends OReportService {
   openFillReport(uuid: string, parametersValues: Array<OReportStoreParamValue> = [], filter: OFilterParameter = { filter: {} }) {
     this.configureService(this.getDefaultServiceConfiguration());
     this.configureResponseAdapter();
-    let kv = { 'UUID': uuid };
+    let kv = { 'REPORTUUID': uuid };
     this.query(kv, null, 'getReport', {}).subscribe(
       res => {
         if (res && res.data.length && res.code === 0) {
@@ -145,7 +146,7 @@ export class OReportStoreService extends OReportService {
       let method = entity === 'addReport' ? 'POST' : 'PUT';
 
 
-      const request = new HttpRequest(method, url, toUpload, {
+      const request = new HttpRequest('POST', url, toUpload, {
         headers: this.buildHeadersReport(),
         reportProgress: true
       });

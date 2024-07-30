@@ -2,7 +2,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Inject, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
-import { AppConfig, AppearanceService, DialogService, OColumn, OTableBase, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
+import { AppConfig, AppearanceService, DialogService, OColumn, OTableBase, OTranslateService, OntimizePreferencesService, preferencesServiceFactory, SnackBarService, Util, OConfigureServiceArgs } from 'ontimize-web-ngx';
 
 import { OReportService } from '../../../services/o-report.service';
 import { OntimizeReportDataProvider } from '../../../services/ontimize-report-data-provider.service';
@@ -24,6 +24,9 @@ import { OReportParam } from './../../../types/report-param.type';
   templateUrl: './report-on-demand.component.html',
   styleUrls: ['./report-on-demand.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  providers: [
+    { provide: OntimizePreferencesService, useFactory: preferencesServiceFactory, deps: [Injector] }
+  ],
   host: {
     '[class.o-report-on-demand]': 'true'
   }
@@ -81,6 +84,7 @@ export class ReportOnDemandComponent implements OnInit {
   protected dialogService: DialogService;
   public dialog: MatDialog;
   reportDataProvider: OntimizeReportDataProvider;
+  preferenceService: OntimizePreferencesService;
   constructor(
     public injector: Injector,
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
@@ -94,6 +98,14 @@ export class ReportOnDemandComponent implements OnInit {
     this.dialogService = this.injector.get<DialogService>(DialogService);
     this.dialog = this.injector.get<MatDialog>(MatDialog);
     this.reportDataProvider = this.injector.get<OntimizeReportDataProvider>(OntimizeReportDataProvider);
+
+    this.configurePrefereceService();
+  }
+
+  public configurePrefereceService(): void {
+    let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizePreferencesService, entity: 'preferences', service: 'preferences', serviceType: null };
+    this.preferenceService = Util.configureService(configureServiceArgs);
+
   }
 
   ngOnInit() {
@@ -107,9 +119,10 @@ export class ReportOnDemandComponent implements OnInit {
     this.visibleColumnsArray = this.getVisibleColumns();
     this.initialColumnsData = this.parseReportColumn(this.visibleColumnsArray);
     this.initialColumnsToGroupData = this.columnsArray;
-    this.currentConfiguration = { ENTITY: this.table.entity };
+    this.currentConfiguration = { PREFERENCEENTITY: this.table.entity };
     this.isDarkMode = this.appearanceService.isDarkMode();
     this.initializeReportPreferences();
+
 
     this.getFunctions();
   }
@@ -249,7 +262,11 @@ export class ReportOnDemandComponent implements OnInit {
   applyConfiguration(configuration: any) {
     this.clearCurrentPreferences();
     this.currentConfiguration = configuration;
-    this.currentPreference = JSON.parse(this.currentConfiguration.PREFERENCES);
+    if (this.appConfig.getConfiguration().serviceType === 'JSONAPI') {
+      this.currentPreference = JSON.parse(atob(this.currentConfiguration.PREFERENCEPREFERENCES));
+    } else {
+      this.currentPreference = JSON.parse(this.currentConfiguration.PREFERENCEPREFERENCES);
+    }
     this.currentPreference.columns.forEach((column: OReportColumn) => this.updateColumnsOrderByData(column.id, column.name));
 
     this.checkPreferenceData();
@@ -441,8 +458,8 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   openSavePreferences(): void {
-    if (Util.isDefined(this.currentConfiguration.ID)) {
-      this.savePreferences({ name: this.currentConfiguration.NAME, description: this.currentConfiguration.DESCRIPTION }, true);
+    if (Util.isDefined(this.currentConfiguration.PREFERENCEID)) {
+      this.savePreferences({ name: this.currentConfiguration.PREFERENCENAME, description: this.currentConfiguration.PREFERENCEDESCRIPTION }, true);
     } else {
       this.dialog
         .open(SavePreferencesDialogComponent, {
@@ -460,8 +477,8 @@ export class ReportOnDemandComponent implements OnInit {
 
   savePreferences(data: any, update?: boolean) {
     let preference = {
-      "name": data.name, "description": data.description,
-      "entity": this.currentPreference.entity, "service": this.currentPreference.service, "type": "REPORT", "params": {
+      "preferencename": data.name, "preferencedescription": data.description,
+      "preferenceentity": this.currentPreference.entity, "preferenceservice": this.currentPreference.service, "preferencetype": "REPORT", "preferencepreferences": {
         "title": this.currentPreference.title, "groups": this.currentPreference.groups,
         "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions, "style": this.currentPreference.style,
         "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy, "entity": this.currentPreference.entity, "service": this.currentPreference.service
@@ -469,11 +486,11 @@ export class ReportOnDemandComponent implements OnInit {
     }
 
     if (update) {
-      this.reportService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
+      this.preferenceService.savePreferences(this.currentConfiguration.PREFERENCEID, preference).subscribe(res => {
         this.showConfirmOperatinInSnackBar(res);
       });
     } else {
-      this.reportService.saveAsPreferences(preference).subscribe(res => {
+      this.preferenceService.saveAsPreferences(preference).subscribe(res => {
         if (res && res.code === 0) {
           this.showConfirmOperatinInSnackBar(res);
         }

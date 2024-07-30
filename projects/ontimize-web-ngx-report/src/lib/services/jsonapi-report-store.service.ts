@@ -49,7 +49,7 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
     this.configureResponseAdapter();
     this.path = `${this.path}/getReport`;
     let queryParams: JSONAPIQueryParameter = {
-      filter: { 'UUID': uuid }
+      filter: { 'REPORTUUID': uuid }
     };
     this.query(queryParams).subscribe({
 

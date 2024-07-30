@@ -11,7 +11,7 @@ const routes: Routes = [{
   path: 'new',
   component: OReportNewComponent
 },{
-  path: ':UUID',
+  path: ':REPORTUUID',
   component: OReportDetailComponent
 }];
 

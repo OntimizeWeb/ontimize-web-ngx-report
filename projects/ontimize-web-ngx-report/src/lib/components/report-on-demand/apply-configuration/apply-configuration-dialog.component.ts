@@ -1,29 +1,38 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
+import { Component, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSelectionList, MatListOption } from '@angular/material/list';
-import { DialogService, Util } from 'ontimize-web-ngx';
-import { OReportService } from '../../../services/o-report.service';
+import { MatListOption, MatSelectionList } from '@angular/material/list';
+import { DialogService, OntimizePreferencesService, preferencesServiceFactory, Util } from 'ontimize-web-ngx';
 import { OReportConfiguration } from '../../../types/report-configuration.type';
+import { Subscription } from 'rxjs';
 
 
 @Component({
   selector: 'apply-configuration-dialog',
-  templateUrl: './apply-configuration-dialog.component.html'
+  templateUrl: './apply-configuration-dialog.component.html',
+  providers: [
+    { provide: OntimizePreferencesService, useFactory: preferencesServiceFactory, deps: [Injector] }
+  ],
 })
 
-export class ApplyConfigurationDialogComponent implements OnInit {
+export class ApplyConfigurationDialogComponent implements OnInit, OnDestroy {
   @ViewChild(MatSelectionList, { static: true })
   protected configurationList: MatSelectionList;
 
   public configurationListData: OReportConfiguration[] = [];
   public selectedConfiguration: OReportConfiguration;
+  private dialogService: DialogService;
+  private preferenceService: OntimizePreferencesService;
+  protected preferencesSubscription: Subscription = new Subscription();
 
   constructor(
-    private dialogService: DialogService,
-    private reportsService: OReportService,
     public dialogo: MatDialogRef<ApplyConfigurationDialogComponent>,
+    protected injector: Injector,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
+
+    this.dialogService = this.injector.get(DialogService);
+    this.preferenceService = this.injector.get(OntimizePreferencesService);
+    this.preferenceService.configureService(this.preferenceService.getDefaultServiceConfiguration('preferences'));
     this.getConfigurations();
   }
   ngOnInit(): void {
@@ -37,11 +46,11 @@ export class ApplyConfigurationDialogComponent implements OnInit {
   remove(): void {
     this.dialogService.confirm('CONFIRM', 'TABLE.DIALOG.CONFIRM_REMOVE_CONFIGURATION').then(result => {
       if (result) {
-        this.reportsService.deletePreferences(this.selectedConfiguration.ID).subscribe(res => {
+        this.preferencesSubscription.add(this.preferenceService.deletePreferences(this.selectedConfiguration.PREFERENCEID).subscribe(res => {
           if (res && res.code === 0) {
             this.getConfigurations();
           }
-        });
+        }));
       }
     });
   }
@@ -50,11 +59,11 @@ export class ApplyConfigurationDialogComponent implements OnInit {
   }
 
   getConfigurations() {
-    this.reportsService.getPreferences(this.data.entity, this.data.service).subscribe(resp => {
+    this.preferencesSubscription.add(this.preferenceService.getPreferences(this.data.entity, this.data.service, 'REPORT').subscribe(resp => {
       if (resp.isSuccessful()) {
         this.setDataArray(resp.data);
       }
-    });
+    }));
   }
 
   setDataArray(data: any) {
@@ -63,5 +72,12 @@ export class ApplyConfigurationDialogComponent implements OnInit {
     } else {
       this.configurationListData = []
     }
+  }
+
+  ngOnDestroy(): void {
+    if (this.preferencesSubscription) {
+      this.preferencesSubscription.unsubscribe();
+    }
+
   }
 }

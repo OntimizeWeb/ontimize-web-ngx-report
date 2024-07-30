@@ -1,17 +1,18 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogService, OFileInputComponent, OFormComponent, OTextInputComponent, Util } from 'ontimize-web-ngx';
+import { AppConfig, DialogService, OConfigureServiceArgs, OFileInputComponent, OFormComponent, OTextInputComponent, Util } from 'ontimize-web-ngx';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { OReportStoreParam, OReportStoreParamValue } from '../../../types/report-store-param.type';
 import { Utils } from '../../../util/utils';
 import { OReportViewerComponent } from '../o-report-viewer/o-report-viewer.component';
+import { OReportStoreService } from '../../../services/o-report-store.service';
 
 
 export type JasperReportParameter = {
-  name: string,
-  description: string,
-  valueClass: string,
-  type?: string
+  reportParameterName: string,
+  reportParameterDescription: string,
+  reportParameterValueClass: string,
+  reportParameterType?: string
 }
 
 
@@ -19,7 +20,7 @@ export type JasperReportParameter = {
   selector: 'o-report-detail',
   templateUrl: './o-report-detail.component.html'
 })
-export class OReportDetailComponent {
+export class OReportDetailComponent implements OnDestroy {
 
   @ViewChild('form', { static: false })
   mainForm: OFormComponent;
@@ -43,12 +44,15 @@ export class OReportDetailComponent {
   description: OTextInputComponent;
   @ViewChild('file', { static: true })
   file: OFileInputComponent;
+  appConfig: AppConfig;
 
   constructor(
     protected dialogService: DialogService,
-    protected dialog: MatDialog
+    protected dialog: MatDialog,
+    protected injector: Injector
   ) {
     this.existsParameterChanges = this.existChangesSubject.asObservable();
+    this.appConfig = this.injector.get(AppConfig);
   }
 
   @ViewChild('paramForm', { static: false }) set content(content: OFormComponent) {
@@ -78,13 +82,13 @@ export class OReportDetailComponent {
       const formValues = this.paramForm.getAttributesValuesToInsert();
       const sqlTypes = this.paramForm.getAttributesSQLTypes();
       for (let currentParam of this.parameters) {
-        if (Util.isDefined(formValues[currentParam.name])) {
+        if (Util.isDefined(formValues[currentParam.reportParameterName])) {
           let current = {
-            name: currentParam.name,
-            value: formValues[currentParam.name]
+            name: currentParam.reportParameterName,
+            value: formValues[currentParam.reportParameterName]
           };
-          if (Util.isDefined(sqlTypes[currentParam.name])) {
-            current["sqlType"] = sqlTypes[currentParam.name];
+          if (Util.isDefined(sqlTypes[currentParam.reportParameterName])) {
+            current["sqlType"] = sqlTypes[currentParam.reportParameterName];
           }
           parameterValues.push(current);
         }
@@ -112,8 +116,8 @@ export class OReportDetailComponent {
   onDataLoaded(e: object) {
     this.parameters = Util.isArray(e['PARAMETERS']) ? e['PARAMETERS'] : [];
     this.hasParams = !Util.isArrayEmpty(this.parameters);
-    this.name = Util.isDefined(e['NAME']) ? e['NAME'] : "";
-    this.id = Util.isDefined(e['UUID']) ? e['UUID'] : undefined;
+    this.name = Util.isDefined(e['REPORTNAME']) ? e['REPORTNAME'] : "";
+    this.id = Util.isDefined(e['REPORTUUID']) ? e['REPORTUUID'] : undefined;
     if (!this.hasParams) {
       this.canFillReport();
     }
@@ -142,4 +146,7 @@ export class OReportDetailComponent {
     this.existChangesSubject.next(result);
   }
 
+  configureServiceReportStore(): OConfigureServiceArgs {
+    return { baseService: OReportStoreService, entity: 'report' };
+  }
 }
