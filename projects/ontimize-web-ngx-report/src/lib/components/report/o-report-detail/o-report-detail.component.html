@@ -1,5 +1,6 @@
-<o-form #form attr="report" entity="report" service="reportstore" keys="REPORTUUID" header-actions="R;I;U;D" show-header="yes"
-  show-header-navigation="yes" fxLayout="column" (onDataLoaded)="onDataLoaded($event)" [configure-service-args]="configureServiceReportStore()">
+<o-form #form attr="report" service="reportstore" entity="report" keys="REPORTUUID" header-actions="R;I;U;D" show-header="yes"
+  show-header-navigation="yes" fxLayout="column" (onDataLoaded)="onDataLoaded($event)" [configure-service-args]="configureServiceReportStore()"
+  (onBeforeUpdate)="onBeforeUpdate($event)" columns="REPORTID">
   <o-column attr="row1" title="REPORT_DATA" icon="description" layout-gap="14px" fxFill>
     <o-text-input #id attr="REPORTUUID" label="REPORT_ID" enabled="no" fxFlex="100"></o-text-input>
     <div fxLayout="row wrap" fxLayoutGap="14px" fxLayoutAlign="start start" fxFlex>
@@ -16,17 +17,22 @@
         layout-direction="column" query-on-init="no" confirm-exit="no">
         <div fxLayout="column wrap" fxLayoutGap="14px" fxLayoutAlign="start start" fxFlex>
           <ng-container *ngFor="let elem of parameters; let i = index" [ngSwitch]="elem.valueClass">
-            <o-date-input *ngSwitchCase="'java.util.Date'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes" value-type="string"
-              format="YYYY-MM-DD" fxFill></o-date-input>
-            <o-time-input *ngSwitchCase="'java.sql.Timestamp'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes" value-type="string"
-              date-placeholder="YYYY-MM-DD" hour-placeholder="hh:mm" fxFill></o-time-input>
-            <o-integer-input *ngSwitchCase="'java.lang.Integer'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
-              fxFill></o-integer-input>
-            <o-integer-input *ngSwitchCase="'java.lang.Long'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes" fxFill></o-integer-input>
-            <o-real-input *ngSwitchCase="'java.lang.Float'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes" fxFill></o-real-input>
-            <o-real-input *ngSwitchCase="'java.lang.Double'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes" fxFill></o-real-input>
-            <o-checkbox *ngSwitchCase="'java.lang.Boolean'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes" fxFill></o-checkbox>
-            <o-text-input *ngSwitchDefault [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes" fxFill></o-text-input>
+            <o-date-input *ngSwitchCase="'java.util.Date'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
+              value-type="string" format="YYYY-MM-DD" fxFill></o-date-input>
+            <o-time-input *ngSwitchCase="'java.sql.Timestamp'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription"
+              required="yes" value-type="string" date-placeholder="YYYY-MM-DD" hour-placeholder="hh:mm" fxFill></o-time-input>
+            <o-integer-input *ngSwitchCase="'java.lang.Integer'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription"
+              required="yes" fxFill></o-integer-input>
+            <o-integer-input *ngSwitchCase="'java.lang.Long'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription"
+              required="yes" fxFill></o-integer-input>
+            <o-real-input *ngSwitchCase="'java.lang.Float'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
+              fxFill></o-real-input>
+            <o-real-input *ngSwitchCase="'java.lang.Double'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription"
+              required="yes" fxFill></o-real-input>
+            <o-checkbox *ngSwitchCase="'java.lang.Boolean'" [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
+              fxFill></o-checkbox>
+            <o-text-input *ngSwitchDefault [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
+              fxFill></o-text-input>
           </ng-container>
         </div>
       </o-form>

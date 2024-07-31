@@ -35,6 +35,8 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
 
   public fillReport(uuid: string, reportStoreParam: OReportStoreParam, entity?: string, _sqltypes?: Object): Observable<any> {
     let body = JSON.stringify(reportStoreParam);
+    entity = this.getStandartEntity(entity);
+
     let url = `${this.urlBase}${this.path}${entity}/` + uuid;
 
     return this.doRequest({
@@ -42,6 +44,14 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
       url: url,
       body: body
     });
+  }
+
+  update(kv: object, av: object, entity?: string, sqltypes?: object): Observable<JSONAPIResponse> {
+    entity = this.getStandartEntity(entity);
+    /**Replace key UUID by REPORTID */
+    kv = { 'REPORTID': av['REPORTID'] };
+    delete av['REPORTID'];
+    return super.update(kv, av, entity, sqltypes);
   }
 
   openFillReport(uuid: string, parametersValues: Array<OReportStoreParamValue> = [], filter: OFilterParameter = { filter: {} }) {
@@ -84,7 +94,7 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
   upload(files: any[], entity: string, data?: object): Observable<any> {
     const dataObservable = new Observable(observer => {
 
-      let url = `${this.urlBase}${this.path}${entity}`;
+      let url = `${this.urlBase}${this.path}/addReport`;
 
       const toUpload: any = new FormData();
       files.forEach(item => {
@@ -97,10 +107,8 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
       if (data) {
         toUpload.append('data', JSON.stringify(data));
       }
-      let method = entity === 'addReport' ? 'POST' : 'PUT';
 
-
-      const request = new HttpRequest(method, url, toUpload, {
+      const request = new HttpRequest('POST', url, toUpload, {
         headers: this.buildHeadersReport(),
         reportProgress: true
       });

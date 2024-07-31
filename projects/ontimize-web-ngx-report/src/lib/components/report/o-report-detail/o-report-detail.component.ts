@@ -149,4 +149,10 @@ export class OReportDetailComponent implements OnDestroy {
   configureServiceReportStore(): OConfigureServiceArgs {
     return { baseService: OReportStoreService, entity: 'report' };
   }
+
+  onBeforeUpdate(data) {
+    if (Util.isDefined(this.mainForm.getDataValue('REPORTID'))) {
+      data['REPORTID'] = this.mainForm.getDataValue('REPORTID').value;
+    }
+  }
 }

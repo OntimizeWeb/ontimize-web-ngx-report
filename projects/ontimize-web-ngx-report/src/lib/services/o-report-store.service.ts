@@ -73,6 +73,7 @@ export class OReportStoreService extends OReportService {
   }
 
   public update(kv?: Object, av?: any, _entity?: string, _sqltypes?: Object): Observable<any> {
+    delete av['REPORTID'];
     const identifier = kv.valueOf()[Object.keys(kv)[0]];
     let url = `${this.urlBase}${this.path}/updateReport/` + identifier;
 
@@ -143,8 +144,6 @@ export class OReportStoreService extends OReportService {
       if (data) {
         toUpload.append('data', JSON.stringify(data));
       }
-      let method = entity === 'addReport' ? 'POST' : 'PUT';
-
 
       const request = new HttpRequest('POST', url, toUpload, {
         headers: this.buildHeadersReport(),
