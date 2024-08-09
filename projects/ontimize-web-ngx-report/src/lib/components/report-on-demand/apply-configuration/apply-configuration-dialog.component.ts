@@ -2,8 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatListOption, MatSelectionList } from '@angular/material/list';
-import { DialogService, OntimizePreferencesService, preferencesServiceFactory, Util } from 'ontimize-web-ngx';
-import { OReportConfiguration } from '../../../types/report-configuration.type';
+import { DialogService, OntimizePreferencesService, OPreference, preferencesServiceFactory, Util } from 'ontimize-web-ngx';
 import { Subscription } from 'rxjs';
 
 
@@ -19,8 +18,8 @@ export class ApplyConfigurationDialogComponent implements OnInit, OnDestroy {
   @ViewChild(MatSelectionList, { static: true })
   protected configurationList: MatSelectionList;
 
-  public configurationListData: OReportConfiguration[] = [];
-  public selectedConfiguration: OReportConfiguration;
+  public configurationListData: OPreference[] = [];
+  public selectedConfiguration: OPreference;
   private dialogService: DialogService;
   private preferenceService: OntimizePreferencesService;
   protected preferencesSubscription: Subscription = new Subscription();
