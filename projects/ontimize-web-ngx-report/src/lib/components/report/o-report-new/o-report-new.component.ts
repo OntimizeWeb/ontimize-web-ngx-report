@@ -1,7 +1,8 @@
-import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
-import { DialogService, OFileInputComponent, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
+import { Component, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AppConfig, DialogService, OConfigureServiceArgs, OFileInputComponent, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
 import { Subscription } from 'rxjs';
 import { OAlertService } from '../../../services/o-alert.service';
+import { OReportStoreService } from '../../../services/o-report-store.service';
 
 @Component({
   selector: 'o-report-new',
@@ -27,11 +28,15 @@ export class OReportNewComponent {
 
   subscription: Subscription;
   loading: boolean = false;
+  appConfig: AppConfig;
 
   constructor(
     private alertService: OAlertService,
-    private dialogService: DialogService
-  ) { }
+    private dialogService: DialogService,
+    protected injector: Injector
+  ) {
+    this.appConfig = this.injector.get(AppConfig);
+  }
 
   getFileData() {
     return {
@@ -70,6 +75,11 @@ export class OReportNewComponent {
     }
     this.loading = true;
     this.file.onClickUpload(e);
+  }
+
+  configureServiceReportStore(): OConfigureServiceArgs {
+    let configureArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OReportStoreService, entity: 'report', service: 'reportstore', serviceType: null }
+    return configureArgs;
   }
 
 }

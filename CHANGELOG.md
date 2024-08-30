@@ -1,3 +1,7 @@
+## 15.1.0-JSONAPI-SNAPSHOT-0 (2024-08-30)
+### Features
+Adapt to JSON API
+
 ### 15.0.1 (2024-04-10)
 > [!NOTE]
 > In this version, the bugfixes of version [8.4.2](#842-2024-04-10) were integrated

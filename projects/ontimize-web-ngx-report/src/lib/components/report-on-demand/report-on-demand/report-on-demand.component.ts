@@ -2,13 +2,12 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Inject, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
-import { AppConfig, AppearanceService, DialogService, OColumn, OTableBase, OTranslateService, SnackBarService, Util } from 'ontimize-web-ngx';
+import { AppConfig, AppearanceService, DialogService, OColumn, OTableBase, OTranslateService, OntimizePreferencesService, preferencesServiceFactory, SnackBarService, Util, OConfigureServiceArgs, OPreference } from 'ontimize-web-ngx';
 
 import { OReportService } from '../../../services/o-report.service';
 import { OntimizeReportDataProvider } from '../../../services/ontimize-report-data-provider.service';
 import { OReportColumnStyle } from '../../../types/report-column-style.type';
 import { OReportColumn } from '../../../types/report-column.type';
-import { OReportConfiguration } from '../../../types/report-configuration.type';
 import { OReportFunction } from '../../../types/report-function.type';
 import { OReportOrderBy } from '../../../types/report-orderBy.type';
 import { DefaultOReportPreferences, OReportPreferences } from '../../../types/report-preferences.type';
@@ -24,6 +23,9 @@ import { OReportParam } from './../../../types/report-param.type';
   templateUrl: './report-on-demand.component.html',
   styleUrls: ['./report-on-demand.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  providers: [
+    { provide: OntimizePreferencesService, useFactory: preferencesServiceFactory, deps: [Injector] }
+  ],
   host: {
     '[class.o-report-on-demand]': 'true'
   }
@@ -71,7 +73,7 @@ export class ReportOnDemandComponent implements OnInit {
   private blankPdf: string = 'JVBERi0xLjYKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0ZURlY29kZT4+CnN0cmVhbQp4nDPQM1Qo5ypUMFAw0DMwslAwtTTVMzI3VbAwMdSzMDNUKErlCtdSyOMKVAAAtxIIrgplbmRzdHJlYW0KZW5kb2JqCgozIDAgb2JqCjUwCmVuZG9iagoKNSAwIG9iago8PAo+PgplbmRvYmoKCjYgMCBvYmoKPDwvRm9udCA1IDAgUgovUHJvY1NldFsvUERGL1RleHRdCj4+CmVuZG9iagoKMSAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDQgMCBSL1Jlc291cmNlcyA2IDAgUi9NZWRpYUJveFswIDAgNTk1LjMwMzkzNzAwNzg3NCA4NDEuODg5NzYzNzc5NTI4XS9Hcm91cDw8L1MvVHJhbnNwYXJlbmN5L0NTL0RldmljZVJHQi9JIHRydWU+Pi9Db250ZW50cyAyIDAgUj4+CmVuZG9iagoKNCAwIG9iago8PC9UeXBlL1BhZ2VzCi9SZXNvdXJjZXMgNiAwIFIKL01lZGlhQm94WyAwIDAgNTk1IDg0MSBdCi9LaWRzWyAxIDAgUiBdCi9Db3VudCAxPj4KZW5kb2JqCgo3IDAgb2JqCjw8L1R5cGUvQ2F0YWxvZy9QYWdlcyA0IDAgUgovT3BlbkFjdGlvblsxIDAgUiAvWFlaIG51bGwgbnVsbCAwXQovTGFuZyhlcy1FUykKPj4KZW5kb2JqCgo4IDAgb2JqCjw8L0F1dGhvcjxGRUZGMDA1MDAwNjEwMDc0MDA3MjAwNjkwMDYzMDA2OTAwNjEwMDIwMDA0RDAwNjEwMDcyMDA3NDAwRUQwMDZFMDA2NTAwN0EwMDIwMDA1NDAwNjkwMDZDMDA3NjAwNjU+Ci9DcmVhdG9yPEZFRkYwMDU3MDA3MjAwNjkwMDc0MDA2NTAwNzI+Ci9Qcm9kdWNlcjxGRUZGMDA0QzAwNjkwMDYyMDA3MjAwNjUwMDRGMDA2NjAwNjYwMDY5MDA2MzAwNjUwMDIwMDAzNzAwMkUwMDMxPgovQ3JlYXRpb25EYXRlKEQ6MjAyMjA1MTAxNDUyMDYrMDInMDAnKT4+CmVuZG9iagoKeHJlZgowIDkKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMjM0IDAwMDAwIG4gCjAwMDAwMDAwMTkgMDAwMDAgbiAKMDAwMDAwMDE0MCAwMDAwMCBuIAowMDAwMDAwNDAyIDAwMDAwIG4gCjAwMDAwMDAxNTkgMDAwMDAgbiAKMDAwMDAwMDE4MSAwMDAwMCBuIAowMDAwMDAwNTAwIDAwMDAwIG4gCjAwMDAwMDA1OTYgMDAwMDAgbiAKdHJhaWxlcgo8PC9TaXplIDkvUm9vdCA3IDAgUgovSW5mbyA4IDAgUgovSUQgWyA8RDdBODhCRTRFREFDRkU1RDFGMTIwMzNFMDUyN0JERkU+CjxEN0E4OEJFNEVEQUNGRTVEMUYxMjAzM0UwNTI3QkRGRT4gXQovRG9jQ2hlY2tzdW0gLzgwNTA5NDU4QjgyN0RCRDQ2QzlEODdBMjY4NjdCNEFDCj4+CnN0YXJ0eHJlZgo4NzYKJSVFT0YK';
 
   public currentPreference: OReportPreferences;
-  public currentConfiguration: OReportConfiguration;
+  public currentConfiguration: OPreference;
   public pdf: string;
 
   public translateService: OTranslateService;
@@ -81,6 +83,7 @@ export class ReportOnDemandComponent implements OnInit {
   protected dialogService: DialogService;
   public dialog: MatDialog;
   reportDataProvider: OntimizeReportDataProvider;
+  preferenceService: OntimizePreferencesService;
   constructor(
     public injector: Injector,
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
@@ -94,6 +97,14 @@ export class ReportOnDemandComponent implements OnInit {
     this.dialogService = this.injector.get<DialogService>(DialogService);
     this.dialog = this.injector.get<MatDialog>(MatDialog);
     this.reportDataProvider = this.injector.get<OntimizeReportDataProvider>(OntimizeReportDataProvider);
+
+    this.configurePrefereceService();
+  }
+
+  public configurePrefereceService(): void {
+    let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizePreferencesService, entity: 'preferences', service: 'preferences', serviceType: null };
+    this.preferenceService = Util.configureService(configureServiceArgs);
+
   }
 
   ngOnInit() {
@@ -107,9 +118,10 @@ export class ReportOnDemandComponent implements OnInit {
     this.visibleColumnsArray = this.getVisibleColumns();
     this.initialColumnsData = this.parseReportColumn(this.visibleColumnsArray);
     this.initialColumnsToGroupData = this.columnsArray;
-    this.currentConfiguration = { ENTITY: this.table.entity };
+    this.currentConfiguration = { PREFERENCEENTITY: this.table.entity };
     this.isDarkMode = this.appearanceService.isDarkMode();
     this.initializeReportPreferences();
+
 
     this.getFunctions();
   }
@@ -249,7 +261,11 @@ export class ReportOnDemandComponent implements OnInit {
   applyConfiguration(configuration: any) {
     this.clearCurrentPreferences();
     this.currentConfiguration = configuration;
-    this.currentPreference = JSON.parse(this.currentConfiguration.PREFERENCES);
+    if (this.appConfig.getConfiguration().serviceType === 'JSONAPI') {
+      this.currentPreference = JSON.parse(atob(this.currentConfiguration.PREFERENCEPREFERENCES));
+    } else {
+      this.currentPreference = JSON.parse(this.currentConfiguration.PREFERENCEPREFERENCES);
+    }
     this.currentPreference.columns.forEach((column: OReportColumn) => this.updateColumnsOrderByData(column.id, column.name));
 
     this.checkPreferenceData();
@@ -430,7 +446,7 @@ export class ReportOnDemandComponent implements OnInit {
       panelClass: ['o-dialog-class', 'o-table-dialog'],
       data: { entity: this.currentPreference.entity, service: this.currentPreference.service },
     }).afterClosed()
-      .subscribe((data: OReportConfiguration) => {
+      .subscribe((data: OPreference) => {
         if (Util.isDefined(data) && data) {
           this.applyConfiguration(data);
           this.appliedConfiguration = true;
@@ -441,8 +457,8 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   openSavePreferences(): void {
-    if (Util.isDefined(this.currentConfiguration.ID)) {
-      this.savePreferences({ name: this.currentConfiguration.NAME, description: this.currentConfiguration.DESCRIPTION }, true);
+    if (Util.isDefined(this.currentConfiguration.PREFERENCEID)) {
+      this.savePreferences({ name: this.currentConfiguration.PREFERENCENAME, description: this.currentConfiguration.PREFERENCEDESCRIPTION }, true);
     } else {
       this.dialog
         .open(SavePreferencesDialogComponent, {
@@ -460,20 +476,28 @@ export class ReportOnDemandComponent implements OnInit {
 
   savePreferences(data: any, update?: boolean) {
     let preference = {
-      "name": data.name, "description": data.description,
-      "entity": this.currentPreference.entity, "service": this.currentPreference.service, "type": "REPORT", "params": {
+      "preferencename": data.name,
+      "preferencedescription": data.description,
+      "preferenceentity": this.currentPreference.entity,
+      "preferenceservice": this.currentPreference.service,
+      "preferencetype": "REPORT",
+      "preferenceparameters": {
         "title": this.currentPreference.title, "groups": this.currentPreference.groups,
         "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions, "style": this.currentPreference.style,
-        "subtitle": this.currentPreference.subtitle, "columns": this.currentPreference.columns, "orderBy": this.currentPreference.orderBy, "entity": this.currentPreference.entity, "service": this.currentPreference.service
+        "subtitle": this.currentPreference.subtitle,
+        "columns": this.currentPreference.columns,
+        "orderBy": this.currentPreference.orderBy,
+        "entity": this.currentPreference.entity,
+        "service": this.currentPreference.service
       }
     }
 
     if (update) {
-      this.reportService.savePreferences(this.currentConfiguration.ID, preference).subscribe(res => {
+      this.preferenceService.savePreferences(this.currentConfiguration.PREFERENCEID, preference).subscribe(res => {
         this.showConfirmOperatinInSnackBar(res);
       });
     } else {
-      this.reportService.saveAsPreferences(preference).subscribe(res => {
+      this.preferenceService.saveAsPreferences(preference).subscribe(res => {
         if (res && res.code === 0) {
           this.showConfirmOperatinInSnackBar(res);
         }

@@ -1,11 +1,11 @@
 import { Injectable, Injector } from '@angular/core';
-import { Observable, OErrorDialogManager, OntimizeEEService } from 'ontimize-web-ngx';
+import { JSONAPIService, Observable, OErrorDialogManager } from 'ontimize-web-ngx';
 
 import { OReportParam } from '../types/report-param.type';
 
 
 @Injectable()
-export class OReportService extends OntimizeEEService {
+export class JSONAPIReportService extends JSONAPIService {
   protected oErrorDialogManager: OErrorDialogManager;
 
   constructor(protected injector: Injector) {
@@ -28,7 +28,6 @@ export class OReportService extends OntimizeEEService {
     });
   }
 
-
   public getFunctions(functionparams?: object): Observable<any> {
 
     const body = JSON.stringify(
@@ -42,7 +41,6 @@ export class OReportService extends OntimizeEEService {
       body: body
     });
   }
-
 
 
 }

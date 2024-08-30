@@ -39,11 +39,3 @@ export const OREPORT_IMPORTS_MODULES: any = [
   DragDropModule
 ]
 export const OREPORT_EXPORT_MODULES: any = [];
-export const OREPORT_ENTRY_COMPONENTS_MODULES: any = [
-  OReportViewerComponent,
-  ReportOnDemandComponent,
-  StyleDialogComponent,
-  SelectFunctionDialogComponent,
-  SavePreferencesDialogComponent,
-  ApplyConfigurationDialogComponent
-]
