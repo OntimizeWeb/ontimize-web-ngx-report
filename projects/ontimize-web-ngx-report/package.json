@@ -20,7 +20,7 @@
     "test-watch": "karma start --singleRun=false --autoWatch=true"
   },
   "peerDependencies": {
-    "ontimize-web-ngx": "^15.1.0-JSONAPI-SNAPSHOT-4"
+    "ontimize-web-ngx": "15.1.0-JSONAPI-SNAPSHOT-7"
   },
   "dependencies": {
     "ngx-extended-pdf-viewer": "18.0.0-beta.0",
