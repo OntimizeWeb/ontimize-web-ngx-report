@@ -51,7 +51,7 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
     /**Replace key UUID by REPORTID */
     kv = { 'REPORTID': av['REPORTID'] };
     delete av['REPORTID'];
-    return super.update(kv, av, entity, sqltypes);
+    return super.update(kv, av, entity);
   }
 
   openFillReport(uuid: string, parametersValues: Array<OReportStoreParamValue> = [], filter: OFilterParameter = { filter: {} }) {
