@@ -32,7 +32,7 @@ jobs:
       - name: obtain package.json version
         id: project
         run: |
-          echo ::set-output name=version::$(node -pe "require('./package.json')['version']")
+          echo "version=$(node -pe "require('./package.json')['version']")" >> $GITHUB_OUTPUT
           echo "RELEASE_VERSION=$(node -pe "require('./package.json')['version']")" >> $GITHUB_ENV
 
       - name: abort if SNAPSHOT
