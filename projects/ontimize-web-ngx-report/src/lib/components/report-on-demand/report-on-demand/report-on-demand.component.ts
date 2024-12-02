@@ -500,7 +500,7 @@ export class ReportOnDemandComponent implements OnInit {
     const selectColumnId = selectedColumn.id;
     const selectColumnName = selectedColumn.name;
     this.updateColumnsOrderByData(selectColumnId, selectColumnName, event);
-    this.enabledReport = !(this.currentPreference.columns.length === 0);
+    this.enabledReport = this.currentPreference.columns.length !== 0;
 
   }
 
