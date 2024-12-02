@@ -1,3 +1,7 @@
+### 15.0.2 (2024-12-02)
+### Bug Fixes
+* **Report on demand:** Protected the preview button from multiple clicks ([a1072c7](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/a1072c7)) Closes [#241](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/241)
+
 ### 15.0.1 (2024-04-10)
 > [!NOTE]
 > In this version, the bugfixes of version [8.4.2](#842-2024-04-10) were integrated
