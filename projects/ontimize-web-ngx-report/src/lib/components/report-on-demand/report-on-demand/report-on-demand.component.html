@@ -166,7 +166,7 @@
         <div mat-dialog-actions fxLayout="row" fxLayoutAlign="center center" *ngIf="openedSidenav">
           <button type="button" mat-stroked-button class="o-report-on-demand-clear-button" (click)="clearCurrentPreferences()">
             {{'CLEAR' | oReportsTranslate }}</button>
-          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="currentPreference.columns.length===0">
+          <button type="button" mat-stroked-button class="mat-primary" (click)="previewReport()" [disabled]="!enabledReport">
             {{'PREVIEW' | oReportsTranslate }}</button>
         </div>
 

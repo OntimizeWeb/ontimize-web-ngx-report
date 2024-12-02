@@ -57,6 +57,7 @@ export class ReportOnDemandComponent implements OnInit {
   private initialColumnsData: Array<OReportColumn>;
   public selectedColumnsData: string[];
   public columnsOrderBy: Array<OReportOrderBy> = [];
+  public enabledReport = false;
 
   public columnsToGroupData: any[];
   private initialColumnsToGroupData: any[];
@@ -124,6 +125,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   public previewReport(): void {
+    this.enabledReport = false;
     this.openReport();
   }
 
@@ -211,6 +213,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.reportService.createReport(reportConfiguration).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.pdf = res.data[0].file;
+        this.enabledReport = true;
       }
     });
   }
@@ -497,6 +500,7 @@ export class ReportOnDemandComponent implements OnInit {
     const selectColumnId = selectedColumn.id;
     const selectColumnName = selectedColumn.name;
     this.updateColumnsOrderByData(selectColumnId, selectColumnName, event);
+    this.enabledReport = this.currentPreference.columns.length !== 0;
 
   }
 
