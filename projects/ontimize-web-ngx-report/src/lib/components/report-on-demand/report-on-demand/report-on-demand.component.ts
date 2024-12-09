@@ -144,6 +144,7 @@ export class ReportOnDemandComponent implements OnInit {
     if (this.orderByList) {
       this.orderByList.deselectAll();
     }
+    this.enabledReport = false;
   }
 
   protected initializeReportPreferences() {
@@ -437,6 +438,7 @@ export class ReportOnDemandComponent implements OnInit {
         if (Util.isDefined(data) && data) {
           this.applyConfiguration(data);
           this.appliedConfiguration = true;
+          this.enabledReport = true;
         }
       }, _error => {
         this.appliedConfiguration = false;
@@ -516,6 +518,7 @@ export class ReportOnDemandComponent implements OnInit {
         this.addColumnData(columnStyleSelected[0]);
       }
     }
+    this.enabledReport = this.currentPreference.columns.length !== 0;
   }
 
 
