@@ -1,3 +1,7 @@
+### 15.0.3 (2024-12-10)
+### Bug Fixes
+* **Report on demand:** Fixed bug that prevented the preview button from being activated when a stored configuration was loaded ([d759c0b](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/d759c0b)) Closes [#246](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/246)
+
 ### 15.0.2 (2024-12-02)
 ### Bug Fixes
 * **Report on demand:** Protected the preview button from multiple clicks ([a1072c7](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/a1072c7)) Closes [#241](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/241)
