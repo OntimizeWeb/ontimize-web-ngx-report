@@ -144,7 +144,7 @@ export class ReportOnDemandComponent implements OnInit {
     if (this.orderByList) {
       this.orderByList.deselectAll();
     }
-    this.enabledReport = false;
+    this.checkEnabledReport();
   }
 
   protected initializeReportPreferences() {
@@ -438,7 +438,7 @@ export class ReportOnDemandComponent implements OnInit {
         if (Util.isDefined(data) && data) {
           this.applyConfiguration(data);
           this.appliedConfiguration = true;
-          this.enabledReport = true;
+          this.checkEnabledReport();
         }
       }, _error => {
         this.appliedConfiguration = false;
@@ -502,10 +502,13 @@ export class ReportOnDemandComponent implements OnInit {
     const selectColumnId = selectedColumn.id;
     const selectColumnName = selectedColumn.name;
     this.updateColumnsOrderByData(selectColumnId, selectColumnName, event);
-    this.enabledReport = this.currentPreference.columns.length !== 0;
+    this.checkEnabledReport();
 
   }
 
+  checkEnabledReport() {
+    this.enabledReport = this.currentPreference.columns.length !== 0;
+  }
   onSelectionChangeGroups(event: MatSelectionListChange) {
     if (!event.options[0].selected) return;
     let groupSelected: string = event.options[0].value;
@@ -518,7 +521,7 @@ export class ReportOnDemandComponent implements OnInit {
         this.addColumnData(columnStyleSelected[0]);
       }
     }
-    this.enabledReport = this.currentPreference.columns.length !== 0;
+    this.checkEnabledReport();
   }
 
 
