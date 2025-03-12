@@ -2,11 +2,21 @@
 ### Features
 Adapt to JSON API
 
-### 15.0.1 (2024-04-10)
+
+## 15.0.3 (2024-12-10)
+### Bug Fixes
+* **Report on demand:** Fixed bug that prevented the preview button from being activated when a stored configuration was loaded ([d759c0b](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/d759c0b)) Closes [#246](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/246)
+
+## 15.0.2 (2024-12-02)
+### Bug Fixes
+* **Report on demand:** Protected the preview button from multiple clicks ([a1072c7](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/a1072c7)) Closes [#241](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/241)
+
+## 15.0.1 (2024-04-10)
+
 > [!NOTE]
 > In this version, the bugfixes of version [8.4.2](#842-2024-04-10) were integrated
 
-### 8.4.2 (2024-04-10)
+## 8.4.2 (2024-04-10)
 ### Bug Fixes
 * **Injectors and providers:** Solved problems with injectors and providers when application was built with aot=true ([c82eb4e](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/c82eb4e821b92b2f49fae6765b513e5dc2ba673d)) Closes [#223](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/223)
 
@@ -30,12 +40,12 @@ import { OREPORT_PROVIDERS, OReportModule } from 'ontimize-web-ngx-report';
 > [!NOTE]
 > In this version, the features and bugfixes of version [8.3.0](#830-2024-01-02), [8.3.1](#831-2024-01-24), [8.3.2](#832-2024-01-25), [8.4.0](#840-2024-03-15) and [8.4.1](#841-2024-03-18) were integrated
 
-### 8.4.1 (2024-03-18)
+## 8.4.1 (2024-03-18)
 ### Bug Fixes
 * **Report detail component:** Changed scope of Report Store service into ReportDetailComponent constructor ([4f43e37](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/4f43e370a2c7295a0e56262c1ec6bb399c4b28b2))
 
 
-### 8.4.0 (2024-03-15)
+## 8.4.0 (2024-03-15)
 ### BREAKING CHANGES
 * Modified the API for filling reports when using parameters. Now all primitive types are considered when using Jasper parameters. ([6c64162](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/6c64162)) Closes [#190](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/190)
 
@@ -55,11 +65,11 @@ Where:
     * value: the value of the parameter.
     * sqlType: (optional) a number representing the SQL type of the parameter.
 
-### 8.3.2 (2024-01-25)
+## 8.3.2 (2024-01-25)
 ### Bug Fixes
 * Fixed bug caused by incorrect import of the OReportSkeletonComponent ([cb1b3fe](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/cb1b3fe)) Closes [#197](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/197)
 
-### 8.3.1 (2024-01-24)
+## 8.3.1 (2024-01-24)
 ### Bug Fixes
 * **Report on demand:** Fixed bug that prevents groups from being cleaned ([c6e7cb5](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/c6e7cb5)) Closes [#184](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/184)
 * **Report store:**
@@ -67,7 +77,7 @@ Where:
   * Modified the report window style ([832296c](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/832296c)) Closes [#188](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/188)
   * Fixed bug with service provider ([7f64ecc](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/7f64ecc)) Closes [#191](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/191)
 
-### 8.3.0 (2024-01-02)
+## 8.3.0 (2024-01-02)
 ### Features
 * New injection token **O_REPORT_DATA_SERVICE** that allows to override report data provider for customizing report parameters when report on demand
 * **Report on demand:** : New boolean renderer in which you can set the true/false value that you want to render in the report on demand ([95306fa](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/95306fa)) Closes [#172](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/172)
@@ -89,11 +99,11 @@ Where:
 * Migration to Angular Material 15.
 
 
-### 8.2.2 (2023-11-30)
+## 8.2.2 (2023-11-30)
 ### Features
 * **Report on demand:**  Added title as column name ([c0a45cc](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/c0a45cc)) Closes [#167](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/167)
 
-### 8.2.1 (2023-10-26)
+## 8.2.1 (2023-10-26)
 ### Bug Fixes
 * **Report on demand:** Modified columns so that they don't allow action type columns to be included in reports([d8e5b91](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/d8e5b91)) Closes [#145](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/145)
 
