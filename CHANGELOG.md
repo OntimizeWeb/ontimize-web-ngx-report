@@ -1,3 +1,7 @@
+## 15.1.0-JSONAPI-SNAPSHOT-1
+### Features
+Merge 15.0.1 to 15.0.3
+
 ## 15.1.0-JSONAPI-SNAPSHOT-0 (2024-08-30)
 ### Features
 Adapt to JSON API
