@@ -97,8 +97,8 @@ export class OReportStoreService extends OReportService {
 
   openFillReport(uuid: string, parametersValues: Array<OReportStoreParamValue> = [], filter: OFilterParameter = { filter: {} }) {
     this.configureService(this.getDefaultServiceConfiguration());
-    this.configureResponseAdapter();
-    let kv = { 'REPORTUUID': uuid };
+    this.configureAdapter();
+    let kv = { 'UUID': uuid };
     this.query(kv, null, 'getReport', {}).subscribe(
       res => {
         if (res && res.data.length && res.code === 0) {
