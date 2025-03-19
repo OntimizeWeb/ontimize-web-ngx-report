@@ -5,6 +5,8 @@ import { IReportDataProvider } from '../interfaces/report-data-provider.interfac
 import { JSONAPIReportStoreService } from '../services/jsonapi-report-store.service';
 import { JSONAPIReportService } from '../services/jsonapi-report.service';
 import { OAlertService } from '../services/o-alert.service';
+import { OReportQueryArgumentsAdapter } from '../services/o-report-query-argument.adapter';
+import { OReportResponseAdapter } from '../services/o-report-response.adapter';
 import { OReportStoreService } from '../services/o-report-store.service';
 import { OReportService } from '../services/o-report.service';
 import { O_REPORT_DATA_SERVICE } from '../services/ontimize-report-data-base-provider.service';
@@ -66,5 +68,7 @@ export const OREPORT_PROVIDERS: any = [
     useFactory: reportDataFactory,
     deps: [Injector]
   },
-  OAlertService
+  OAlertService,
+  OReportResponseAdapter,
+  OReportQueryArgumentsAdapter
 ];
