@@ -32,7 +32,7 @@ export class OReportViewerComponent {
     this.pdf = this.blankPdf;
 
     this.reportStoreService.configureService(this.reportStoreService.getDefaultServiceConfiguration());
-    this.reportStoreService.configureResponseAdapter();
+    this.reportStoreService.configureAdapter();
 
     this.name = Util.isDefined(this.data['name']) ? this.data.name : '';
     const uuid = this.data['id'];
