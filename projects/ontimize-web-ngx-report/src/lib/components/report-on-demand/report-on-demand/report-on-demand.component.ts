@@ -2,7 +2,20 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Inject, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
-import { AppConfig, AppearanceService, DialogService, OColumn, OTableBase, OTranslateService, OntimizePreferencesService, preferencesServiceFactory, SnackBarService, Util, OConfigureServiceArgs, OPreference, OPreferenceMappingUtils, OntimizeEEService } from 'ontimize-web-ngx';
+import {
+  AppConfig,
+  AppearanceService,
+  DialogService,
+  OColumn,
+  OConfigureServiceArgs,
+  OntimizePreferencesService,
+  OPreference,
+  OTableBase,
+  OTranslateService,
+  preferencesServiceFactory,
+  SnackBarService,
+  Util
+} from 'ontimize-web-ngx';
 
 import { OReportService } from '../../../services/o-report.service';
 import { OntimizeReportDataProvider } from '../../../services/ontimize-report-data-provider.service';
@@ -495,11 +508,6 @@ export class ReportOnDemandComponent implements OnInit {
         "entity": this.currentPreference.entity,
         "service": this.currentPreference.service
       }
-    }
-
-
-    if (this.appConfig.getConfiguration().serviceType instanceof OntimizeEEService) {
-      preference = OPreferenceMappingUtils.ontimizeDataMapping(preference);
     }
 
     if (update) {
