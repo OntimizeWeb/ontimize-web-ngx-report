@@ -2,7 +2,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, Inject, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
-import { AppConfig, AppearanceService, DialogService, OColumn, OTableBase, OTranslateService, OntimizePreferencesService, preferencesServiceFactory, SnackBarService, Util, OConfigureServiceArgs, OPreference } from 'ontimize-web-ngx';
+import { AppConfig, AppearanceService, DialogService, OColumn, OTableBase, OTranslateService, OntimizePreferencesService, preferencesServiceFactory, SnackBarService, Util, OConfigureServiceArgs, OPreference, OPreferenceMappingUtils, OntimizeEEService } from 'ontimize-web-ngx';
 
 import { OReportService } from '../../../services/o-report.service';
 import { OntimizeReportDataProvider } from '../../../services/ontimize-report-data-provider.service';
@@ -257,7 +257,7 @@ export class ReportOnDemandComponent implements OnInit {
    */
   private checkPreferenceData() {
     this.currentPreference.columns = this.currentPreference.columns.filter(column => this.initialColumnsData.findIndex(columnData => columnData.id === column.id) > -1);
-    this.currentPreference.groups = this.currentPreference.groups.filter(column => this.initialColumnsToGroupData.findIndex(columnData => columnData === column) > -1);
+    this.currentPreference.groups = Object.values(this.currentPreference.groups).filter(column => this.initialColumnsToGroupData.findIndex(columnData => columnData === column) > -1);
     this.currentPreference.functions = this.currentPreference.functions.filter(column => this.initialFunctionsData.findIndex(columnData => columnData.columnName === column.columnName) > -1);
     this.currentPreference.orderBy = this.currentPreference.orderBy.filter(column => this.columnsOrderBy.findIndex(columnData => columnData.columnId === column.columnId) > -1);
   }
@@ -480,7 +480,7 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   savePreferences(data: any, update?: boolean) {
-    let preference = {
+    let preference: { [key: string]: any } = {
       "preferencename": data.name,
       "preferencedescription": data.description,
       "preferenceentity": this.currentPreference.entity,
@@ -495,6 +495,11 @@ export class ReportOnDemandComponent implements OnInit {
         "entity": this.currentPreference.entity,
         "service": this.currentPreference.service
       }
+    }
+
+
+    if (this.appConfig.getConfiguration().serviceType instanceof OntimizeEEService) {
+      preference = OPreferenceMappingUtils.ontimizeDataMapping(preference);
     }
 
     if (update) {
