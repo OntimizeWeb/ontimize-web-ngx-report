@@ -2,24 +2,24 @@
 
 export class OReportMappingUtils {
 
-  static STANDARDREPORTMAPPING = {
+  static readonly STANDARDREPORTMAPPING = {
     "REPORT_TYPE": "REPORTTYPE",
     "DESCRIPTION": "REPORTDESCRIPTION",
     "MAIN_REPORT_FILENAME": "REPORTFILENAME",
     "UUID": "REPORTUUID",
     "NAME": "REPORTNAME"
   };
-  static STANDARDPARAMETERMAPPING = {
+  static readonly STANDARDPARAMETERMAPPING = {
     "name": "reportParameterName",
     "description": "reportParameterDescription"
   };
 
-  static ONTIMIZEPARAMETERMAPPING = {
+  static readonly ONTIMIZEPARAMETERMAPPING = {
     "reportParameterName": "name",
     "reportParameterDescription": "description"
   };
 
-  static ONTIMIZEREPORTMAPPING = {
+  static readonly ONTIMIZEREPORTMAPPING = {
     "REPORTTYPE": "REPORT_TYPE",
     "REPORTDESCRIPTION": "DESCRIPTION",
     "REPORTFILENAME": "MAIN_REPORT_FILENAME",

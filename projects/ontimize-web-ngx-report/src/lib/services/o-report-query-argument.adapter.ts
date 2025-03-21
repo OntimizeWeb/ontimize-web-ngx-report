@@ -1,6 +1,6 @@
 import { OntimizeQueryArgumentsAdapter } from 'ontimize-web-ngx';
 
-import { OReportMappingUtils } from '../util/ReportMappingUtils';
+import { OReportMappingUtils } from '../util/report-mapping-utils';
 import { Injectable } from '@angular/core';
 
 @Injectable()
