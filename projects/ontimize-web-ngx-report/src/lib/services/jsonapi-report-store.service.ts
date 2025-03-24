@@ -30,7 +30,6 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
     super.configureService(config);
     this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/auth/login';
     this.path = config.path || this.DEFAULT_PATH;
-    this.context = config.context;
   }
 
   public fillReport(uuid: string, reportStoreParam: OReportStoreParam, entity?: string, _sqltypes?: Object): Observable<any> {
@@ -56,7 +55,7 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
 
   openFillReport(uuid: string, parametersValues: Array<OReportStoreParamValue> = [], filter: OFilterParameter = { filter: {} }) {
     this.configureService(this.getDefaultServiceConfiguration());
-    this.configureResponseAdapter();
+    this.configureAdapter();
     this.path = `${this.path}/getReport`;
     let queryParams: JSONAPIQueryParameter = {
       filter: { 'REPORTUUID': uuid }
