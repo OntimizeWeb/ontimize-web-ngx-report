@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { _getInjectionTokenValue, AppConfig, O_REPORT_SERVICE, Util } from 'ontimize-web-ngx';
+import { _getInjectionTokenValue, AppConfig, JSONAPIService, O_REPORT_SERVICE, OntimizeEEService, Util } from 'ontimize-web-ngx';
 
 import { IReportDataProvider } from '../interfaces/report-data-provider.interface';
 import { JSONAPIReportStoreService } from '../services/jsonapi-report-store.service';
@@ -34,10 +34,13 @@ export function getReportOnDemandServiceProvider(injector: Injector): OReportSer
   // return Util.isDefined(service) ? service : new OReportService(injector);
 
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.serviceType) || 'OntimizeEE' === config.serviceType) {
+  if (!Util.isDefined(config.serviceType)) {
     return new OReportService(injector);
-  } else if ('JSONAPI' === config.serviceType) {
-    return new JSONAPIReportService(injector);
+  } else {
+    if ('OntimizeEE' === config.serviceType || config.serviceType instanceof OntimizeEEService) {
+      return new OReportService(injector);
+    } else if ('JSONAPI' === config.serviceType || config.serviceType instanceof JSONAPIService) {
+      return new JSONAPIReportService(injector);
   }
 
 }
@@ -51,9 +54,12 @@ export function getReportStoreServiceProvider(injector: Injector): OReportStoreS
   // const service = Util.createServiceInstance(serviceClass, injector);
   // return Util.isDefined(service) ? service : new OReportStoreService(injector);
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.serviceType) || 'OntimizeEE' === config.serviceType) {
+  if (!Util.isDefined(config.serviceType)) {
     return new OReportStoreService(injector);
-  } else if ('JSONAPI' === config.serviceType) {
+  }
+  if ('OntimizeEE' === config.serviceType || config.serviceType instanceof OntimizeEEService) {
+    return new OReportStoreService(injector);
+  } else if ('JSONAPI' === config.serviceType || config.serviceType instanceof JSONAPIService) {
     return new JSONAPIReportStoreService(injector);
   }
 
