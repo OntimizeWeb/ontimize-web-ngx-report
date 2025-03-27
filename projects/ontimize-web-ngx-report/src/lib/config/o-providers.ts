@@ -37,10 +37,11 @@ export function getReportOnDemandServiceProvider(injector: Injector): OReportSer
   if (!Util.isDefined(config.serviceType)) {
     return new OReportService(injector);
   } else {
-    if ('OntimizeEE' === config.serviceType || config.serviceType instanceof OntimizeEEService) {
+    if (Util.isOntimizeEEService(injector)) {
       return new OReportService(injector);
-    } else if ('JSONAPI' === config.serviceType || config.serviceType instanceof JSONAPIService) {
+    } else if (Util.isJsonApiService(injector)) {
       return new JSONAPIReportService(injector);
+    }
   }
 
 }
