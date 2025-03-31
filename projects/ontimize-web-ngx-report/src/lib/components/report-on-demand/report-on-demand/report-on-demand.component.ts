@@ -112,17 +112,27 @@ export class ReportOnDemandComponent implements OnInit {
     this.dialog = this.injector.get<MatDialog>(MatDialog);
     this.reportDataProvider = this.injector.get<OntimizeReportDataProvider>(OntimizeReportDataProvider);
 
-    this.configurePrefereceService();
   }
 
   public configurePrefereceService(): void {
     let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizePreferencesService, entity: 'preferences', service: 'preferences', serviceType: null };
+    if (Util.isJsonApiService(this.injector)) {
+      configureServiceArgs.service = this.table.service;
+      configureServiceArgs.serviceType = this.table.serviceType;
+    }
     this.preferenceService = Util.configureService(configureServiceArgs);
-
   }
+
+  public configureReportService(): void {
+    this.reportService.configureService(this.reportService.getDefaultServiceConfiguration(this.table.service || this.table.serviceType));
+  }
+
 
   ngOnInit() {
     this.initialize();
+    this.configurePrefereceService();
+    this.configureReportService();
+    this.getFunctions();
   }
 
   protected initialize() {
@@ -135,9 +145,6 @@ export class ReportOnDemandComponent implements OnInit {
     this.currentConfiguration = { PREFERENCEENTITY: this.table.entity };
     this.isDarkMode = this.appearanceService.isDarkMode();
     this.initializeReportPreferences();
-
-
-    this.getFunctions();
   }
 
   public getDefaultServiceConfiguration(serviceName?: string): any {

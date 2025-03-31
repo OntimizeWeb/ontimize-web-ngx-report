@@ -19,7 +19,7 @@ export class JSONAPIReportService extends JSONAPIService {
     const body = JSON.stringify(
       reportparams
     )
-    const url = this.urlBase + '/dynamicjasper/report';
+    const url = `${this.urlBase}${this.path}/dynamicjasper/report`;
 
     return this.doRequest({
       method: 'POST',
@@ -33,7 +33,7 @@ export class JSONAPIReportService extends JSONAPIService {
     const body = JSON.stringify(
       functionparams
     )
-    const url = this.urlBase + '/dynamicjasper/functionsName';
+    const url = `${this.urlBase}${this.path}/dynamicjasper/functionsName`;
 
     return this.doRequest({
       method: 'POST',
