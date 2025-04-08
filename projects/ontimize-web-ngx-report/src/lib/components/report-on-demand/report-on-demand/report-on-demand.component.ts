@@ -116,10 +116,6 @@ export class ReportOnDemandComponent implements OnInit {
 
   public configurePrefereceService(): void {
     let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizePreferencesService, entity: 'preferences', service: 'preferences', serviceType: null };
-    if (Util.isJsonApiService(this.injector)) {
-      configureServiceArgs.service = this.table.service;
-      configureServiceArgs.serviceType = this.table.serviceType;
-    }
     this.preferenceService = Util.configureService(configureServiceArgs);
   }
 
