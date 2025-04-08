@@ -48,8 +48,6 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
   update(kv: object, av: object, entity?: string, sqltypes?: object): Observable<JSONAPIResponse> {
     entity = this.getStandartEntity(entity);
     /**Replace key UUID by REPORTID */
-    // kv = { 'REPORTID': av['REPORTID'] };
-    // delete av['REPORTID'];
     return super.update(kv, av, entity);
   }
 

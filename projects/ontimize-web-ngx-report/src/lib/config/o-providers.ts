@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { _getInjectionTokenValue, AppConfig, JSONAPIService, O_REPORT_SERVICE, OntimizeEEService, Util } from 'ontimize-web-ngx';
+import { _getInjectionTokenValue, AppConfig, O_REPORT_SERVICE, Util } from 'ontimize-web-ngx';
 
 import { IReportDataProvider } from '../interfaces/report-data-provider.interface';
 import { JSONAPIReportStoreService } from '../services/jsonapi-report-store.service';
@@ -58,9 +58,9 @@ export function getReportStoreServiceProvider(injector: Injector): OReportStoreS
   if (!Util.isDefined(config.serviceType)) {
     return new OReportStoreService(injector);
   }
-  if ('OntimizeEE' === config.serviceType || config.serviceType instanceof OntimizeEEService) {
+  if (Util.isOntimizeEEService(injector)) {
     return new OReportStoreService(injector);
-  } else if ('JSONAPI' === config.serviceType || config.serviceType instanceof JSONAPIService) {
+  } else if (Util.isJsonApiService(injector)) {
     return new JSONAPIReportStoreService(injector);
   }
 

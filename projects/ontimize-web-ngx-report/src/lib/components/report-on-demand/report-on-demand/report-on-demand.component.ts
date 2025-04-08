@@ -281,7 +281,7 @@ export class ReportOnDemandComponent implements OnInit {
   applyConfiguration(configuration: any) {
     this.clearCurrentPreferences();
     this.currentConfiguration = configuration;
-    if (this.appConfig.getConfiguration().serviceType === 'JSONAPI') {
+    if (Util.isJsonApiService(this.injector)) {
       this.currentPreference = JSON.parse(atob(this.currentConfiguration.PREFERENCEPREFERENCES));
     } else {
       this.currentPreference = JSON.parse(this.currentConfiguration.PREFERENCEPREFERENCES);
@@ -518,10 +518,12 @@ export class ReportOnDemandComponent implements OnInit {
         this.showConfirmOperatinInSnackBar(res);
       });
     } else {
-      this.preferenceService.saveAsPreferences(preference).subscribe(res => {
+      this.preferenceService.saveAsPreferences(preference).subscribe( res => {
         if (res && res.code === 0) {
           this.showConfirmOperatinInSnackBar(res);
         }
+      }, error => {
+        this.dialogService.alert('ERROR', error);
       });
     }
   }

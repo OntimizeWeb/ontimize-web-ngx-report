@@ -2,6 +2,8 @@ import { Injectable, Injector } from '@angular/core';
 import { JSONAPIService, Observable, OErrorDialogManager } from 'ontimize-web-ngx';
 
 import { OReportParam } from '../types/report-param.type';
+import { JSONAPIResponse } from 'ontimize-web-ngx/lib/interfaces/jsonapi-response.interface';
+import { OReportMappingUtils } from '../util/report-mapping-utils';
 
 
 @Injectable()
@@ -10,7 +12,7 @@ export class JSONAPIReportService extends JSONAPIService {
 
   constructor(protected injector: Injector) {
     super(injector);
-    super.configureService(this.getDefaultServiceConfiguration());
+    super.configureService(this.getDefaultServiceConfiguration('report'));
     this.oErrorDialogManager = injector.get<OErrorDialogManager>(OErrorDialogManager);
   }
 
@@ -40,6 +42,12 @@ export class JSONAPIReportService extends JSONAPIService {
       url: url,
       body: body
     });
+  }
+
+  public update(kv: object, av: any, entity?: string): Observable<JSONAPIResponse> {
+    av = OReportMappingUtils.ontimizeMappingKeys(av);
+    console.log('av', av, entity);
+    return super.update(kv, av, entity);
   }
 
 

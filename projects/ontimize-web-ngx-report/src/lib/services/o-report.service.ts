@@ -12,7 +12,7 @@ export class OReportService extends OntimizeEEService {
 
   constructor(protected injector: Injector) {
     super(injector);
-    super.configureService(this.getDefaultServiceConfiguration());
+    super.configureService(this.getDefaultServiceConfiguration('report'));
     this.oErrorDialogManager = injector.get<OErrorDialogManager>(OErrorDialogManager);
     this.queryArgumentAdapter = this.injector.get(OReportQueryArgumentsAdapter);
   }
