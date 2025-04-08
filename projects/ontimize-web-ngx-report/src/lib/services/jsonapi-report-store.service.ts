@@ -36,7 +36,7 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
     let body = JSON.stringify(reportStoreParam);
     entity = this.getStandartEntity(entity);
 
-    let url = `${this.urlBase}${this.path}${entity}/` + uuid;
+    let url = `${this.urlBase}${this.path}/${entity}/` + uuid;
 
     return this.doRequest({
       method: 'POST',
@@ -48,13 +48,13 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
   update(kv: object, av: object, entity?: string, sqltypes?: object): Observable<JSONAPIResponse> {
     entity = this.getStandartEntity(entity);
     /**Replace key UUID by REPORTID */
-    kv = { 'REPORTID': av['REPORTID'] };
-    delete av['REPORTID'];
+    // kv = { 'REPORTID': av['REPORTID'] };
+    // delete av['REPORTID'];
     return super.update(kv, av, entity);
   }
 
   openFillReport(uuid: string, parametersValues: Array<OReportStoreParamValue> = [], filter: OFilterParameter = { filter: {} }) {
-    this.configureService(this.getDefaultServiceConfiguration());
+    this.configureService(this.getDefaultServiceConfiguration('reportstore'));
     this.configureAdapter();
     this.path = `${this.path}/getReport`;
     let queryParams: JSONAPIQueryParameter = {
