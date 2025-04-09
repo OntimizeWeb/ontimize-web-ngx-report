@@ -1,3 +1,4 @@
+import { ReportTranslateService } from './../services/report-translate.service';
 import { Injector } from '@angular/core';
 import { _getInjectionTokenValue, AppConfig, O_REPORT_SERVICE, Util } from 'ontimize-web-ngx';
 
@@ -77,5 +78,6 @@ export const OREPORT_PROVIDERS: any = [
   },
   OAlertService,
   OReportResponseAdapter,
-  OReportQueryArgumentsAdapter
+  OReportQueryArgumentsAdapter,
+  ReportTranslateService
 ];
