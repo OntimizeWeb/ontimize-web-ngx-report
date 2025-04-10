@@ -142,13 +142,13 @@ export class OReportDetailComponent implements OnDestroy {
 
   private finalizeDataLoading(reportName?: string, reportUuid?: string) {
     this.hasParams = !!this.parameters.length;
-    // this.name = reportName ?? "";
     this.id = reportUuid ?? undefined;
 
     if (!this.hasParams) {
       this.canFillReport();
     }
   }
+
   getFileData() {
     return {
       'name': this.name,

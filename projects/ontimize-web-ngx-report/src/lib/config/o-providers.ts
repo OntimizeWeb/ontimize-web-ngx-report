@@ -37,14 +37,13 @@ export function getReportOnDemandServiceProvider(injector: Injector): OReportSer
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType)) {
     return new OReportService(injector);
-  } else {
-    if (Util.isOntimizeEEService(injector)) {
+  } else if (Util.isOntimizeEEService(injector)) {
       return new OReportService(injector);
     } else if (Util.isJsonApiService(injector)) {
       return new JSONAPIReportService(injector);
     }
-  }
 
+  return new OReportService(injector);
 }
 
 /**
@@ -64,7 +63,7 @@ export function getReportStoreServiceProvider(injector: Injector): OReportStoreS
   } else if (Util.isJsonApiService(injector)) {
     return new JSONAPIReportStoreService(injector);
   }
-
+  return new OReportStoreService(injector);
 }
 
 export const OREPORT_PROVIDERS: any = [

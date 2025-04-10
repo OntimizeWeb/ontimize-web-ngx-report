@@ -38,6 +38,6 @@
       </o-form>
     </o-column>
   </div>
-  <o-button type="RAISED" (click)="fillReport()" label="FILL_REPORT" icon="download" layout-padding color="accent"
+  <o-button type="RAISED" (click)="fillReport()" (keyup)="fillReport()" label="FILL_REPORT" icon="download" layout-padding color="accent"
     [enabled]="existsParameterChanges | async"></o-button>
 </o-form>
