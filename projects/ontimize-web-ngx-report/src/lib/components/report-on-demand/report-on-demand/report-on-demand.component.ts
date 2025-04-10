@@ -112,17 +112,23 @@ export class ReportOnDemandComponent implements OnInit {
     this.dialog = this.injector.get<MatDialog>(MatDialog);
     this.reportDataProvider = this.injector.get<OntimizeReportDataProvider>(OntimizeReportDataProvider);
 
-    this.configurePrefereceService();
   }
 
   public configurePrefereceService(): void {
     let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizePreferencesService, entity: 'preferences', service: 'preferences', serviceType: null };
     this.preferenceService = Util.configureService(configureServiceArgs);
-
   }
+
+  public configureReportService(): void {
+    this.reportService.configureService(this.reportService.getDefaultServiceConfiguration(this.table.service || this.table.serviceType));
+  }
+
 
   ngOnInit() {
     this.initialize();
+    this.configurePrefereceService();
+    this.configureReportService();
+    this.getFunctions();
   }
 
   protected initialize() {
@@ -135,9 +141,6 @@ export class ReportOnDemandComponent implements OnInit {
     this.currentConfiguration = { PREFERENCEENTITY: this.table.entity };
     this.isDarkMode = this.appearanceService.isDarkMode();
     this.initializeReportPreferences();
-
-
-    this.getFunctions();
   }
 
   public getDefaultServiceConfiguration(serviceName?: string): any {
@@ -278,7 +281,7 @@ export class ReportOnDemandComponent implements OnInit {
   applyConfiguration(configuration: any) {
     this.clearCurrentPreferences();
     this.currentConfiguration = configuration;
-    if (this.appConfig.getConfiguration().serviceType === 'JSONAPI') {
+    if (Util.isJsonApiService(this.injector)) {
       this.currentPreference = JSON.parse(atob(this.currentConfiguration.PREFERENCEPREFERENCES));
     } else {
       this.currentPreference = JSON.parse(this.currentConfiguration.PREFERENCEPREFERENCES);
@@ -515,10 +518,12 @@ export class ReportOnDemandComponent implements OnInit {
         this.showConfirmOperatinInSnackBar(res);
       });
     } else {
-      this.preferenceService.saveAsPreferences(preference).subscribe(res => {
+      this.preferenceService.saveAsPreferences(preference).subscribe( res => {
         if (res && res.code === 0) {
           this.showConfirmOperatinInSnackBar(res);
         }
+      }, error => {
+        this.dialogService.alert('ERROR', error);
       });
     }
   }

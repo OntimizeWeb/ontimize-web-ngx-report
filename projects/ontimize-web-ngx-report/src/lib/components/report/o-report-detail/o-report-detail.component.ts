@@ -1,6 +1,6 @@
 import { Component, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AppConfig, DialogService, OConfigureServiceArgs, OFileInputComponent, OFormComponent, OTextInputComponent, Util } from 'ontimize-web-ngx';
+import { AppConfig, createServiceInstance, DialogService, JSONAPIService, OConfigureServiceArgs, OFileInputComponent, OFormComponent, OTextInputComponent, Util } from 'ontimize-web-ngx';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { OReportStoreParam, OReportStoreParamValue } from '../../../types/report-store-param.type';
 import { Utils } from '../../../util/utils';
@@ -45,6 +45,7 @@ export class OReportDetailComponent implements OnDestroy {
   @ViewChild('file', { static: true })
   file: OFileInputComponent;
   appConfig: AppConfig;
+  reportParameterService: JSONAPIService;
 
   constructor(
     protected dialogService: DialogService,
@@ -114,10 +115,35 @@ export class OReportDetailComponent implements OnDestroy {
   }
 
   onDataLoaded(e: object) {
-    this.parameters = Util.isArray(e['PARAMETERS']) ? e['PARAMETERS'] : [];
-    this.hasParams = !Util.isArrayEmpty(this.parameters);
-    this.name = Util.isDefined(e['REPORTNAME']) ? e['REPORTNAME'] : "";
-    this.id = Util.isDefined(e['REPORTUUID']) ? e['REPORTUUID'] : undefined;
+    const { REPORTUUID, REPORTNAME, PARAMETERS } = e as any;
+    if (Util.isJsonApiService(this.injector)) {
+      this.reportParameterService = createServiceInstance(this.appConfig.getConfiguration().serviceType, this.injector);
+      this.reportParameterService.configureService(this.reportParameterService.getDefaultServiceConfiguration('reportparameter'));
+      this.reportParameterService.query({ filter: { 'REPORTUUID': e['REPORTUUID'] } }).subscribe(resp => {
+        if (resp.isSuccessful() && Util.isArray(resp.data) && resp.data.length > 0) {
+          this.parameters = resp.data.map(({ REPORTPARAMETERNAME, REPORTPARAMETERDESCRIPTION, REPORTPARAMETERVALUECLASS, REPORTPARAMETERTYPE }) => ({
+            reportParameterName: REPORTPARAMETERNAME,
+            reportParameterDescription: REPORTPARAMETERDESCRIPTION,
+            reportParameterValueClass: REPORTPARAMETERVALUECLASS,
+            reportParameterType: REPORTPARAMETERTYPE
+          }));
+        } else {
+          this.parameters = [];
+        }
+
+        this.finalizeDataLoading(REPORTNAME, REPORTUUID);
+      });
+    } else {
+
+      this.parameters = Util.isArray(PARAMETERS) ? PARAMETERS : [];
+      this.finalizeDataLoading(REPORTNAME, REPORTUUID);
+    }
+  }
+
+  private finalizeDataLoading(reportName?: string, reportUuid?: string) {
+    this.hasParams = !!this.parameters.length;
+    this.id = reportUuid ?? undefined;
+
     if (!this.hasParams) {
       this.canFillReport();
     }
@@ -148,6 +174,10 @@ export class OReportDetailComponent implements OnDestroy {
 
   configureServiceReportStore(): OConfigureServiceArgs {
     return { baseService: OReportStoreService, entity: 'report' };
+  }
+
+  configureServiceReportParameter(): OConfigureServiceArgs {
+    return { baseService: OReportStoreService, entity: 'reportparameter' };
   }
 
   onBeforeUpdate(data) {

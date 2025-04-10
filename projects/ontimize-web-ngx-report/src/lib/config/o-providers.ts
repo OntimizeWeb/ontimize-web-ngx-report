@@ -1,3 +1,4 @@
+import { ReportTranslateService } from './../services/report-translate.service';
 import { Injector } from '@angular/core';
 import { _getInjectionTokenValue, AppConfig, O_REPORT_SERVICE, Util } from 'ontimize-web-ngx';
 
@@ -34,12 +35,15 @@ export function getReportOnDemandServiceProvider(injector: Injector): OReportSer
   // return Util.isDefined(service) ? service : new OReportService(injector);
 
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.serviceType) || 'OntimizeEE' === config.serviceType) {
+  if (!Util.isDefined(config.serviceType)) {
     return new OReportService(injector);
-  } else if ('JSONAPI' === config.serviceType) {
-    return new JSONAPIReportService(injector);
-  }
+  } else if (Util.isOntimizeEEService(injector)) {
+      return new OReportService(injector);
+    } else if (Util.isJsonApiService(injector)) {
+      return new JSONAPIReportService(injector);
+    }
 
+  return new OReportService(injector);
 }
 
 /**
@@ -51,12 +55,15 @@ export function getReportStoreServiceProvider(injector: Injector): OReportStoreS
   // const service = Util.createServiceInstance(serviceClass, injector);
   // return Util.isDefined(service) ? service : new OReportStoreService(injector);
   const config = injector.get(AppConfig).getConfiguration();
-  if (!Util.isDefined(config.serviceType) || 'OntimizeEE' === config.serviceType) {
+  if (!Util.isDefined(config.serviceType)) {
     return new OReportStoreService(injector);
-  } else if ('JSONAPI' === config.serviceType) {
+  }
+  if (Util.isOntimizeEEService(injector)) {
+    return new OReportStoreService(injector);
+  } else if (Util.isJsonApiService(injector)) {
     return new JSONAPIReportStoreService(injector);
   }
-
+  return new OReportStoreService(injector);
 }
 
 export const OREPORT_PROVIDERS: any = [
@@ -70,5 +77,6 @@ export const OREPORT_PROVIDERS: any = [
   },
   OAlertService,
   OReportResponseAdapter,
-  OReportQueryArgumentsAdapter
+  OReportQueryArgumentsAdapter,
+  ReportTranslateService
 ];
