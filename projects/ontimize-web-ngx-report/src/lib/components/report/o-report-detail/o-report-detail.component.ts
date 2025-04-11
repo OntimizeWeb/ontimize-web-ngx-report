@@ -1,11 +1,22 @@
 import { Component, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AppConfig, createServiceInstance, DialogService, JSONAPIService, OConfigureServiceArgs, OFileInputComponent, OFormComponent, OntimizeService, OTextInputComponent, Util } from 'ontimize-web-ngx';
+import {
+  AppConfig,
+  createServiceInstance,
+  DialogService,
+  OConfigureServiceArgs,
+  OFileInputComponent,
+  OFormComponent,
+  OntimizeService,
+  OTextInputComponent,
+  Util
+} from 'ontimize-web-ngx';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+
+import { OReportStoreService } from '../../../services/o-report-store.service';
 import { OReportStoreParam, OReportStoreParamValue } from '../../../types/report-store-param.type';
 import { Utils } from '../../../util/utils';
 import { OReportViewerComponent } from '../o-report-viewer/o-report-viewer.component';
-import { OReportStoreService } from '../../../services/o-report-store.service';
 
 
 export type JasperReportParameter = {
@@ -162,9 +173,9 @@ export class OReportDetailComponent implements OnDestroy {
   }
 
   canFillReport(): void {
-    let result = this.form && this.form.formGroup && this.form.formGroup.valid;
+    let result = this.form?.formGroup && this.form?.formGroup.valid;
     if (this.hasParams) {
-      result = result && this.paramForm && this.paramForm.formGroup && this.paramForm.formGroup.valid
+      result = result && this.paramForm?.formGroup && this.paramForm?.formGroup.valid
     }
     this.existChangesSubject.next(result);
   }
