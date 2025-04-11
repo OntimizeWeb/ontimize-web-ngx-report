@@ -1,6 +1,6 @@
 import { Component, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AppConfig, createServiceInstance, DialogService, JSONAPIService, OConfigureServiceArgs, OFileInputComponent, OFormComponent, OTextInputComponent, Util } from 'ontimize-web-ngx';
+import { AppConfig, createServiceInstance, DialogService, JSONAPIService, OConfigureServiceArgs, OFileInputComponent, OFormComponent, OntimizeService, OTextInputComponent, Util } from 'ontimize-web-ngx';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { OReportStoreParam, OReportStoreParamValue } from '../../../types/report-store-param.type';
 import { Utils } from '../../../util/utils';
@@ -15,15 +15,12 @@ export type JasperReportParameter = {
   reportParameterType?: string
 }
 
-
 @Component({
   selector: 'o-report-detail',
   templateUrl: './o-report-detail.component.html'
 })
 export class OReportDetailComponent implements OnDestroy {
 
-  @ViewChild('form', { static: false })
-  mainForm: OFormComponent;
   paramForm: OFormComponent;
   id: string;
 
@@ -34,18 +31,23 @@ export class OReportDetailComponent implements OnDestroy {
   protected existChangesSubject = new BehaviorSubject<boolean>(false);
   public existsParameterChanges: Observable<boolean>;
   loading: boolean = false;
+
   @ViewChild('form', { static: true })
   form: OFormComponent;
-  @ViewChild('name', { static: true })
-  name: OTextInputComponent;
+
+  name:string=''
+
   @ViewChild('type', { static: true })
   type: OTextInputComponent;
+
   @ViewChild('description', { static: true })
   description: OTextInputComponent;
+
   @ViewChild('file', { static: true })
   file: OFileInputComponent;
+
   appConfig: AppConfig;
-  reportParameterService: JSONAPIService;
+  reportParameterService: OntimizeService;
 
   constructor(
     protected dialogService: DialogService,
@@ -116,6 +118,7 @@ export class OReportDetailComponent implements OnDestroy {
 
   onDataLoaded(e: object) {
     const { REPORTUUID, REPORTNAME, PARAMETERS } = e as any;
+
     if (Util.isJsonApiService(this.injector)) {
       this.reportParameterService = createServiceInstance(this.appConfig.getConfiguration().serviceType, this.injector);
       this.reportParameterService.configureService(this.reportParameterService.getDefaultServiceConfiguration('reportparameter'));
@@ -143,19 +146,13 @@ export class OReportDetailComponent implements OnDestroy {
   private finalizeDataLoading(reportName?: string, reportUuid?: string) {
     this.hasParams = !!this.parameters.length;
     this.id = reportUuid ?? undefined;
+    this.name = reportName ?? ''
 
     if (!this.hasParams) {
       this.canFillReport();
     }
   }
 
-  getFileData() {
-    return {
-      'name': this.name,
-      'type': "this.type",
-      'description': "this.description",
-    };
-  }
   onError() {
     if (this.dialogService) {
       this.dialogService.error('ERROR',
@@ -165,7 +162,7 @@ export class OReportDetailComponent implements OnDestroy {
   }
 
   canFillReport(): void {
-    let result = this.mainForm && this.mainForm.formGroup && this.mainForm.formGroup.valid;
+    let result = this.form && this.form.formGroup && this.form.formGroup.valid;
     if (this.hasParams) {
       result = result && this.paramForm && this.paramForm.formGroup && this.paramForm.formGroup.valid
     }
@@ -181,8 +178,10 @@ export class OReportDetailComponent implements OnDestroy {
   }
 
   onBeforeUpdate(data) {
-    if (Util.isDefined(this.mainForm.getDataValue('REPORTID'))) {
-      data['REPORTID'] = this.mainForm.getDataValue('REPORTID').value;
+
+    if (Util.isDefined(this.form.getDataValue('REPORTID'))) {
+      data['REPORTID'] = this.form.getDataValue('REPORTID').value;
     }
+    console.log('onBeforeUpdate => ', data);
   }
 }
