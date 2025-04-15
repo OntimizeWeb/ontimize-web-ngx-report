@@ -173,9 +173,9 @@ export class OReportDetailComponent implements OnDestroy {
   }
 
   canFillReport(): void {
-    let result = this.form?.formGroup && this.form?.formGroup.valid;
+    let result = this.form?.formGroup?.valid;
     if (this.hasParams) {
-      result = result && this.paramForm?.formGroup && this.paramForm?.formGroup.valid
+      result = result && this.paramForm?.formGroup?.valid
     }
     this.existChangesSubject.next(result);
   }
