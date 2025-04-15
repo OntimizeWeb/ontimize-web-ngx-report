@@ -12,18 +12,23 @@ export class ReportTranslateService {
   constructor(
     public translate: OTranslateService
   ) {
+    this.translate.onLanguageChanged.subscribe((event: Event) => {
+      ReportTranslateService.initialized = false;
+      this.loadTranslations();
+    });
+
     if (!ReportTranslateService.initialized) {
       this.loadTranslations();
-      ReportTranslateService.initialized = true;
     }
   }
 
   loadTranslations() {
-    Object.keys(MAP).forEach(lang => {
-      this.translate.getNgxTranslateService().setTranslation(lang, MAP[this.translate.getCurrentLang()], true); // `true` => merge
-    });
+    if (!ReportTranslateService.initialized) {
+      const lang = this.translate.getCurrentLang();
+      this.translate.getNgxTranslateService().setTranslation(lang, MAP[lang], true); // `true` => merge
+      ReportTranslateService.initialized = true;
+    }
   }
-
 
 
 }
