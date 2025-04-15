@@ -1,11 +1,11 @@
-<span mat-dialog-title> {{ 'DIALOG.SELECT_FUNCTION.TITLE' | oReportsTranslate }}</span>
+<span mat-dialog-title> {{ 'DIALOG.SELECT_FUNCTION.TITLE' | oTranslate }}</span>
 
 <mat-dialog-content>
-  <div mat-subheader>{{ 'DIALOG.SELECT_FUNCTION.DESCRIPTION' | oReportsTranslate }}</div>
+  <div mat-subheader>{{ 'DIALOG.SELECT_FUNCTION.DESCRIPTION' | oTranslate }}</div>
 
   <mat-radio-group name="Function" [(ngModel)]="selectedFunction" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="12px">
     <mat-radio-button *ngFor="let function of functions" [value]="function.id">
-      {{ function.value | oReportsTranslate }}
+      {{ function.value | oTranslate }}
     </mat-radio-button>
   </mat-radio-group>
 
