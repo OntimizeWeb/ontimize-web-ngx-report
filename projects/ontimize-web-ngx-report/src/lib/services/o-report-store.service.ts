@@ -9,6 +9,7 @@ import { OFilterParameter } from '../types/filter-parameter.type';
 import { OReportStoreParam, OReportStoreParamValue } from '../types/report-store-param.type';
 import { Utils } from '../util/utils';
 import { OReportService } from './o-report.service';
+import { OReportMappingUtils } from '../util/report-mapping-utils';
 
 @Injectable()
 export class OReportStoreService extends OReportService {
@@ -76,7 +77,7 @@ export class OReportStoreService extends OReportService {
     delete av['REPORTID'];
     const identifier = kv.valueOf()[Object.keys(kv)[0]];
     let url = `${this.urlBase}${this.path}/updateReport/` + identifier;
-
+    av = OReportMappingUtils.ontimizeDataMapping(av);
     return this.doRequest({
       method: 'PUT',
       url: url,
