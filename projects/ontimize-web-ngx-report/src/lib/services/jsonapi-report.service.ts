@@ -44,7 +44,7 @@ export class JSONAPIReportService extends JSONAPIService {
     });
   }
 
-  public update(id: string, attributes: any, type?: string): Observable<JSONAPIResponse> {
+  public update(id: string, attributes: any, type: string): Observable<JSONAPIResponse> {
     attributes = OReportMappingUtils.ontimizeMappingKeys(attributes);
     return super.update(id, attributes, type);
   }
