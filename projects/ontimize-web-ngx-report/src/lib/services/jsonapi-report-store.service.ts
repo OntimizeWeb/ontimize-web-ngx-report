@@ -34,7 +34,6 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
 
   public fillReport(uuid: string, reportStoreParam: OReportStoreParam, type?: string): Observable<any> {
     let body = JSON.stringify(reportStoreParam);
-    // entity = this.getStandartEntity(entity);
 
     let url = `${this.urlBase}${this.path}/${type}/` + uuid;
 
