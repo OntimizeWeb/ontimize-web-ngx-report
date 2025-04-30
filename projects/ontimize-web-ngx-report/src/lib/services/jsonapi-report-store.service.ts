@@ -32,11 +32,10 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
     this.path = config.path || this.DEFAULT_PATH;
   }
 
-  public fillReport(uuid: string, reportStoreParam: OReportStoreParam, entity?: string, _sqltypes?: Object): Observable<any> {
+  public fillReport(uuid: string, reportStoreParam: OReportStoreParam, type?: string): Observable<any> {
     let body = JSON.stringify(reportStoreParam);
-    entity = this.getStandartEntity(entity);
 
-    let url = `${this.urlBase}${this.path}/${entity}/` + uuid;
+    let url = `${this.urlBase}${this.path}/${type}/` + uuid;
 
     return this.doRequest({
       method: 'POST',
@@ -45,10 +44,10 @@ export class JSONAPIReportStoreService extends JSONAPIReportService {
     });
   }
 
-  update(kv: object, av: object, entity?: string, sqltypes?: object): Observable<JSONAPIResponse> {
-    entity = this.getStandartEntity(entity);
+  update(id: string, attributes: object, type: string): Observable<JSONAPIResponse> {
+
     /**Replace key UUID by REPORTID */
-    return super.update(kv, av, entity);
+    return super.update(id, attributes, type);
   }
 
   openFillReport(uuid: string, parametersValues: Array<OReportStoreParamValue> = [], filter: OFilterParameter = { filter: {} }) {

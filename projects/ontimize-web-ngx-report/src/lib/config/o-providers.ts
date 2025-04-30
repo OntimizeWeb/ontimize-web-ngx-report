@@ -6,7 +6,7 @@ import { IReportDataProvider } from '../interfaces/report-data-provider.interfac
 import { JSONAPIReportStoreService } from '../services/jsonapi-report-store.service';
 import { JSONAPIReportService } from '../services/jsonapi-report.service';
 import { OAlertService } from '../services/o-alert.service';
-import { OReportQueryArgumentsAdapter } from '../services/o-report-query-argument.adapter';
+import { OReportRequestArgumentsAdapter } from '../services/o-report-request-argument.adapter';
 import { OReportResponseAdapter } from '../services/o-report-response.adapter';
 import { OReportStoreService } from '../services/o-report-store.service';
 import { OReportService } from '../services/o-report.service';
@@ -77,6 +77,6 @@ export const OREPORT_PROVIDERS: any = [
   },
   OAlertService,
   OReportResponseAdapter,
-  OReportQueryArgumentsAdapter,
+  OReportRequestArgumentsAdapter,
   ReportTranslateService
 ];

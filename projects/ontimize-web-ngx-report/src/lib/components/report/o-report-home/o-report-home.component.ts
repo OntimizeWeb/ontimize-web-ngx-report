@@ -24,11 +24,10 @@ export class OReportHomeComponent {
 
   configureServiceReportStore(): OConfigureServiceArgs {
     let configureArgs: OConfigureServiceArgs;
-    // if (this.appConfig.getConfiguration().serviceType?.indexOf('Ontimize') > -1) {
-    //   configureArgs = { injector: this.injector, baseService: OReportStoreService, entity: 'report', service: 'reportstore', serviceType: null }
-    // } else {
-      configureArgs = { injector: this.injector, baseService: OReportStoreService, entity: 'report', service: 'reportstore', serviceType: null }
-    // }
+    configureArgs = {
+      injector: this.injector, baseService: OReportStoreService, entity: this.table.entity, service: this.table.service, serviceType: null
+    };
+
     return configureArgs;
   }
 }

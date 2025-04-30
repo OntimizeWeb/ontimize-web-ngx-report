@@ -1,4 +1,4 @@
-<o-form #form attr="report" service="reportstore" entity="report" keys="REPORTUUID" header-actions="R;I;U;D" show-header="yes"
+<o-form #form attr="report" service="reportstore" entity="Report" keys="REPORTUUID" header-actions="R;I;U;D" show-header="yes"
   show-header-navigation="yes" fxLayout="column" (onDataLoaded)="onDataLoaded($event)" [configure-service-args]="configureServiceReportStore()"
   (onBeforeUpdate)="onBeforeUpdate($event)" columns="REPORTID">
   <o-column attr="row1" title="REPORT_DATA" icon="description" layout-gap="14px" fxFill>

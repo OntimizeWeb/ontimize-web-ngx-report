@@ -3,7 +3,7 @@ import { Observable, OErrorDialogManager, OntimizeEEService } from 'ontimize-web
 
 import { OReportParam } from '../types/report-param.type';
 import { OReportResponseAdapter } from './o-report-response.adapter';
-import { OReportQueryArgumentsAdapter } from './o-report-query-argument.adapter';
+import { OReportRequestArgumentsAdapter } from './o-report-request-argument.adapter';
 
 
 @Injectable()
@@ -14,7 +14,7 @@ export class OReportService extends OntimizeEEService {
     super(injector);
     super.configureService(this.getDefaultServiceConfiguration('report'));
     this.oErrorDialogManager = injector.get<OErrorDialogManager>(OErrorDialogManager);
-    this.queryArgumentAdapter = this.injector.get(OReportQueryArgumentsAdapter);
+    this.requestArgumentAdapter = this.injector.get(OReportRequestArgumentsAdapter);
   }
 
   public configureAdapter() {
