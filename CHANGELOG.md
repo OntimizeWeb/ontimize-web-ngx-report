@@ -1,5 +1,5 @@
 ## 15.0.4 (2025-05-15)
-### Features
+### Bug Fixes
 * **Report on demand:** Added the path parameter to the function that retrieves the name of the functions, ensuring consistency with the report generation process where this parameter was already being used ([6a49228](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/6a49228)) Closes [#260](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/260)
 
 ## 15.0.3 (2024-12-10)
