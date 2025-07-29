@@ -64,15 +64,19 @@ export class OntimizeReportDataBaseProvider implements IReportDataProvider {
 
   }
 
+  getServicePath(service: string): string {
+    const serviceConfiguration = this.getDefaultServiceConfiguration(service);
+    if (Util.isObject(serviceConfiguration) && serviceConfiguration.hasOwnProperty('path')) {
+      return serviceConfiguration.path;
+    }
+    return '';
+  }
+
   getReportConfiguration(currentPreference: OReportPreferences, table: OTableBase): OReportParam {
 
     let reportConfiguration: OReportParam;
 
-    const serviceConfiguration = this.getDefaultServiceConfiguration(currentPreference.service);
-    let pathService: string;
-    if (Util.isObject(serviceConfiguration) && serviceConfiguration.hasOwnProperty('path')) {
-      pathService = serviceConfiguration.path;
-    }
+    const pathService = this.getServicePath(currentPreference.service);
 
     let filters: OFilterParameter = {
       columns: table.oTableOptions.visibleColumns.filter(c => table.getColumnsNotIncluded().indexOf(c) === -1),

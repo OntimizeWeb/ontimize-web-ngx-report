@@ -250,7 +250,7 @@ export class ReportOnDemandComponent implements OnInit {
   getFunctions() {
     this.reportService.getFunctions({
       "columns": this.columnsArray, "entity": this.currentPreference.entity,
-      "service": this.currentPreference.service, "language": this.language
+      "service": this.currentPreference.service, "language": this.language, "path": this.reportDataProvider.getServicePath(this.currentPreference.service)
     }).subscribe(res => {
       if (res && res.data.length && res.code === 0) {
         this.functionsData = this.parseDefaultFunctionsData(res.data[0].functions);
