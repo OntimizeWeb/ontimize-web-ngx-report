@@ -6,6 +6,7 @@ import {
   AppConfig,
   AppearanceService,
   DialogService,
+  FactoryUtil,
   OColumn,
   OConfigureServiceArgs,
   OntimizePreferencesService,
@@ -116,7 +117,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   public configurePrefereceService(): void {
     let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizePreferencesService, entity: 'preferences', service: 'preferences', serviceType: null };
-    this.preferenceService = Util.configureService(configureServiceArgs);
+    this.preferenceService = FactoryUtil.configureService(configureServiceArgs);
   }
 
   public configureReportService(): void {
@@ -281,7 +282,7 @@ export class ReportOnDemandComponent implements OnInit {
   applyConfiguration(configuration: any) {
     this.clearCurrentPreferences();
     this.currentConfiguration = configuration;
-    if (Util.isJsonApiService(this.injector)) {
+    if (FactoryUtil.isJsonApiService(this.injector)) {
       this.currentPreference = JSON.parse(atob(this.currentConfiguration.PREFERENCEPREFERENCES));
     } else {
       this.currentPreference = JSON.parse(this.currentConfiguration.PREFERENCEPREFERENCES);

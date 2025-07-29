@@ -4,6 +4,7 @@ import {
   AppConfig,
   createServiceInstance,
   DialogService,
+  FactoryUtil,
   OConfigureServiceArgs,
   OFileInputComponent,
   OFormComponent,
@@ -130,7 +131,7 @@ export class OReportDetailComponent implements OnDestroy {
   onDataLoaded(e: object) {
     const { REPORTUUID, REPORTNAME, PARAMETERS } = e as any;
 
-    if (Util.isJsonApiService(this.injector)) {
+    if (FactoryUtil.isJsonApiService(this.injector)) {
       this.reportParameterService = createServiceInstance(this.appConfig.getConfiguration().serviceType, this.injector);
       this.reportParameterService.configureService(this.reportParameterService.getDefaultServiceConfiguration('reportparameter'));
       this.reportParameterService.query({ filter: { 'REPORTUUID': e['REPORTUUID'] } }).subscribe(resp => {
