@@ -1,6 +1,6 @@
 import { ReportTranslateService } from './../services/report-translate.service';
 import { Injector } from '@angular/core';
-import { _getInjectionTokenValue, AppConfig, O_REPORT_SERVICE, Util } from 'ontimize-web-ngx';
+import { _getInjectionTokenValue, AppConfig, FactoryUtil, O_REPORT_SERVICE, Util } from 'ontimize-web-ngx';
 
 import { IReportDataProvider } from '../interfaces/report-data-provider.interface';
 import { JSONAPIReportStoreService } from '../services/jsonapi-report-store.service';
@@ -37,9 +37,9 @@ export function getReportOnDemandServiceProvider(injector: Injector): OReportSer
   const config = injector.get(AppConfig).getConfiguration();
   if (!Util.isDefined(config.serviceType)) {
     return new OReportService(injector);
-  } else if (Util.isOntimizeEEService(injector)) {
+  } else if (FactoryUtil.isOntimizeEEService(injector)) {
       return new OReportService(injector);
-    } else if (Util.isJsonApiService(injector)) {
+  } else if (FactoryUtil.isJsonApiService(injector)) {
       return new JSONAPIReportService(injector);
     }
 
@@ -58,9 +58,9 @@ export function getReportStoreServiceProvider(injector: Injector): OReportStoreS
   if (!Util.isDefined(config.serviceType)) {
     return new OReportStoreService(injector);
   }
-  if (Util.isOntimizeEEService(injector)) {
+  if (FactoryUtil.isOntimizeEEService(injector)) {
     return new OReportStoreService(injector);
-  } else if (Util.isJsonApiService(injector)) {
+  } else if (FactoryUtil.isJsonApiService(injector)) {
     return new JSONAPIReportStoreService(injector);
   }
   return new OReportStoreService(injector);
