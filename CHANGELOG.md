@@ -1,8 +1,18 @@
-## 15.1.0-JSONAPI-SNAPSHOT-1
-### Features
-Merge 15.0.1 to 15.0.3
+## 15.1.0-next.4
+* Use `FactoryUtil` instance of `Util`
 
-## 15.1.0-JSONAPI-SNAPSHOT-0 (2024-08-30)
+## 15.1.0-next.3 (2025-04-30)
+* Merge 15.0.4
+
+## 15.1.0-next.2 (2025-04-16)
+* Replaced `oReportsTranslate` with `oTranslate`
+
+## 15.1.0-next.1 (2025-04-30)
+### Features
+* Merge 15.0.1 to 15.0.3
+* Added configuration support for `report`, `reportStore`, and `reportParameter` services
+
+## 15.1.0-next.0 (2025-03-25)
 ### Features
 Adapt to JSON API
 
