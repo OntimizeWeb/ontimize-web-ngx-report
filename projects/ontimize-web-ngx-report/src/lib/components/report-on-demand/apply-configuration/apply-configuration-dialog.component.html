@@ -2,10 +2,10 @@
 <mat-dialog-content fxLayout="column">
   <div mat-subheader>{{ 'TABLE.DIALOG.APPLY_CONFIGURATION' | oTranslate }}</div>
   <mat-selection-list #configurationList dense class="apply-configuration-dialog-list">
-    <mat-list-option (click)="onClickConfigurationList(configuration)" checkboxPosition="before"
-      *ngFor="let configuration of configurationListData" [value]="configuration">
-      <span matListItemTitle>{{ configuration.NAME }}</span>
-      <span matListItemLine>{{ configuration.DESCRIPTION }}</span>
+    <mat-list-option (click)="onClickConfigurationList(configuration)" checkboxPosition="before" *ngFor="let configuration of configurationListData"
+      [value]="configuration">
+      <span matListItemTitle>{{ configuration.PREFERENCENAME }}</span>
+      <span matListItemLine>{{ configuration.PREFERENCEDESCRIPTION }}</span>
     </mat-list-option>
   </mat-selection-list>
 </mat-dialog-content>

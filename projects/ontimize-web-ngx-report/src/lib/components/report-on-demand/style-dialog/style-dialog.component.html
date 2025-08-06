@@ -1,15 +1,15 @@
-<span mat-dialog-title>{{ 'COLUMN_CONFIGURATION' | oReportsTranslate }}</span>
+<span mat-dialog-title>{{ 'COLUMN_CONFIGURATION' | oTranslate }}</span>
 <mat-dialog-content>
-  <div mat-subheader>{{ 'SAVE_COLUMN_CONFIGURATION' | oReportsTranslate }}</div>
+  <div mat-subheader>{{ 'SAVE_COLUMN_CONFIGURATION' | oTranslate }}</div>
   <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="12px">
     <form #form>
       <mat-form-field subscriptSizing='dynamic' fxFill>
-        <mat-label>{{ 'COLUMN_NAME' | oReportsTranslate }}</mat-label>
-        <input id="columnNameInput" name="columnNameInput" matInput placeholder="{{ 'COLUMN_NAME' | oReportsTranslate }}" required
+        <mat-label>{{ 'COLUMN_NAME' | oTranslate }}</mat-label>
+        <input id="columnNameInput" name="columnNameInput" matInput placeholder="{{ 'COLUMN_NAME' | oTranslate }}" required
           [(ngModel)]="reportColumn.name" #columnNameInput="ngModel" [ngModelOptions]="{standalone: true}">
       </mat-form-field>
       <mat-form-field subscriptSizing='dynamic' fxFill>
-        <input id="widthColumnInput" name="widthColumnInput" matInput type="number" placeholder="{{ 'COLUMN_WIDTH' | oReportsTranslate }}" required
+        <input id="widthColumnInput" name="widthColumnInput" matInput type="number" placeholder="{{ 'COLUMN_WIDTH' | oTranslate }}" required
           [(ngModel)]="reportColumn.columnStyle.width" #widthColumnInput="ngModel" [ngModelOptions]="{standalone: true}">
         <span matSuffix>px</span>
         <mat-hint></mat-hint>

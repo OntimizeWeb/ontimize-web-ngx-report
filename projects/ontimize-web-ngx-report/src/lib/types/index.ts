@@ -1,5 +1,4 @@
 export * from './report-column-style.type';
-export * from './report-configuration.type';
 export * from './report-function.type';
 export * from './report-orderBy.type';
 export * from './report-preferences.type';
@@ -7,3 +6,5 @@ export * from './report-column.type';
 export * from './report-param.type';
 export * from './report-service-renderer.type';
 export * from './report-style-params.type';
+export * from './report-store-param.type';
+export * from './filter-parameter.type'

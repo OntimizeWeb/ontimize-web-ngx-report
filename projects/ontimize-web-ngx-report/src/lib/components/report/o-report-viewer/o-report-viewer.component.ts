@@ -31,7 +31,7 @@ export class OReportViewerComponent {
     @Inject(MAT_DIALOG_DATA) public data: any, private appearanceService: AppearanceService) {
     this.pdf = this.blankPdf;
 
-    this.reportStoreService.configureService(this.reportStoreService.getDefaultServiceConfiguration());
+    this.reportStoreService.configureService(this.reportStoreService.getDefaultServiceConfiguration('reportstore'));
     this.reportStoreService.configureAdapter();
 
     this.name = Util.isDefined(this.data['name']) ? this.data.name : '';
