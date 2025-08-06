@@ -1,4 +1,14 @@
-## 15.1.0-next.4
+## 15.1.0 (2025-08-06)
+> [!NOTE]
+> This version requires `ontimize-web-ngx` version `15.6.0` or higher.
+
+### Feature
+* Full adaptation to [JSON:API](https://jsonapi.org/) specification for improved interoperability. ([c4bcd60](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/c4bcd60)) Closes [#1525](https://github.com/OntimizeWeb/ontimize-web-ngx/issues/#1525)
+
+### DEPENDENCY UPDATES
+* **Updated**: ontimize-web-ngx@15.6.0
+
+## 15.1.0-next.4 (2025-07-30)
 * Use `FactoryUtil` instance of `Util`
 
 ## 15.1.0-next.3 (2025-04-30)
