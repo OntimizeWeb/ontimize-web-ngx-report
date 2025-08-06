@@ -1,24 +1,19 @@
 import { Injectable, Injector } from '@angular/core';
-import { Observable, OErrorDialogManager, OntimizeEEService } from 'ontimize-web-ngx';
+import { JSONAPIService, Observable, OErrorDialogManager } from 'ontimize-web-ngx';
 
 import { OReportParam } from '../types/report-param.type';
-import { OReportResponseAdapter } from './o-report-response.adapter';
-import { OReportRequestArgumentsAdapter } from './o-report-request-argument.adapter';
+import { JSONAPIResponse } from 'ontimize-web-ngx/lib/interfaces/jsonapi-response.interface';
+import { OReportMappingUtils } from '../util/report-mapping-utils';
 
 
 @Injectable()
-export class OReportService extends OntimizeEEService {
+export class JSONAPIReportService extends JSONAPIService {
   protected oErrorDialogManager: OErrorDialogManager;
 
   constructor(protected injector: Injector) {
     super(injector);
     super.configureService(this.getDefaultServiceConfiguration('report'));
     this.oErrorDialogManager = injector.get<OErrorDialogManager>(OErrorDialogManager);
-    this.requestArgumentAdapter = this.injector.get(OReportRequestArgumentsAdapter);
-  }
-
-  public configureAdapter() {
-    this.adapter = this.injector.get(OReportResponseAdapter);
   }
 
   public createReport(reportparams: OReportParam): Observable<any> {
@@ -26,7 +21,7 @@ export class OReportService extends OntimizeEEService {
     const body = JSON.stringify(
       reportparams
     )
-    const url = this.urlBase + '/dynamicjasper/report';
+    const url = `${this.urlBase}${this.path}/dynamicjasper/report`;
 
     return this.doRequest({
       method: 'POST',
@@ -34,14 +29,13 @@ export class OReportService extends OntimizeEEService {
       body: body
     });
   }
-
 
   public getFunctions(functionparams?: object): Observable<any> {
 
     const body = JSON.stringify(
       functionparams
     )
-    const url = this.urlBase + '/dynamicjasper/functionsName';
+    const url = `${this.urlBase}${this.path}/dynamicjasper/functionsName`;
 
     return this.doRequest({
       method: 'POST',
@@ -50,6 +44,10 @@ export class OReportService extends OntimizeEEService {
     });
   }
 
+  public update(id: string, attributes: any, type: string): Observable<JSONAPIResponse> {
+    attributes = OReportMappingUtils.ontimizeMappingKeys(attributes);
+    return super.update(id, attributes, type);
+  }
 
 
 }

@@ -2,19 +2,20 @@ import { HttpEventType, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogService, Observable, Util } from 'ontimize-web-ngx';
+import { JSONAPIResponse } from 'ontimize-web-ngx/lib/interfaces/jsonapi-response.interface';
 import { share } from 'rxjs/operators';
 
-import { OReportViewerComponent } from '../components/report/o-report-viewer/o-report-viewer.component';
-import { OFilterParameter } from '../types/filter-parameter.type';
 import { OReportStoreParam, OReportStoreParamValue } from '../types/report-store-param.type';
 import { Utils } from '../util/utils';
-import { OReportService } from './o-report.service';
-import { OReportMappingUtils } from '../util/report-mapping-utils';
+import { JSONAPIReportService } from './jsonapi-report.service';
+import { OFilterParameter } from '../types/filter-parameter.type';
+import { JSONAPIQueryParameter } from 'ontimize-web-ngx/lib/types/json-query-parameter.type';
+import { OReportViewerComponent } from '../components/report/o-report-viewer/o-report-viewer.component';
 
 @Injectable()
-export class OReportStoreService extends OReportService {
+export class JSONAPIReportStoreService extends JSONAPIReportService {
   protected dialogService: DialogService;
-  protected dialog: MatDialog
+  protected dialog: MatDialog;
   readonly DEFAULT_PATH = '/reportstore';
 
   constructor(
@@ -25,69 +26,16 @@ export class OReportStoreService extends OReportService {
     this.dialog = this.injector.get<MatDialog>(MatDialog);
   }
 
-  configureService(config: any): void {
+  public configureService(config: any): void {
     super.configureService(config);
+    this._startSessionPath = this._appConfig.startSessionPath ? this._appConfig.startSessionPath : '/auth/login';
     this.path = config.path || this.DEFAULT_PATH;
   }
 
-  public query(kv?: Object, _av?: Array<string>, entity?: string, _sqltypes?: Object): Observable<any> {
-    const identifier = kv['REPORTUUID'];
-    let url = '';
-    if (Object.keys(kv).length === 0) {
-      url = `${this.urlBase}${this.path}/listReports`;
-    } else {
-      url = `${this.urlBase}${this.path}/getReport/` + identifier;
-    }
-
-    return this.doRequest({
-      method: 'GET',
-      url: url
-    });
-  }
-
-
-  public advancedQuery(_kv?: Object, _av?: Array<string>, entity?: string, _sqltypes?: Object, offset?: number, _pagesize?: number, _orderby?: Array<Object>): Observable<any> {
-    offset = (Util.isDefined(offset)) ? offset : this.offset;
-
-    // Calculate page
-    let page = 0;
-    if (Util.isDefined(offset)) {
-      page = Math.trunc(offset / 10) + 1;
-    }
-
-    let url = this.urlBase + this.path + '/' + entity + '/?format=json' + '&page=' + page;
-
-    return this.doRequest({
-      method: 'GET',
-      url: url
-    });
-  }
-
-  public delete(kv?: Object, _entity?: string, _sqltypes?: Object): Observable<any> {
-    const identifier = kv.valueOf()[Object.keys(kv)[0]];
-    let url = `${this.urlBase}${this.path}/removeReport/` + identifier;
-
-    return this.doRequest({
-      method: 'DELETE',
-      url: url
-    });
-  }
-
-  public update(kv?: Object, av?: any, _entity?: string, _sqltypes?: Object): Observable<any> {
-    delete av['REPORTID'];
-    const identifier = kv.valueOf()[Object.keys(kv)[0]];
-    let url = `${this.urlBase}${this.path}/updateReport/` + identifier;
-    av = OReportMappingUtils.ontimizeDataMapping(av);
-    return this.doRequest({
-      method: 'PUT',
-      url: url,
-      body: av
-    });
-  }
-
-  public fillReport(uuid: string, reportStoreParam: OReportStoreParam, entity?: string, _sqltypes?: Object): Observable<any> {
+  public fillReport(uuid: string, reportStoreParam: OReportStoreParam, type?: string): Observable<any> {
     let body = JSON.stringify(reportStoreParam);
-    let url = `${this.urlBase}${this.path}/${entity}/` + uuid;
+
+    let url = `${this.urlBase}${this.path}/${type}/` + uuid;
 
     return this.doRequest({
       method: 'POST',
@@ -96,13 +44,23 @@ export class OReportStoreService extends OReportService {
     });
   }
 
+  update(id: string, attributes: object, type: string): Observable<JSONAPIResponse> {
+
+    /**Replace key UUID by REPORTID */
+    return super.update(id, attributes, type);
+  }
+
   openFillReport(uuid: string, parametersValues: Array<OReportStoreParamValue> = [], filter: OFilterParameter = { filter: {} }) {
     this.configureService(this.getDefaultServiceConfiguration('reportstore'));
     this.configureAdapter();
-    let kv = { 'UUID': uuid };
-    this.query(kv, null, 'getReport', {}).subscribe(
-      res => {
-        if (res && res.data.length && res.code === 0) {
+    this.path = `${this.path}/getReport`;
+    let queryParams: JSONAPIQueryParameter = {
+      filter: { 'REPORTUUID': uuid }
+    };
+    this.query(queryParams).subscribe({
+
+      next: (res: JSONAPIResponse) => {
+        if (Util.isArray(res) && res.isSuccessful()) {
           let name = res.data[0].NAME;
 
           const reportStoreParam: OReportStoreParam = {
@@ -118,14 +76,14 @@ export class OReportStoreService extends OReportService {
 
         }
       },
-      err => {
+      error: (err) => {
         if (this.dialogService) {
           this.dialogService.error('ERROR',
             'SERVER_ERROR_MESSAGE');
         }
         console.log(err);
       }
-    );
+    });
 
   }
 
@@ -202,6 +160,5 @@ export class OReportStoreService extends OReportService {
       observer.error('Service unavailable');
     }
   }
-
 
 }
