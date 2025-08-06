@@ -39,13 +39,23 @@ export const MAP = {
     'MAX': 'Maximun',
     'AVERAGE': 'Average',
     'SUM': 'Sum',
-    'TOTAL': 'Total'
+    'TOTAL': 'Total',
+    "REPORTS": "Reports",
+    "REPORT_DATA": "Report information",
+    "REPORT_ID": "Id.",
+    "REPORT_NAME": "Name",
+    "REPORT_DESCRIPTION": "Description",
+    "REPORT_TYPE": "Report types",
+    "REPORT_FILENAME": "Main report filename",
+    "REPORT_ZIPFOLDER": "Report file (ZIP folder)",
+    "FILL_REPORT": "Generate report",
+    "PARAMETERS": "Report parameters",
+    "GENERATE": "Generate",
   },
 
   // Spanish
   es: {
     'REPORT_ON_DEMAND_TITLE': 'Informes Dinámicos',
-
     'BUTTONS.SAVE_CONFIGURATION': 'Guardar configuración',
     'BUTTONS.SAVEAS_CONFIGURATION': 'Guardar configuración como',
     'BUTTONS.APPLY_CONFIGURATION': 'Aplicar configuración',
@@ -81,7 +91,18 @@ export const MAP = {
     'MAX': 'Máximo',
     'AVERAGE': 'Media',
     'SUM': 'Suma',
-    'TOTAL': 'Total'
+    'TOTAL': 'Total',
+    "REPORTS": "Informes",
+    "REPORT_DATA": "Datos informe",
+    "REPORT_ID": "Id.",
+    "REPORT_NAME": "Nombre",
+    "REPORT_DESCRIPTION": "Descripción",
+    "REPORT_TYPE": "Tipos de informe",
+    "REPORT_FILENAME": "Archivo principal",
+    "REPORT_ZIPFOLDER": "Archivo informe (carpeta ZIP)",
+    "FILL_REPORT": "Generar informe",
+    "PARAMETERS": "Parámetros",
+    "GENERATE": "Generar",
   }
 
 };

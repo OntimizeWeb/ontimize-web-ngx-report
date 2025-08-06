@@ -1,3 +1,21 @@
+## 15.1.0-next.4
+* Use `FactoryUtil` instance of `Util`
+
+## 15.1.0-next.3 (2025-04-30)
+* Merge 15.0.4
+
+## 15.1.0-next.2 (2025-04-16)
+* Replaced `oReportsTranslate` with `oTranslate`
+
+## 15.1.0-next.1 (2025-04-30)
+### Features
+* Merge 15.0.1 to 15.0.3
+* Added configuration support for `report`, `reportStore`, and `reportParameter` services
+
+## 15.1.0-next.0 (2025-03-25)
+### Features
+Adapt to JSON API
+
 ## 15.0.4 (2025-05-15)
 ### Bug Fixes
 * **Report on demand:** Added the path parameter to the function that retrieves the name of the functions, ensuring consistency with the report generation process where this parameter was already being used ([6a49228](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/6a49228)) Closes [#260](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/260)
@@ -11,6 +29,7 @@
 * **Report on demand:** Protected the preview button from multiple clicks ([a1072c7](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/a1072c7)) Closes [#241](https://github.com/OntimizeWeb/ontimize-web-ngx-report/issues/241)
 
 ## 15.0.1 (2024-04-10)
+
 > [!NOTE]
 > In this version, the bugfixes of version [8.4.2](#842-2024-04-10) were integrated
 
