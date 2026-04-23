@@ -43,7 +43,7 @@
     "moment": "^2.29.4",
     "ngx-extended-pdf-viewer": "^19.0.0",
     "ngx-skeleton-loader": "^8.0.0",
-    "ontimize-web-ngx": "^15.9.0",
+    "ontimize-web-ngx": "file:ontimize-web-ngx-18.0.0-SNAPSHOT-0-patched.tgz",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.0"

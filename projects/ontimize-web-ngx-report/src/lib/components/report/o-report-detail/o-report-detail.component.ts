@@ -24,7 +24,8 @@ export type JasperReportParameter = {
   reportParameterName: string,
   reportParameterDescription: string,
   reportParameterValueClass: string,
-  reportParameterType?: string
+  reportParameterType?: string,
+  valueClass?: string
 }
 
 @Component({
