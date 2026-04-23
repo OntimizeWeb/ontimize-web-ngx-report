@@ -1,6 +1,6 @@
 {
   "name": "ontimize-web-ngx-report",
-  "version": "16.0.0-SNAPSHOT-0",
+  "version": "17.0.0-SNAPSHOT-0",
   "description": "Authomatic reports implementation for Ontimize Web",
   "keywords": [
     "angular",
@@ -20,8 +20,8 @@
     "test-watch": "karma start --singleRun=false --autoWatch=true"
   },
   "peerDependencies": {
-    "@angular/common": "^16.2.0",
-    "@angular/core": "^16.2.0",
+    "@angular/common": "^17.3.0",
+    "@angular/core": "^17.3.0",
     "ontimize-web-ngx": "^15.9.0"
   },
   "dependencies": {
