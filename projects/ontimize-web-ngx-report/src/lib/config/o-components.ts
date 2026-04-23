@@ -1,4 +1,4 @@
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { OntimizeWebModule } from 'ontimize-web-ngx';
 import { DragDropModule } from '@angular/cdk/drag-drop';
