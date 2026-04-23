@@ -18,7 +18,7 @@
         [ngModelOptions]="{standalone: true}">
         @for (aligmentItem of dataAlignment; track aligmentItem.name) {
           <mat-radio-button [value]="aligmentItem.name"
-            [checked]="reportColumn.columnStyle.alignment === aligmentItem">
+            [checked]="reportColumn.columnStyle.alignment === aligmentItem.name">
             <mat-icon fxFlex>
               {{ aligmentItem.icon }}
             </mat-icon>

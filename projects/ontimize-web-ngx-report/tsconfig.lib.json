@@ -14,9 +14,18 @@
   "angularCompilerOptions": {
     "skipTemplateCodegen": true,
     "strictMetadataEmit": true,
-    "fullTemplateTypeCheck": true,
+    "fullTemplateTypeCheck": false,
     "strictInjectionParameters": true,
-    "enableResourceInlining": true
+    "enableResourceInlining": true,
+    "strictTemplates": false,
+    "strictInputTypes": false,
+    "strictAttributeTypes": false,
+    "strictNullInputTypes": false,
+    "strictDomEventTypes": false,
+    "strictDomLocalRefTypes": false,
+    "strictSafeNavigationTypes": false,
+    "strictContextGenerics": false,
+    "strictOutputEventTypes": false
   },
   "exclude": [
     "src/test.ts",

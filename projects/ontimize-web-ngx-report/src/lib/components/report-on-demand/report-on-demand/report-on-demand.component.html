@@ -210,7 +210,7 @@
     <mat-sidenav-content>
       <div class="sidenav-container-content">
         <ngx-extended-pdf-viewer [base64Src]="pdf" [filenameForDownload]="currentPreference.title" [customToolbar]="additionalButtons"
-          useBrowserLocale="true" delayFirstView="1000" [textLayer]="true" [theme]="isDarkMode ? 'dark' : 'light'"
+          useBrowserLocale="true" [delayFirstView]="1000" [textLayer]="true" [theme]="isDarkMode ? 'dark' : 'light'"
           [backgroundColor]="isDarkMode ? '#5c5c5c' : '#e4e6e8'"></ngx-extended-pdf-viewer>
         <ng-template #additionalButtons>
           <div id="toolbarViewer">

@@ -419,7 +419,7 @@ export class ReportOnDemandComponent implements OnInit {
 
   }
 
-  dropColumns(event: CdkDragDrop<string[]>) {
+  dropColumns(event: CdkDragDrop<any[]>) {
     moveItemInArray(this.columnsData, event.previousIndex, event.currentIndex);
     this.updateColumnsSort();
   }
@@ -429,7 +429,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.updateColumnToGroupSort();
   }
 
-  dropColumnsOrderBy(event: CdkDragDrop<string[]>) {
+  dropColumnsOrderBy(event: CdkDragDrop<any[]>) {
     moveItemInArray(this.columnsOrderBy, event.previousIndex, event.currentIndex);
     this.updateColumnGroupBySort();
   }
