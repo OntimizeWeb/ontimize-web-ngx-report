@@ -1,14 +1,17 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatListOption, MatSelectionList } from '@angular/material/list';
-import { DialogService, OntimizePreferencesService, OPreference, preferencesServiceFactory, Util } from 'ontimize-web-ngx';
+import { Component, inject, Inject, Injector, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatListModule, MatListOption, MatSelectionList } from '@angular/material/list';
+import { DialogService, OntimizePreferencesService, OntimizeWebModule, OPreference, preferencesServiceFactory, Util } from 'ontimize-web-ngx';
 import { Subscription } from 'rxjs';
 
 
 @Component({
   selector: 'apply-configuration-dialog',
   templateUrl: './apply-configuration-dialog.component.html',
+  standalone: true,
+  imports: [MatDialogModule, MatButtonModule, MatListModule, OntimizeWebModule],
   providers: [
     { provide: OntimizePreferencesService, useFactory: preferencesServiceFactory, deps: [Injector] }
   ],
@@ -20,17 +23,14 @@ export class ApplyConfigurationDialogComponent implements OnInit, OnDestroy {
 
   public configurationListData: OPreference[] = [];
   public selectedConfiguration: OPreference;
-  private dialogService: DialogService;
-  private preferenceService: OntimizePreferencesService;
+  private dialogService = inject(DialogService);
+  private preferenceService = inject(OntimizePreferencesService);
   protected preferencesSubscription: Subscription = new Subscription();
 
   constructor(
     public dialogo: MatDialogRef<ApplyConfigurationDialogComponent>,
-    protected injector: Injector,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
 
-    this.dialogService = this.injector.get(DialogService);
-    this.preferenceService = this.injector.get(OntimizePreferencesService);
     this.preferenceService.configureService(this.preferenceService.getDefaultServiceConfiguration('preferences'));
     this.getConfigurations();
   }

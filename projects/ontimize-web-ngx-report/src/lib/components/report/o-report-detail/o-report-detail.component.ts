@@ -1,4 +1,5 @@
-import { Component, Injector, OnDestroy, ViewChild } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, inject, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   AppConfig,
@@ -9,6 +10,7 @@ import {
   OFileInputComponent,
   OFormComponent,
   OntimizeService,
+  OntimizeWebModule,
   OTextInputComponent,
   Util
 } from 'ontimize-web-ngx';
@@ -30,7 +32,9 @@ export type JasperReportParameter = {
 
 @Component({
   selector: 'o-report-detail',
-  templateUrl: './o-report-detail.component.html'
+  templateUrl: './o-report-detail.component.html',
+  standalone: true,
+  imports: [OntimizeWebModule, AsyncPipe],
 })
 export class OReportDetailComponent implements OnDestroy {
 
@@ -59,16 +63,14 @@ export class OReportDetailComponent implements OnDestroy {
   @ViewChild('file', { static: true })
   file: OFileInputComponent;
 
-  appConfig: AppConfig;
+  protected dialogService = inject(DialogService);
+  protected dialog = inject(MatDialog);
+  protected injector = inject(Injector);
+  appConfig = inject(AppConfig);
   reportParameterService: OntimizeService;
 
-  constructor(
-    protected dialogService: DialogService,
-    protected dialog: MatDialog,
-    protected injector: Injector
-  ) {
+  constructor() {
     this.existsParameterChanges = this.existChangesSubject.asObservable();
-    this.appConfig = this.injector.get(AppConfig);
   }
 
   @ViewChild('paramForm', { static: false }) set content(content: OFormComponent) {

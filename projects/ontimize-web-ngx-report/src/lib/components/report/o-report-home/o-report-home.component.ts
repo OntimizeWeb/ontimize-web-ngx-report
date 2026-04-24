@@ -1,25 +1,28 @@
-import { Component, Injector, ViewChild } from '@angular/core';
-import { OTableComponent, OConfigureServiceArgs, AppConfig } from 'ontimize-web-ngx';
+import { Component, inject, Injector, ViewChild } from '@angular/core';
+import { OTableComponent, OConfigureServiceArgs, AppConfig, OntimizeWebModule } from 'ontimize-web-ngx';
 import { OAlertService } from '../../../services/o-alert.service';
 import { OReportStoreService } from '../../../services';
 
 @Component({
   selector: 'o-report-home',
   templateUrl: './o-report-home.component.html',
+  standalone: true,
+  imports: [OntimizeWebModule],
 })
 export class OReportHomeComponent {
 
   @ViewChild('table', { static: true })
   table: OTableComponent;
-  appConfig: AppConfig;
 
-  constructor(private alertService: OAlertService,
-    protected injector: Injector) {
-    alertService.alert$.subscribe(
+  private alertService = inject(OAlertService);
+  protected injector = inject(Injector);
+  appConfig = inject(AppConfig);
+
+  constructor() {
+    this.alertService.alert$.subscribe(
       _res => {
         this.table.refresh();
       });
-    this.appConfig = this.injector.get(AppConfig);
   }
 
   configureServiceReportStore(): OConfigureServiceArgs {

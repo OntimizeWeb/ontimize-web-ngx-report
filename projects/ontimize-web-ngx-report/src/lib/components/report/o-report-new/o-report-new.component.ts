@@ -1,5 +1,6 @@
-import { Component, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
-import { AppConfig, DialogService, OConfigureServiceArgs, OFileInputComponent, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
+import { Component, inject, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AppConfig, DialogService, OConfigureServiceArgs, OFileInputComponent, OFormComponent, OntimizeWebModule, OTextInputComponent } from 'ontimize-web-ngx';
 import { Subscription } from 'rxjs';
 import { OAlertService } from '../../../services/o-alert.service';
 import { OReportStoreService } from '../../../services/o-report-store.service';
@@ -8,6 +9,8 @@ import { OReportStoreService } from '../../../services/o-report-store.service';
   selector: 'o-report-new',
   templateUrl: './o-report-new.component.html',
   styleUrls: ['./o-report-new.component.scss'],
+  standalone: true,
+  imports: [OntimizeWebModule, MatProgressSpinnerModule],
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.app-report-store-new]': 'true'
@@ -28,15 +31,11 @@ export class OReportNewComponent {
 
   subscription: Subscription;
   loading: boolean = false;
-  appConfig: AppConfig;
 
-  constructor(
-    private alertService: OAlertService,
-    private dialogService: DialogService,
-    protected injector: Injector
-  ) {
-    this.appConfig = this.injector.get(AppConfig);
-  }
+  private alertService = inject(OAlertService);
+  private dialogService = inject(DialogService);
+  protected injector = inject(Injector);
+  appConfig = inject(AppConfig);
 
   getFileData() {
     return {

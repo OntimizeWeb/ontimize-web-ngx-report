@@ -1,14 +1,19 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { AppearanceService, DialogService, Util } from 'ontimize-web-ngx';
 import { OReportStoreService } from '../../../services/o-report-store.service';
 import { Utils } from '../../../util/utils';
 import { OReportStoreParam } from '../../../types/report-store-param.type';
+import { OReportSkeletonComponent } from '../o-report-skeleton/o-report-skeleton.component';
 
 @Component({
   selector: 'o-report-viewer',
   templateUrl: './o-report-viewer.component.html',
   styleUrls: ['./o-report-viewer.component.scss'],
+  standalone: true,
+  imports: [NgxExtendedPdfViewerModule, MatDialogModule, MatIconModule, OReportSkeletonComponent],
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class.o-report-viewer]': 'true'

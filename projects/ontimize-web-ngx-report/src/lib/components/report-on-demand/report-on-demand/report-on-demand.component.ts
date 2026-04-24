@@ -1,6 +1,17 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, Inject, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CommonModule } from '@angular/common';
+import { Component, inject, Inject, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import {
   AppConfig,
@@ -10,6 +21,7 @@ import {
   OColumn,
   OConfigureServiceArgs,
   OntimizePreferencesService,
+  OntimizeWebModule,
   OPreference,
   OTableBase,
   OTranslateService,
@@ -36,6 +48,14 @@ import { OReportParam } from './../../../types/report-param.type';
   selector: 'o-report-on-demand',
   templateUrl: './report-on-demand.component.html',
   styleUrls: ['./report-on-demand.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule, FormsModule,
+    MatButtonModule, MatDialogModule, MatExpansionModule, MatIconModule, MatListModule,
+    MatMenuModule, MatRadioModule, MatSidenavModule, MatTooltipModule,
+    DragDropModule, NgxExtendedPdfViewerModule,
+    OntimizeWebModule
+  ],
   encapsulation: ViewEncapsulation.None,
   providers: [
     { provide: OntimizePreferencesService, useFactory: preferencesServiceFactory, deps: [Injector] }
@@ -91,28 +111,21 @@ export class ReportOnDemandComponent implements OnInit {
   public currentConfiguration: OPreference;
   public pdf: string;
 
-  public translateService: OTranslateService;
-  protected appConfig: AppConfig;
-  protected snackBarService: SnackBarService;
-  protected reportService: OReportService;
-  protected dialogService: DialogService;
-  public dialog: MatDialog;
-  reportDataProvider: OntimizeReportDataProvider;
+  public injector = inject(Injector);
+  public translateService = inject(OTranslateService);
+  protected appConfig = inject(AppConfig);
+  protected snackBarService = inject(SnackBarService);
+  protected reportService = inject(OReportService);
+  protected dialogService = inject(DialogService);
+  public dialog = inject(MatDialog);
+  reportDataProvider = inject(OntimizeReportDataProvider);
   preferenceService: OntimizePreferencesService;
+
   constructor(
-    public injector: Injector,
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
     @Inject(MAT_DIALOG_DATA) public data: OTableBase,
     private appearanceService: AppearanceService
   ) {
-    this.appConfig = this.injector.get(AppConfig);
-    this.translateService = this.injector.get<OTranslateService>(OTranslateService);
-    this.snackBarService = this.injector.get<SnackBarService>(SnackBarService);
-    this.reportService = this.injector.get<OReportService>(OReportService);
-    this.dialogService = this.injector.get<DialogService>(DialogService);
-    this.dialog = this.injector.get<MatDialog>(MatDialog);
-    this.reportDataProvider = this.injector.get<OntimizeReportDataProvider>(OntimizeReportDataProvider);
-
   }
 
   public configurePrefereceService(): void {
