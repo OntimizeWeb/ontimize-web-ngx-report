@@ -142,7 +142,7 @@ export class ReportOnDemandComponent implements OnInit {
   protected columnsArray: Array<string>;
   protected visibleColumnsArray = [];
   protected table: OTableBase;
-  private blankPdf: string =
+  private readonly blankPdf: string =
     "JVBERi0xLjYKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0ZURlY29kZT4+CnN0cmVhbQp4nDPQM1Qo5ypUMFAw0DMwslAwtTTVMzI3VbAwMdSzMDNUKErlCtdSyOMKVAAAtxIIrgplbmRzdHJlYW0KZW5kb2JqCgozIDAgb2JqCjUwCmVuZG9iagoKNSAwIG9iago8PAo+PgplbmRvYmoKCjYgMCBvYmoKPDwvRm9udCA1IDAgUgovUHJvY1NldFsvUERGL1RleHRdCj4+CmVuZG9iagoKMSAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDQgMCBSL1Jlc291cmNlcyA2IDAgUi9NZWRpYUJveFswIDAgNTk1LjMwMzkzNzAwNzg3NCA4NDEuODg5NzYzNzc5NTI4XS9Hcm91cDw8L1MvVHJhbnNwYXJlbmN5L0NTL0RldmljZVJHQi9JIHRydWU+Pi9Db250ZW50cyAyIDAgUj4+CmVuZG9iagoKNCAwIG9iago8PC9UeXBlL1BhZ2VzCi9SZXNvdXJjZXMgNiAwIFIKL01lZGlhQm94WyAwIDAgNTk1IDg0MSBdCi9LaWRzWyAxIDAgUiBdCi9Db3VudCAxPj4KZW5kb2JqCgo3IDAgb2JqCjw8L1R5cGUvQ2F0YWxvZy9QYWdlcyA0IDAgUgovT3BlbkFjdGlvblsxIDAgUiAvWFlaIG51bGwgbnVsbCAwXQovTGFuZyhlcy1FUykKPj4KZW5kb2JqCgo4IDAgb2JqCjw8L0F1dGhvcjxGRUZGMDA1MDAwNjEwMDc0MDA3MjAwNjkwMDYzMDA2OTAwNjEwMDIwMDA0RDAwNjEwMDcyMDA3NDAwRUQwMDZFMDA2NTAwN0EwMDIwMDA1NDAwNjkwMDZDMDA3NjAwNjU+Ci9DcmVhdG9yPEZFRkYwMDU3MDA3MjAwNjkwMDc0MDA2NTAwNzI+Ci9Qcm9kdWNlcjxGRUZGMDA0QzAwNjkwMDYyMDA3MjAwNjUwMDRGMDA2NjAwNjYwMDY5MDA2MzAwNjUwMDIwMDAzNzAwMkUwMDMxPgovQ3JlYXRpb25EYXRlKEQ6MjAyMjA1MTAxNDUyMDYrMDInMDAnKT4+CmVuZG9iagoKeHJlZgowIDkKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMjM0IDAwMDAwIG4gCjAwMDAwMDAwMTkgMDAwMDAgbiAKMDAwMDAwMDE0MCAwMDAwMCBuIAowMDAwMDAwNDAyIDAwMDAwIG4gCjAwMDAwMDAxNTkgMDAwMDAgbiAKMDAwMDAwMDE4MSAwMDAwMCBuIAowMDAwMDAwNTAwIDAwMDAwIG4gCjAwMDAwMDA1OTYgMDAwMDAgbiAKdHJhaWxlcgo8PC9TaXplIDkvUm9vdCA3IDAgUgovSW5mbyA4IDAgUgovSUQgWyA8RDdBODhCRTRFREFDRkU1RDFGMTIwMzNFMDUyN0JERkU+CjxEN0E4OEJFNEVEQUNGRTVEMUYxMjAzM0UwNTI3QkRGRT4gXQovRG9jQ2hlY2tzdW0gLzgwNTA5NDU4QjgyN0RCRDQ2QzlEODdBMjY4NjdCNEFDCj4+CnN0YXJ0eHJlZgo4NzYKJSVFT0YK";
 
   public currentPreference: OReportPreferences;
@@ -162,7 +162,7 @@ export class ReportOnDemandComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
     @Inject(MAT_DIALOG_DATA) public data: OTableBase,
-    private appearanceService: AppearanceService,
+    private readonly appearanceService: AppearanceService,
   ) {}
 
   public configurePrefereceService(): void {
@@ -256,7 +256,7 @@ export class ReportOnDemandComponent implements OnInit {
           oCol.type !== "image" &&
           oCol.type !== "action" &&
           oCol.visible &&
-          columnsArray.findIndex((column) => column === oCol.attr) > -1,
+          columnsArray.some((column) => column === oCol.attr),
       )
       .map((x: OColumn) => {
         return x.attr;
@@ -271,7 +271,7 @@ export class ReportOnDemandComponent implements OnInit {
           oCol.type !== "image" &&
           oCol.type !== "action" &&
           oCol.visible &&
-          columnsArray.findIndex((column) => column === oCol.attr) > -1,
+          columnsArray.some((column) => column === oCol.attr),
       )
       .map((x: OColumn) => {
         return { id: x.attr, name: x.title };
@@ -352,13 +352,13 @@ export class ReportOnDemandComponent implements OnInit {
   parseDefaultFunctionsData(listColumns: OReportFunction[]) {
     return listColumns.filter(
       (column) =>
-        this.columnsData.findIndex(
+        !this.columnsData.some(
           (columnData) =>
             columnData.columnStyle &&
             columnData.columnStyle.renderer &&
             columnData.columnStyle.renderer.type === "service" &&
             columnData.id === column.columnName,
-        ) === -1,
+        ),
     );
   }
 
@@ -368,29 +368,28 @@ export class ReportOnDemandComponent implements OnInit {
   private checkPreferenceData() {
     this.currentPreference.columns = this.currentPreference.columns.filter(
       (column) =>
-        this.initialColumnsData.findIndex(
+        this.initialColumnsData.some(
           (columnData) => columnData.id === column.id,
-        ) > -1,
+        ),
     );
     this.currentPreference.groups = Object.values(
       this.currentPreference.groups,
-    ).filter(
-      (column) =>
-        this.initialColumnsToGroupData.findIndex(
-          (columnData) => columnData === column,
-        ) > -1,
+    ).filter((column) =>
+      this.initialColumnsToGroupData.some(
+        (columnData) => columnData === column,
+      ),
     );
     this.currentPreference.functions = this.currentPreference.functions.filter(
       (column) =>
-        this.initialFunctionsData.findIndex(
+        this.initialFunctionsData.some(
           (columnData) => columnData.columnName === column.columnName,
-        ) > -1,
+        ),
     );
     this.currentPreference.orderBy = this.currentPreference.orderBy.filter(
       (column) =>
-        this.columnsOrderBy.findIndex(
+        this.columnsOrderBy.some(
           (columnData) => columnData.columnId === column.columnId,
-        ) > -1,
+        ),
     );
   }
 
@@ -726,9 +725,7 @@ export class ReportOnDemandComponent implements OnInit {
     this.updateColumnsOrderByData(groupSelected, groupSelectedName, event);
     if (
       event.options[0].selected &&
-      this.currentPreference.columns.findIndex(
-        (x) => x.id === groupSelected,
-      ) === -1
+      !this.currentPreference.columns.some((x) => x.id === groupSelected)
     ) {
       const columnStyleSelected: OReportColumn[] = this.columnsData.filter(
         (x: OReportColumn) => x.id === groupSelected,
@@ -746,9 +743,8 @@ export class ReportOnDemandComponent implements OnInit {
     event?: MatSelectionListChange,
   ) {
     if (!event) {
-      const existColumn = this.columnsArray.findIndex(
-        (col) => col === columnId,
-      );
+      const existColumn = this.columnsArray.indexOf(columnId);
+
       if (existColumn === -1) {
         console.warn(
           "The loaded configuration has the column " +
@@ -765,7 +761,7 @@ export class ReportOnDemandComponent implements OnInit {
       ascendent: true,
     };
     let index = this.columnsOrderBy.findIndex((x) => x.columnId === columnId);
-    if (!event || (event && event.options[0].selected)) {
+    if (!event || event?.options[0]?.selected) {
       if (index === -1) {
         this.columnsOrderBy.push(columnGroupBySelected);
       }
@@ -793,9 +789,9 @@ export class ReportOnDemandComponent implements OnInit {
 
     if (
       event.options[0].selected &&
-      this.currentPreference.columns.findIndex(
+      !this.currentPreference.columns.some(
         (x) => x.id === columnSelectedToGroup,
-      ) === -1
+      )
     ) {
       const column = this.columnsData.find(
         (x) => x.id === columnSelectedToGroup,
@@ -816,19 +812,18 @@ export class ReportOnDemandComponent implements OnInit {
 
   isCheckedColumn(column: OReportColumn) {
     return this.currentPreference.columns.length > 0
-      ? this.currentPreference.columns.filter((x) => x.id === column.id)
-          .length > 0
+      ? this.currentPreference.columns.some((x) => x.id === column.id)
       : false;
   }
 
   isCheckedFunction(column: OReportFunction) {
     return this.currentPreference.functions.length > 0
-      ? this.currentPreference.functions.filter(
+      ? this.currentPreference.functions.some(
           (x) =>
             x.columnName === column.columnName &&
             x.type === column.type &&
             x.type !== "TOTAL",
-        ).length > 0
+        )
       : false;
   }
 
