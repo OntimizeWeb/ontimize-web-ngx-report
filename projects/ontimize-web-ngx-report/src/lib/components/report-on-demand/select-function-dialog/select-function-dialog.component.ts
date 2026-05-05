@@ -1,11 +1,17 @@
 import { Component, Inject, Optional } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatRadioModule } from '@angular/material/radio';
+import { OntimizeWebModule } from 'ontimize-web-ngx';
 import { OReportFunction } from '../../../types/report-function.type';
 
 @Component({
   selector: 'app-select-function-dialog',
   templateUrl: './select-function-dialog.component.html',
   styleUrls: ['./select-function-dialog.component.scss'],
+  standalone: true,
+  imports: [MatDialogModule, MatButtonModule, MatRadioModule, FormsModule, OntimizeWebModule],
 })
 export class SelectFunctionDialogComponent {
   public selectedFunction: string;

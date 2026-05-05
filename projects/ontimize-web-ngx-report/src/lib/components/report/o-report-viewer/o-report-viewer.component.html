@@ -1,23 +1,24 @@
-<div mat-dialog-title class="dialog-title" fxLayout="row" fxLayoutAlign="space-between center">
+<div mat-dialog-title class="dialog-title o-layout-align-sb-center">
   {{ name }}
   <div>
     <mat-icon aria-label="fullscreen dialog" (click)="setFullscreenDialog()">
       @if (fullscreen) {
-        <ng-container>fullscreen_exit</ng-container>
+      <ng-container>fullscreen_exit</ng-container>
       } @else {
-        <ng-container>fullscreen</ng-container>
+      <ng-container>fullscreen</ng-container>
       }
     </mat-icon>
-    <mat-icon svgIcon="ontimize:close" [mat-dialog-close]="true"></mat-icon>
+    <mat-icon [mat-dialog-close]="true">close</mat-icon>
   </div>
 </div>
 <div #dialog mat-dialog-content class="dialog-container">
   @if (!showReport) {
-    <o-report-skeleton></o-report-skeleton>
+  <o-report-skeleton></o-report-skeleton>
   }
   @if (showReport) {
-    <ngx-extended-pdf-viewer [base64Src]="pdf" [filenameForDownload]="name" [showPropertiesButton]="false" [showOpenFileButton]="false"
-      [showDrawEditor]="false" [showTextEditor]="false" useBrowserLocale="true" [delayFirstView]="1000" [textLayer]="true"
-      [theme]="isDarkMode ? 'dark' : 'light'" [backgroundColor]="isDarkMode ? '#5c5c5c' : '#e4e6e8'"></ngx-extended-pdf-viewer>
+  <ngx-extended-pdf-viewer [base64Src]="pdf" [filenameForDownload]="name" [showPropertiesButton]="false"
+                           [showOpenFileButton]="false" [showDrawEditor]="false" [showTextEditor]="false"
+                           [textLayer]="true" [theme]="isDarkMode ? 'dark' : 'light'"
+                           [backgroundColor]="isDarkMode ? '#5c5c5c' : '#e4e6e8'"></ngx-extended-pdf-viewer>
   }
 </div>

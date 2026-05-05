@@ -22,9 +22,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
-      - name: 'Cache node modules'
+      - name: "Cache node modules"
         uses: actions/cache@v4
         with:
           path: ~/.npm
@@ -32,10 +32,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Node 18.x
+      - name: Configure Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18.10.0
+          node-version: ${{ vars.V18_NODE_VERSION }}
 
       - name: Setup Node registry
         if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'snapshot')
@@ -57,5 +57,5 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

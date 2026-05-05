@@ -1,13 +1,21 @@
 import { Component, Inject, Optional } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Util } from 'ontimize-web-ngx';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { OntimizeWebModule, Util } from 'ontimize-web-ngx';
 import { OReportColumn } from '../../../types/report-column.type';
 import { Constants } from '../../../util/constants';
 import { Utils } from '../../../util/utils';
 
 @Component({
   selector: 'app-style-dialog',
-  templateUrl: './style-dialog.component.html'
+  templateUrl: './style-dialog.component.html',
+  standalone: true,
+  imports: [MatDialogModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatIconModule, MatRadioModule, FormsModule, OntimizeWebModule],
 })
 export class StyleDialogComponent {
 

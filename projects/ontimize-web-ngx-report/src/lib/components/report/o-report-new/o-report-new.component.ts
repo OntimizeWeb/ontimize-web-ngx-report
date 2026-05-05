@@ -1,48 +1,60 @@
-import { Component, Injector, ViewChild, ViewEncapsulation } from '@angular/core';
-import { AppConfig, DialogService, OConfigureServiceArgs, OFileInputComponent, OFormComponent, OTextInputComponent } from 'ontimize-web-ngx';
-import { Subscription } from 'rxjs';
-import { OAlertService } from '../../../services/o-alert.service';
-import { OReportStoreService } from '../../../services/o-report-store.service';
+import {
+  Component,
+  inject,
+  Injector,
+  ViewChild,
+  ViewEncapsulation,
+} from "@angular/core";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import {
+  AppConfig,
+  DialogService,
+  OConfigureServiceArgs,
+  OFileInputComponent,
+  OFormComponent,
+  OntimizeWebModule,
+  OTextInputComponent,
+} from "ontimize-web-ngx";
+import { Subscription } from "rxjs";
+import { OAlertService } from "../../../services/o-alert.service";
+import { OReportStoreService } from "../../../services/o-report-store.service";
 
 @Component({
-  selector: 'o-report-new',
-  templateUrl: './o-report-new.component.html',
-  styleUrls: ['./o-report-new.component.scss'],
+  selector: "o-report-new",
+  templateUrl: "./o-report-new.component.html",
+  styleUrls: ["./o-report-new.component.scss"],
+  standalone: true,
+  imports: [OntimizeWebModule, MatProgressSpinnerModule],
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class.app-report-store-new]': 'true'
-  }
+    "[class.app-report-store-new]": "true",
+  },
 })
 export class OReportNewComponent {
-
-  @ViewChild('name', { static: true })
+  @ViewChild("name", { static: true })
   name: OTextInputComponent;
-  @ViewChild('type', { static: true })
+  @ViewChild("type", { static: true })
   type: OTextInputComponent;
-  @ViewChild('description', { static: true })
+  @ViewChild("description", { static: true })
   description: OTextInputComponent;
-  @ViewChild('form', { static: true })
+  @ViewChild("form", { static: true })
   form: OFormComponent;
-  @ViewChild('file', { static: true })
+  @ViewChild("file", { static: true })
   file: OFileInputComponent;
 
   subscription: Subscription;
   loading: boolean = false;
-  appConfig: AppConfig;
 
-  constructor(
-    private alertService: OAlertService,
-    private dialogService: DialogService,
-    protected injector: Injector
-  ) {
-    this.appConfig = this.injector.get(AppConfig);
-  }
+  private readonly alertService = inject(OAlertService);
+  private readonly dialogService = inject(DialogService);
+  protected injector = inject(Injector);
+  appConfig = inject(AppConfig);
 
   getFileData() {
     return {
-      'name': this.name.getValue(),
-      'type': this.type.getValue(),
-      'description': this.description.getValue(),
+      name: this.name.getValue(),
+      type: this.type.getValue(),
+      description: this.description.getValue(),
     };
   }
 
@@ -54,14 +66,13 @@ export class OReportNewComponent {
 
   onError() {
     if (this.dialogService) {
-      this.dialogService.error('ERROR',
-        'SERVER_ERROR_MESSAGE');
+      this.dialogService.error("ERROR", "SERVER_ERROR_MESSAGE");
       this.loading = false;
     }
   }
 
   confirm() {
-    this.alertService.announceAlert('alert');
+    this.alertService.announceAlert("alert");
   }
 
   onClickSave(e: Event) {
@@ -70,7 +81,7 @@ export class OReportNewComponent {
     });
 
     if (!this.form.formGroup.valid) {
-      this.dialogService.alert('ERROR', 'MESSAGES.FORM_VALIDATION_ERROR');
+      this.dialogService.alert("ERROR", "MESSAGES.FORM_VALIDATION_ERROR");
       return;
     }
     this.loading = true;
@@ -78,8 +89,13 @@ export class OReportNewComponent {
   }
 
   configureServiceReportStore(): OConfigureServiceArgs {
-    let configureArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OReportStoreService, entity: 'report', service: 'reportstore', serviceType: null }
+    let configureArgs: OConfigureServiceArgs = {
+      injector: this.injector,
+      baseService: OReportStoreService,
+      entity: "report",
+      service: "reportstore",
+      serviceType: null,
+    };
     return configureArgs;
   }
-
 }
