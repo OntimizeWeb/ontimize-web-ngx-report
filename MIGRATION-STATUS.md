@@ -1,22 +1,22 @@
 # Migración Angular 15 → 18 — ontimize-web-ngx-report
 
-> Última actualización: 24 abril 2026 (Fase 3 completa, build verde)
+> Última actualización: 5 mayo 2026 (Fase 3 completa, build verde — ramas rebasadas sobre 18.x.x huérfana)
 
 ## Estado global
 
 | Rama | Angular | Commit | Estado |
 |------|---------|--------|--------|
-| `migration/16.x.x` | 16.2 | `ff1c68b`, `014f74e` | ✅ Completado |
-| `migration/17.x.x` | 17.3 | `8b9311e`, `98b1048` | ✅ Completado |
-| `migration/18.x.x` | 18.2 | `d611fce` | ✅ Completado — build verde |
+| `migration/16.x.x` | 16.2 | `b19c94e`, `f2c4882` | ✅ Completado |
+| `migration/17.x.x` | 17.3 | `06df90d`, `a750277` | ✅ Completado |
+| `migration/18.x.x` | 18.2 | `ca610ae`…`7ce4bed` | ✅ Completado — build verde |
 
 ---
 
 ## FASE 1: Angular 15 → 16 — rama `migration/16.x.x`
 
 ### Commits
-- `ff1c68b` — bump to Angular 16, `@ngbracket/ngx-layout@^16.0.0`, tsconfig `module: es2022`
-- `014f74e` — fix: alias `@angular/flex-layout` → `@ngbracket/ngx-layout`, fix `copy-files` script
+- `b19c94e` — bump to Angular 16, `@ngbracket/ngx-layout@^16.0.0`, tsconfig `module: es2022`
+- `f2c4882` — fix: alias `@angular/flex-layout` → `@ngbracket/ngx-layout`, fix `copy-files` script
 
 ### Cambios
 - Todas las dependencias Angular a `^16.2.0`, ng-packagr `^16.2.0`, TypeScript `~5.0.4`
@@ -30,8 +30,8 @@
 ## FASE 2: Angular 16 → 17 — rama `migration/17.x.x`
 
 ### Commits
-- `8b9311e` — bump to Angular 17, control flow syntax (`@if`/`@for`/`@switch`)
-- `98b1048` — fix: TS2322 en compilación partial (tgz parchado del framework)
+- `06df90d` — bump to Angular 17, control flow syntax (`@if`/`@for`/`@switch`)
+- `a750277` — fix: TS2322 en compilación partial (tgz parchado del framework)
 
 ### Cambios
 
@@ -67,8 +67,13 @@
 
 ## FASE 3: Angular 17 → 18 — rama `migration/18.x.x`
 
-### Commit
-- `d611fce` — Angular 18: standalone components, inject(), flex-layout removal
+### Commits
+- `ca610ae` — bump to Angular 16 (acumulado en base de 18.x.x)
+- `a58c7eb` — fix flex-layout alias
+- `85ab82d` — bump to Angular 17, control flow syntax
+- `7e34fd2` — fix TS2322 compilación partial
+- `013de54` — Angular 18: standalone components, inject(), flex-layout removal
+- `7ce4bed` — docs: add MIGRATION-STATUS.md and migration plan
 
 ### Cambios
 
