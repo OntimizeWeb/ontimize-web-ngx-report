@@ -1,6 +1,7 @@
-<o-form #form attr="report" service="reportstore" entity="Report" keys="REPORTUUID" header-actions="R;I;U;D" show-header="yes"
-  show-header-navigation="yes" class="o-flex-column" (onDataLoaded)="onDataLoaded($event)" [configure-service-args]="configureServiceReportStore()"
-  (onBeforeUpdate)="onBeforeUpdate($event)" columns="REPORTID">
+<o-form #form attr="report" service="reportstore" entity="Report" keys="REPORTUUID" header-actions="R;I;U;D"
+        show-header="yes" show-header-navigation="yes" class="o-flex-column" (onDataLoaded)="onDataLoaded($event)"
+        [configure-service-args]="configureServiceReportStore()" (onBeforeUpdate)="onBeforeUpdate($event)"
+        columns="REPORTID">
   <o-column attr="row1" title="REPORT_DATA" icon="description" layout-gap="14px" class="o-flex-fill">
     <o-text-input #id attr="REPORTUUID" label="REPORT_ID" enabled="no" class="o-flex-100"></o-text-input>
     <div class="o-flex-row-wrap o-layout-align-start-start o-flex" style="gap:14px">
@@ -8,56 +9,61 @@
       <o-text-input #type attr="REPORTTYPE" label="REPORT_TYPE" required="yes" class="o-flex"></o-text-input>
     </div>
     <o-text-input class="form-field o-flex" attr="REPORTFILENAME" label="REPORT_FILENAME" required="yes"></o-text-input>
-    <o-textarea-input #description class="form-field o-flex" attr="REPORTDESCRIPTION" label="REPORT_DESCRIPTION" required="yes"></o-textarea-input>
+    <o-textarea-input #description class="form-field o-flex" attr="REPORTDESCRIPTION" label="REPORT_DESCRIPTION"
+                      required="yes"></o-textarea-input>
   </o-column>
 
   @if (hasParams) {
   <div>
-    <o-column #params title="PARAMETERS" icon="info" class="vertical-margin-10" layout-align="start stretch" appearance="outline">
-      <o-form #paramForm attr="reportParams" service="reportstore" entity="fillReport" keys="id" header-mode="none" show-header="no"
-        layout-direction="column" query-on-init="no" confirm-exit="no" [configure-service-args]="configureServiceReportStore()">
-        <div class="o-layout-align-start-start o-flex" style="display:flex;flex-direction:column;flex-wrap:wrap;gap:14px">
+    <o-column #params title="PARAMETERS" icon="info" class="vertical-margin-10" layout-align="start stretch"
+              appearance="outline">
+      <o-form #paramForm attr="reportParams" service="reportstore" entity="fillReport" keys="id" header-mode="none"
+              show-header="no" layout-direction="column" query-on-init="no" confirm-exit="no"
+              [configure-service-args]="configureServiceReportStore()">
+        <div class="o-layout-align-start-start o-flex"
+             style="display:flex;flex-direction:column;flex-wrap:wrap;gap:14px">
           @for (elem of parameters; track elem.reportParameterName; let i = $index) {
-            @switch (elem.valueClass) {
-              @case ('java.util.Date') {
-                <o-date-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
-                  value-type="string" format="YYYY-MM-DD" class="o-flex-fill"></o-date-input>
-              }
-              @case ('java.sql.Timestamp') {
-                <o-time-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription"
-                  required="yes" value-type="string" date-placeholder="YYYY-MM-DD" hour-placeholder="hh:mm" class="o-flex-fill"></o-time-input>
-              }
-              @case ('java.lang.Integer') {
-                <o-integer-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription"
-                  required="yes" class="o-flex-fill"></o-integer-input>
-              }
-              @case ('java.lang.Long') {
-                <o-integer-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription"
-                  required="yes" class="o-flex-fill"></o-integer-input>
-              }
-              @case ('java.lang.Float') {
-                <o-real-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
-                  class="o-flex-fill"></o-real-input>
-              }
-              @case ('java.lang.Double') {
-                <o-real-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription"
-                  required="yes" class="o-flex-fill"></o-real-input>
-              }
-              @case ('java.lang.Boolean') {
-                <o-checkbox [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
-                  class="o-flex-fill"></o-checkbox>
-              }
-              @default {
-                <o-text-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
-                  class="o-flex-fill"></o-text-input>
-              }
-            }
+          @switch (elem.valueClass) {
+          @case ('java.util.Date') {
+          <o-date-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
+                        value-type="string" format="YYYY-MM-DD" class="o-flex-fill"></o-date-input>
+          }
+          @case ('java.sql.Timestamp') {
+          <o-time-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
+                        value-type="string" date-placeholder="YYYY-MM-DD" hour-placeholder="hh:mm"
+                        class="o-flex-fill"></o-time-input>
+          }
+          @case ('java.lang.Integer') {
+          <o-integer-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
+                           class="o-flex-fill"></o-integer-input>
+          }
+          @case ('java.lang.Long') {
+          <o-integer-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
+                           class="o-flex-fill"></o-integer-input>
+          }
+          @case ('java.lang.Float') {
+          <o-real-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
+                        class="o-flex-fill"></o-real-input>
+          }
+          @case ('java.lang.Double') {
+          <o-real-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
+                        class="o-flex-fill"></o-real-input>
+          }
+          @case ('java.lang.Boolean') {
+          <o-checkbox [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
+                      class="o-flex-fill"></o-checkbox>
+          }
+          @default {
+          <o-text-input [attr]="elem.reportParameterName" [label]="elem.reportParameterDescription" required="yes"
+                        class="o-flex-fill"></o-text-input>
+          }
+          }
           }
         </div>
       </o-form>
     </o-column>
   </div>
   }
-  <o-button type="RAISED" (click)="fillReport()" (keyup)="fillReport()" label="FILL_REPORT" icon="download" layout-padding color="accent"
-    [enabled]="existsParameterChanges | async"></o-button>
+  <o-button type="RAISED" (click)="fillReport()" (keyup)="fillReport()" label="FILL_REPORT" icon="download"
+            layout-padding color="accent" [enabled]="existsParameterChanges | async"></o-button>
 </o-form>

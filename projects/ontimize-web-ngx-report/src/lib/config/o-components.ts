@@ -1,13 +1,13 @@
-import { OReportHomeComponent } from '../components/report/o-report-home/o-report-home.component';
-import { OReportNewComponent } from '../components/report/o-report-new/o-report-new.component';
-import { OReportDetailComponent } from '../components/report/o-report-detail/o-report-detail.component';
-import { OReportViewerComponent } from '../components/report/o-report-viewer/o-report-viewer.component';
-import { OReportSkeletonComponent } from '../components/report/o-report-skeleton/o-report-skeleton.component';
-import { ReportOnDemandComponent } from '../components/report-on-demand/report-on-demand/report-on-demand.component';
-import { StyleDialogComponent } from '../components/report-on-demand/style-dialog/style-dialog.component';
-import { SelectFunctionDialogComponent } from '../components/report-on-demand/select-function-dialog/select-function-dialog.component';
-import { SavePreferencesDialogComponent } from '../components/report-on-demand/save-preferences-dialog/save-preferences-dialog.component';
-import { ApplyConfigurationDialogComponent } from '../components/report-on-demand/apply-configuration/apply-configuration-dialog.component';
+import { ApplyConfigurationDialogComponent } from "../components/report-on-demand/apply-configuration/apply-configuration-dialog.component";
+import { ReportOnDemandComponent } from "../components/report-on-demand/report-on-demand/report-on-demand.component";
+import { SavePreferencesDialogComponent } from "../components/report-on-demand/save-preferences-dialog/save-preferences-dialog.component";
+import { SelectFunctionDialogComponent } from "../components/report-on-demand/select-function-dialog/select-function-dialog.component";
+import { StyleDialogComponent } from "../components/report-on-demand/style-dialog/style-dialog.component";
+import { OReportDetailComponent } from "../components/report/o-report-detail/o-report-detail.component";
+import { OReportHomeComponent } from "../components/report/o-report-home/o-report-home.component";
+import { OReportNewComponent } from "../components/report/o-report-new/o-report-new.component";
+import { OReportSkeletonComponent } from "../components/report/o-report-skeleton/o-report-skeleton.component";
+import { OReportViewerComponent } from "../components/report/o-report-viewer/o-report-viewer.component";
 
 export const OREPORT_STANDALONE_COMPONENTS: any = [
   OReportHomeComponent,
@@ -19,7 +19,7 @@ export const OREPORT_STANDALONE_COMPONENTS: any = [
   StyleDialogComponent,
   SelectFunctionDialogComponent,
   SavePreferencesDialogComponent,
-  ApplyConfigurationDialogComponent
+  ApplyConfigurationDialogComponent,
 ];
 
 /** @deprecated Use OREPORT_STANDALONE_COMPONENTS — kept for backward compat */

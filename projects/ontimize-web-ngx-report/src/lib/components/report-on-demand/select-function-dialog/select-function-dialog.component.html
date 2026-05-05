@@ -3,11 +3,12 @@
 <mat-dialog-content>
   <div mat-subheader>{{ 'DIALOG.SELECT_FUNCTION.DESCRIPTION' | oTranslate }}</div>
 
-  <mat-radio-group name="Function" [(ngModel)]="selectedFunction" class="o-flex-column o-layout-align-start-start o-gap-12">
+  <mat-radio-group name="Function" [(ngModel)]="selectedFunction"
+                   class="o-flex-column o-layout-align-start-start o-gap-12">
     @for (function of functions; track function.id) {
-      <mat-radio-button [value]="function.id">
-        {{ function.value | oTranslate }}
-      </mat-radio-button>
+    <mat-radio-button [value]="function.id">
+      {{ function.value | oTranslate }}
+    </mat-radio-button>
     }
   </mat-radio-group>
 
@@ -16,6 +17,7 @@
 <mat-dialog-actions align="end">
   <button type="button" mat-stroked-button class="mat-primary" [mat-dialog-close]="false" class="o-button-default">
     {{ 'CANCEL' | oTranslate }}</button>
-  <button type="button" mat-stroked-button class="mat-primary" (click)="save()" [mat-dialog-close]="true" [disabled]="!selectedFunction">
+  <button type="button" mat-stroked-button class="mat-primary" (click)="save()" [mat-dialog-close]="true"
+          [disabled]="!selectedFunction">
     {{'SAVE' | oTranslate }}</button>
 </mat-dialog-actions>
