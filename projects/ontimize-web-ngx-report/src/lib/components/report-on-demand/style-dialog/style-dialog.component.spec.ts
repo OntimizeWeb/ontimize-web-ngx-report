@@ -3,7 +3,7 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { OReportModule } from './../../../ontimize-web-ngx-report.module';
 import { OntimizeWebModule, APP_CONFIG, AppConfig, appConfigFactory, ONTIMIZE_PROVIDERS } from 'ontimize-web-ngx';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StyleDialogComponent } from './style-dialog.component';
 
@@ -11,7 +11,7 @@ describe('StyleDialogComponent', () => {
   let component: StyleDialogComponent;
   let fixture: ComponentFixture<StyleDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         OntimizeWebModule,
