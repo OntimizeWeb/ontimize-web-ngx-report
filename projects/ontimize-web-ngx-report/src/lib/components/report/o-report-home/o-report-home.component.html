@@ -1,0 +1,15 @@
+<o-form-layout-manager attr="report-layout-mgn" title="REPORTS" separator=" " mode="tab" label-columns="NAME">
+  <div fxLayout="column" fxLayoutAlign="start start" fxFill>
+    <o-table #table fxFlex attr="report" service="reportstore" entity="Report" keys="REPORTUUID"
+      columns="REPORTUUID;REPORTNAME;REPORTDESCRIPTION;REPORTTYPE;REPORTFILENAME" visible-columns="REPORTNAME;REPORTDESCRIPTION;REPORTTYPE"
+      query-rows="20" show-report-on-demand-option="no" show-chart-on-demand-option="no" [configure-service-args]="configureServiceReportStore()">
+      >
+      <o-table-column attr="REPORTNAME" title="REPORT_NAME" orderable="yes" searchable="yes"
+        class="o-table-column-centered"></o-table-column>
+      <o-table-column attr="REPORTDESCRIPTION" title="REPORT_DESCRIPTION" orderable="yes" searchable="no"
+        class="o-table-column-centered"></o-table-column>
+      <o-table-column attr="REPORTTYPE" title="REPORT_TYPE" orderable="yes" searchable="no"
+        class="o-table-column-centered"></o-table-column>
+    </o-table>
+  </div>
+</o-form-layout-manager>

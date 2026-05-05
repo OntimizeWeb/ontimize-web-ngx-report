@@ -1,0 +1,59 @@
+.o-dialog-class .mat-mdc-dialog-container .o-report-viewer {
+  .mat-mdc-dialog-title {
+    .mat-icon {
+      cursor: pointer;
+    }
+  }
+
+  .mat-mdc-dialog-content {
+    //height - toolbar-height - padding-top
+    max-height: calc(100% - 36px - 8px);
+    height: 100%;
+    padding-top: 8px;
+    padding-bottom: 0;
+  }
+
+  ngx-extended-pdf-viewer {
+    .zoom {
+      height: 100%;
+    }
+  }
+
+  .item {
+    width: auto;
+    height: auto;
+    margin: 10px auto;
+    border: 1px solid #eaeaea;
+    padding: 10px;
+  }
+
+  .fb-item {
+    width: auto;
+    height: auto;
+    margin: 10px auto;
+    border: 1px solid #eaeaea;
+    padding: 10px;
+  }
+
+  .gravatar {
+    width: 100px;
+    height: 90px;
+  }
+
+  .gravatar-title {
+    width: 500px;
+    padding: 10px;
+    height: 80px;
+  }
+
+  .first-section-wrapper,
+  .second-section-wrapper {
+    width: 100%;
+    height: auto;
+    flex: 1;
+  }
+
+  .first-section-wrapper {
+    display: inline-flex;
+  }
+}
