@@ -1,3 +1,31 @@
+## 18.0.0-next.0 (2026-05-05)
+> [!NOTE]
+> This version requires `ontimize-web-ngx` version `18.0.0-next.0` or higher and `Angular` version `18.2.0` or higher.
+
+### Features
+* **Migration**: migrated library to Angular 18 — updated all Angular packages to `^18.2.0`, ng-packagr to `^18.2.0`, TypeScript to `~5.5.4` ([ca610ae](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/ca610ae), [85ab82d](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/85ab82d), [013de54](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/013de54))
+* **Standalone**: migrated all 10 components to `standalone: true` ([013de54](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/013de54))
+* **Control flow**: migrated all templates from `*ngIf`/`*ngFor`/`*ngSwitch` to Angular 17+ control flow syntax (`@if`/`@for`/`@switch`) ([85ab82d](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/85ab82d))
+* **Flex-layout**: removed `@angular/flex-layout` and `@ngbracket/ngx-layout` — replaced with CSS utility classes from `ontimize-web-ngx` ([013de54](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/013de54))
+* **inject()**: migrated `Injector.get()` calls to `inject()` function in 5 components ([013de54](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/013de54))
+
+### Bug Fixes
+* **Icons**: replaced Ontimize icons with Material icons in `report-on-demand` and `o-report-viewer` templates ([5418420](https://github.com/OntimizeWeb/ontimize-web-ngx-report/commit/5418420))
+
+### BREAKING CHANGES
+* Requires Angular `^18.2.0` and `ontimize-web-ngx ^18.0.0-next.0`
+* `@angular/flex-layout` and `@ngbracket/ngx-layout` are no longer dependencies
+* All components are now `standalone` — `OReportModule` still exports them for backwards compatibility
+
+### DEPENDENCY UPDATES
+* **Updated**: `@angular/*` `^18.2.0`
+* **Updated**: `ng-packagr` `^18.2.0`
+* **Updated**: `typescript` `~5.5.4`
+* **Updated**: `ontimize-web-ngx` `^18.0.0-next.0`
+* **Updated**: `ngx-extended-pdf-viewer` `^21.0.0`
+* **Updated**: `ngx-skeleton-loader` `^9.0.0`
+* **Removed**: `@angular/flex-layout`, `@ngbracket/ngx-layout`
+
 ## 15.1.0 (2025-08-06)
 > [!NOTE]
 > This version requires `ontimize-web-ngx` version `15.6.0` or higher.
