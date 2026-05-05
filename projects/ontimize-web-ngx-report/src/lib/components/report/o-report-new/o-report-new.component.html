@@ -18,8 +18,10 @@
     </o-file-input>
   </o-column>
 </o-form>
-<div class="loading" *ngIf="loading">
+@if (loading) {
+<div class="loading">
   <div class="spinner">
     <mat-spinner mode="indeterminate"></mat-spinner>
   </div>
 </div>
+}

@@ -16,12 +16,14 @@
       </mat-form-field>
       <mat-radio-group [(ngModel)]="reportColumn.columnStyle.alignment" fxFill fxLayout="row" fxLayoutAlign="space-between center"
         [ngModelOptions]="{standalone: true}">
-        <mat-radio-button *ngFor="let aligmentItem of dataAlignment" [value]="aligmentItem.name"
-          [checked]="reportColumn.columnStyle.alignment === aligmentItem">
-          <mat-icon fxFlex>
-            {{ aligmentItem.icon }}
-          </mat-icon>
-        </mat-radio-button>
+        @for (aligmentItem of dataAlignment; track aligmentItem.name) {
+          <mat-radio-button [value]="aligmentItem.name"
+            [checked]="reportColumn.columnStyle.alignment === aligmentItem.name">
+            <mat-icon fxFlex>
+              {{ aligmentItem.icon }}
+            </mat-icon>
+          </mat-radio-button>
+        }
       </mat-radio-group>
     </form>
   </div>
