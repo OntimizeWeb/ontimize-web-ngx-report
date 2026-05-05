@@ -1,18 +1,38 @@
-import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
-import { CommonModule } from '@angular/common';
-import { Component, inject, Inject, Injector, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
-import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
+import {
+  CdkDragDrop,
+  DragDropModule,
+  moveItemInArray,
+} from "@angular/cdk/drag-drop";
+import { CommonModule } from "@angular/common";
+import {
+  Component,
+  inject,
+  Inject,
+  Injector,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+  MatDialogRef,
+} from "@angular/material/dialog";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatIconModule } from "@angular/material/icon";
+import {
+  MatListModule,
+  MatSelectionList,
+  MatSelectionListChange,
+} from "@angular/material/list";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { NgxExtendedPdfViewerModule } from "ngx-extended-pdf-viewer";
 import {
   AppConfig,
   AppearanceService,
@@ -27,67 +47,84 @@ import {
   OTranslateService,
   preferencesServiceFactory,
   SnackBarService,
-  Util
-} from 'ontimize-web-ngx';
+  Util,
+} from "ontimize-web-ngx";
 
-import { OReportService } from '../../../services/o-report.service';
-import { OntimizeReportDataProvider } from '../../../services/ontimize-report-data-provider.service';
-import { OReportColumnStyle } from '../../../types/report-column-style.type';
-import { OReportColumn } from '../../../types/report-column.type';
-import { OReportFunction } from '../../../types/report-function.type';
-import { OReportOrderBy } from '../../../types/report-orderBy.type';
-import { DefaultOReportPreferences, OReportPreferences } from '../../../types/report-preferences.type';
-import { Utils } from '../../../util/utils';
-import { ApplyConfigurationDialogComponent } from '../apply-configuration/apply-configuration-dialog.component';
-import { SavePreferencesDialogComponent } from '../save-preferences-dialog/save-preferences-dialog.component';
-import { SelectFunctionDialogComponent } from '../select-function-dialog/select-function-dialog.component';
-import { StyleDialogComponent } from '../style-dialog/style-dialog.component';
-import { OReportParam } from './../../../types/report-param.type';
+import { OReportService } from "../../../services/o-report.service";
+import { OntimizeReportDataProvider } from "../../../services/ontimize-report-data-provider.service";
+import { OReportColumnStyle } from "../../../types/report-column-style.type";
+import { OReportColumn } from "../../../types/report-column.type";
+import { OReportFunction } from "../../../types/report-function.type";
+import { OReportOrderBy } from "../../../types/report-orderBy.type";
+import {
+  DefaultOReportPreferences,
+  OReportPreferences,
+} from "../../../types/report-preferences.type";
+import { Utils } from "../../../util/utils";
+import { ApplyConfigurationDialogComponent } from "../apply-configuration/apply-configuration-dialog.component";
+import { SavePreferencesDialogComponent } from "../save-preferences-dialog/save-preferences-dialog.component";
+import { SelectFunctionDialogComponent } from "../select-function-dialog/select-function-dialog.component";
+import { StyleDialogComponent } from "../style-dialog/style-dialog.component";
+import { OReportParam } from "./../../../types/report-param.type";
 
 @Component({
-  selector: 'o-report-on-demand',
-  templateUrl: './report-on-demand.component.html',
-  styleUrls: ['./report-on-demand.component.scss'],
+  selector: "o-report-on-demand",
+  templateUrl: "./report-on-demand.component.html",
+  styleUrls: ["./report-on-demand.component.scss"],
   standalone: true,
   imports: [
-    CommonModule, FormsModule,
-    MatButtonModule, MatDialogModule, MatExpansionModule, MatIconModule, MatListModule,
-    MatMenuModule, MatRadioModule, MatSidenavModule, MatTooltipModule,
-    DragDropModule, NgxExtendedPdfViewerModule,
-    OntimizeWebModule
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatListModule,
+    MatMenuModule,
+    MatRadioModule,
+    MatSidenavModule,
+    MatTooltipModule,
+    DragDropModule,
+    NgxExtendedPdfViewerModule,
+    OntimizeWebModule,
   ],
   encapsulation: ViewEncapsulation.None,
   providers: [
-    { provide: OntimizePreferencesService, useFactory: preferencesServiceFactory, deps: [Injector] }
+    {
+      provide: OntimizePreferencesService,
+      useFactory: preferencesServiceFactory,
+      deps: [Injector],
+    },
   ],
   host: {
-    '[class.o-report-on-demand]': 'true'
-  }
+    "[class.o-report-on-demand]": "true",
+  },
 })
-
 export class ReportOnDemandComponent implements OnInit {
+  @ViewChild("columnsList", { static: false }) columnsList: MatSelectionList;
+  @ViewChild("groupsList", { static: false }) groupsList: MatSelectionList;
+  @ViewChild("functionsList", { static: false })
+  functionsList: MatSelectionList;
+  @ViewChild("orderByList", { static: false }) orderByList: MatSelectionList;
 
-  @ViewChild('columnsList', { static: false }) columnsList: MatSelectionList;
-  @ViewChild('groupsList', { static: false }) groupsList: MatSelectionList;
-  @ViewChild('functionsList', { static: false }) functionsList: MatSelectionList;
-  @ViewChild('orderByList', { static: false }) orderByList: MatSelectionList;
-
-  public orientations = [{ text: "vertical", value: true }, { text: "horizontal", value: false }];
+  public orientations = [
+    { text: "vertical", value: true },
+    { text: "horizontal", value: false },
+  ];
   public functionsData: OReportFunction[] = [];
   private initialFunctionsData: OReportFunction[] = [];
   public appliedConfiguration: boolean = false;
   public selectedFunctions = [];
   isDarkMode: boolean;
   public stylesArray = [
-    { value: 'grid', viewValue: 'GRID' },
-    { value: 'rowNumber', viewValue: 'ROW_NUMBER' },
-    { value: 'columnName', viewValue: 'COLUMNS_NAMES' },
-    { value: 'backgroundOnOddRows', viewValue: 'BACKGROUND_ODD_ROWS' },
-    { value: 'hideGroupDetails', viewValue: 'GROUP_DETAILS' },
-    { value: 'groupNewPage', viewValue: 'GROUP_PAGE' },
-    { value: 'firstGroupNewPage', viewValue: 'FIRST_GROUP_PAGE' }
+    { value: "grid", viewValue: "GRID" },
+    { value: "rowNumber", viewValue: "ROW_NUMBER" },
+    { value: "columnName", viewValue: "COLUMNS_NAMES" },
+    { value: "backgroundOnOddRows", viewValue: "BACKGROUND_ODD_ROWS" },
+    { value: "hideGroupDetails", viewValue: "GROUP_DETAILS" },
+    { value: "groupNewPage", viewValue: "GROUP_PAGE" },
+    { value: "firstGroupNewPage", viewValue: "FIRST_GROUP_PAGE" },
   ];
-
 
   public columnsData: Array<OReportColumn>;
   private initialColumnsData: Array<OReportColumn>;
@@ -105,7 +142,8 @@ export class ReportOnDemandComponent implements OnInit {
   protected columnsArray: Array<string>;
   protected visibleColumnsArray = [];
   protected table: OTableBase;
-  private blankPdf: string = 'JVBERi0xLjYKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0ZURlY29kZT4+CnN0cmVhbQp4nDPQM1Qo5ypUMFAw0DMwslAwtTTVMzI3VbAwMdSzMDNUKErlCtdSyOMKVAAAtxIIrgplbmRzdHJlYW0KZW5kb2JqCgozIDAgb2JqCjUwCmVuZG9iagoKNSAwIG9iago8PAo+PgplbmRvYmoKCjYgMCBvYmoKPDwvRm9udCA1IDAgUgovUHJvY1NldFsvUERGL1RleHRdCj4+CmVuZG9iagoKMSAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDQgMCBSL1Jlc291cmNlcyA2IDAgUi9NZWRpYUJveFswIDAgNTk1LjMwMzkzNzAwNzg3NCA4NDEuODg5NzYzNzc5NTI4XS9Hcm91cDw8L1MvVHJhbnNwYXJlbmN5L0NTL0RldmljZVJHQi9JIHRydWU+Pi9Db250ZW50cyAyIDAgUj4+CmVuZG9iagoKNCAwIG9iago8PC9UeXBlL1BhZ2VzCi9SZXNvdXJjZXMgNiAwIFIKL01lZGlhQm94WyAwIDAgNTk1IDg0MSBdCi9LaWRzWyAxIDAgUiBdCi9Db3VudCAxPj4KZW5kb2JqCgo3IDAgb2JqCjw8L1R5cGUvQ2F0YWxvZy9QYWdlcyA0IDAgUgovT3BlbkFjdGlvblsxIDAgUiAvWFlaIG51bGwgbnVsbCAwXQovTGFuZyhlcy1FUykKPj4KZW5kb2JqCgo4IDAgb2JqCjw8L0F1dGhvcjxGRUZGMDA1MDAwNjEwMDc0MDA3MjAwNjkwMDYzMDA2OTAwNjEwMDIwMDA0RDAwNjEwMDcyMDA3NDAwRUQwMDZFMDA2NTAwN0EwMDIwMDA1NDAwNjkwMDZDMDA3NjAwNjU+Ci9DcmVhdG9yPEZFRkYwMDU3MDA3MjAwNjkwMDc0MDA2NTAwNzI+Ci9Qcm9kdWNlcjxGRUZGMDA0QzAwNjkwMDYyMDA3MjAwNjUwMDRGMDA2NjAwNjYwMDY5MDA2MzAwNjUwMDIwMDAzNzAwMkUwMDMxPgovQ3JlYXRpb25EYXRlKEQ6MjAyMjA1MTAxNDUyMDYrMDInMDAnKT4+CmVuZG9iagoKeHJlZgowIDkKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMjM0IDAwMDAwIG4gCjAwMDAwMDAwMTkgMDAwMDAgbiAKMDAwMDAwMDE0MCAwMDAwMCBuIAowMDAwMDAwNDAyIDAwMDAwIG4gCjAwMDAwMDAxNTkgMDAwMDAgbiAKMDAwMDAwMDE4MSAwMDAwMCBuIAowMDAwMDAwNTAwIDAwMDAwIG4gCjAwMDAwMDA1OTYgMDAwMDAgbiAKdHJhaWxlcgo8PC9TaXplIDkvUm9vdCA3IDAgUgovSW5mbyA4IDAgUgovSUQgWyA8RDdBODhCRTRFREFDRkU1RDFGMTIwMzNFMDUyN0JERkU+CjxEN0E4OEJFNEVEQUNGRTVEMUYxMjAzM0UwNTI3QkRGRT4gXQovRG9jQ2hlY2tzdW0gLzgwNTA5NDU4QjgyN0RCRDQ2QzlEODdBMjY4NjdCNEFDCj4+CnN0YXJ0eHJlZgo4NzYKJSVFT0YK';
+  private blankPdf: string =
+    "JVBERi0xLjYKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0ZURlY29kZT4+CnN0cmVhbQp4nDPQM1Qo5ypUMFAw0DMwslAwtTTVMzI3VbAwMdSzMDNUKErlCtdSyOMKVAAAtxIIrgplbmRzdHJlYW0KZW5kb2JqCgozIDAgb2JqCjUwCmVuZG9iagoKNSAwIG9iago8PAo+PgplbmRvYmoKCjYgMCBvYmoKPDwvRm9udCA1IDAgUgovUHJvY1NldFsvUERGL1RleHRdCj4+CmVuZG9iagoKMSAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDQgMCBSL1Jlc291cmNlcyA2IDAgUi9NZWRpYUJveFswIDAgNTk1LjMwMzkzNzAwNzg3NCA4NDEuODg5NzYzNzc5NTI4XS9Hcm91cDw8L1MvVHJhbnNwYXJlbmN5L0NTL0RldmljZVJHQi9JIHRydWU+Pi9Db250ZW50cyAyIDAgUj4+CmVuZG9iagoKNCAwIG9iago8PC9UeXBlL1BhZ2VzCi9SZXNvdXJjZXMgNiAwIFIKL01lZGlhQm94WyAwIDAgNTk1IDg0MSBdCi9LaWRzWyAxIDAgUiBdCi9Db3VudCAxPj4KZW5kb2JqCgo3IDAgb2JqCjw8L1R5cGUvQ2F0YWxvZy9QYWdlcyA0IDAgUgovT3BlbkFjdGlvblsxIDAgUiAvWFlaIG51bGwgbnVsbCAwXQovTGFuZyhlcy1FUykKPj4KZW5kb2JqCgo4IDAgb2JqCjw8L0F1dGhvcjxGRUZGMDA1MDAwNjEwMDc0MDA3MjAwNjkwMDYzMDA2OTAwNjEwMDIwMDA0RDAwNjEwMDcyMDA3NDAwRUQwMDZFMDA2NTAwN0EwMDIwMDA1NDAwNjkwMDZDMDA3NjAwNjU+Ci9DcmVhdG9yPEZFRkYwMDU3MDA3MjAwNjkwMDc0MDA2NTAwNzI+Ci9Qcm9kdWNlcjxGRUZGMDA0QzAwNjkwMDYyMDA3MjAwNjUwMDRGMDA2NjAwNjYwMDY5MDA2MzAwNjUwMDIwMDAzNzAwMkUwMDMxPgovQ3JlYXRpb25EYXRlKEQ6MjAyMjA1MTAxNDUyMDYrMDInMDAnKT4+CmVuZG9iagoKeHJlZgowIDkKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMjM0IDAwMDAwIG4gCjAwMDAwMDAwMTkgMDAwMDAgbiAKMDAwMDAwMDE0MCAwMDAwMCBuIAowMDAwMDAwNDAyIDAwMDAwIG4gCjAwMDAwMDAxNTkgMDAwMDAgbiAKMDAwMDAwMDE4MSAwMDAwMCBuIAowMDAwMDAwNTAwIDAwMDAwIG4gCjAwMDAwMDA1OTYgMDAwMDAgbiAKdHJhaWxlcgo8PC9TaXplIDkvUm9vdCA3IDAgUgovSW5mbyA4IDAgUgovSUQgWyA8RDdBODhCRTRFREFDRkU1RDFGMTIwMzNFMDUyN0JERkU+CjxEN0E4OEJFNEVEQUNGRTVEMUYxMjAzM0UwNTI3QkRGRT4gXQovRG9jQ2hlY2tzdW0gLzgwNTA5NDU4QjgyN0RCRDQ2QzlEODdBMjY4NjdCNEFDCj4+CnN0YXJ0eHJlZgo4NzYKJSVFT0YK";
 
   public currentPreference: OReportPreferences;
   public currentConfiguration: OPreference;
@@ -124,19 +162,27 @@ export class ReportOnDemandComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ReportOnDemandComponent>,
     @Inject(MAT_DIALOG_DATA) public data: OTableBase,
-    private appearanceService: AppearanceService
-  ) {
-  }
+    private appearanceService: AppearanceService,
+  ) {}
 
   public configurePrefereceService(): void {
-    let configureServiceArgs: OConfigureServiceArgs = { injector: this.injector, baseService: OntimizePreferencesService, entity: 'preferences', service: 'preferences', serviceType: null };
+    let configureServiceArgs: OConfigureServiceArgs = {
+      injector: this.injector,
+      baseService: OntimizePreferencesService,
+      entity: "preferences",
+      service: "preferences",
+      serviceType: null,
+    };
     this.preferenceService = FactoryUtil.configureService(configureServiceArgs);
   }
 
   public configureReportService(): void {
-    this.reportService.configureService(this.reportService.getDefaultServiceConfiguration(this.table.service || this.table.serviceType));
+    this.reportService.configureService(
+      this.reportService.getDefaultServiceConfiguration(
+        this.table.service || this.table.serviceType,
+      ),
+    );
   }
-
 
   ngOnInit() {
     this.initialize();
@@ -204,26 +250,42 @@ export class ReportOnDemandComponent implements OnInit {
 
   protected parseColumnsVisible() {
     const columnsArray = Util.parseArray(this.table.columns);
-    return this.table.oTableOptions.columns.filter(oCol => oCol.type !== "image" && oCol.type !== "action" && oCol.visible && columnsArray.findIndex(column => column === oCol.attr) > -1).map(
-      (x: OColumn) => {
+    return this.table.oTableOptions.columns
+      .filter(
+        (oCol) =>
+          oCol.type !== "image" &&
+          oCol.type !== "action" &&
+          oCol.visible &&
+          columnsArray.findIndex((column) => column === oCol.attr) > -1,
+      )
+      .map((x: OColumn) => {
         return x.attr;
-      }
-    )
+      });
   }
 
   protected getVisibleColumns() {
     const columnsArray = Util.parseArray(this.table.columns);
-    return this.table.oTableOptions.columns.filter(oCol => oCol.type !== "image" && oCol.type !== "action" && oCol.visible && columnsArray.findIndex(column => column === oCol.attr) > -1).map(
-      (x: OColumn) => {
+    return this.table.oTableOptions.columns
+      .filter(
+        (oCol) =>
+          oCol.type !== "image" &&
+          oCol.type !== "action" &&
+          oCol.visible &&
+          columnsArray.findIndex((column) => column === oCol.attr) > -1,
+      )
+      .map((x: OColumn) => {
         return { id: x.attr, name: x.title };
-      }
-    )
+      });
   }
 
   protected parseReportColumn(columns: any[]): OReportColumn[] {
-    return columns.map(column => {
+    return columns.map((column) => {
       let reportColumn: OReportColumn = {
-        id: column.id, name: column.name != '' ? this.translateService.get(column.name) : this.translateService.get(column.id)
+        id: column.id,
+        name:
+          column.name != ""
+            ? this.translateService.get(column.name)
+            : this.translateService.get(column.id),
       };
       let columnStyle = this.parseColumnStyle(column.id);
       if (Util.isObject(columnStyle) && Object.keys(columnStyle).length > 0) {
@@ -243,17 +305,22 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   protected parseColumnsOrderBy(columnsOrderBy: any): OReportOrderBy[] {
-    return columnsOrderBy.map(column => {
-      return { columnId: column.columnId, columnName: column.name, ascendent: column.ascendent }
+    return columnsOrderBy.map((column) => {
+      return {
+        columnId: column.columnId,
+        columnName: column.name,
+        ascendent: column.ascendent,
+      };
     });
   }
 
-
-
-
   protected openReport() {
-    const reportConfiguration: OReportParam = this.reportDataProvider.getReportConfiguration(this.currentPreference, this.table)
-    this.reportService.createReport(reportConfiguration).subscribe(res => {
+    const reportConfiguration: OReportParam =
+      this.reportDataProvider.getReportConfiguration(
+        this.currentPreference,
+        this.table,
+      );
+    this.reportService.createReport(reportConfiguration).subscribe((res) => {
       if (res && res.data.length && res.code === 0) {
         this.pdf = res.data[0].file;
         this.enabledReport = true;
@@ -262,23 +329,36 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   getFunctions() {
-    this.reportService.getFunctions({
-      "columns": this.columnsArray, "entity": this.currentPreference.entity,
-      "service": this.currentPreference.service, "language": this.language, "path": this.reportDataProvider.getServicePath(this.currentPreference.service)
-    }).subscribe(res => {
-      if (res && res.data.length && res.code === 0) {
-        this.functionsData = this.parseDefaultFunctionsData(res.data[0].functions);
-        this.initialFunctionsData = Utils.cloneObject(this.functionsData);
-      }
-    });
+    this.reportService
+      .getFunctions({
+        columns: this.columnsArray,
+        entity: this.currentPreference.entity,
+        service: this.currentPreference.service,
+        language: this.language,
+        path: this.reportDataProvider.getServicePath(
+          this.currentPreference.service,
+        ),
+      })
+      .subscribe((res) => {
+        if (res && res.data.length && res.code === 0) {
+          this.functionsData = this.parseDefaultFunctionsData(
+            res.data[0].functions,
+          );
+          this.initialFunctionsData = Utils.cloneObject(this.functionsData);
+        }
+      });
   }
 
   parseDefaultFunctionsData(listColumns: OReportFunction[]) {
-    return listColumns.filter(column =>
-      this.columnsData.
-        findIndex(columnData =>
-          columnData.columnStyle && columnData.columnStyle.renderer && columnData.columnStyle.renderer.type === 'service' && columnData.id === column.columnName
-        ) === -1
+    return listColumns.filter(
+      (column) =>
+        this.columnsData.findIndex(
+          (columnData) =>
+            columnData.columnStyle &&
+            columnData.columnStyle.renderer &&
+            columnData.columnStyle.renderer.type === "service" &&
+            columnData.id === column.columnName,
+        ) === -1,
     );
   }
 
@@ -286,50 +366,87 @@ export class ReportOnDemandComponent implements OnInit {
    * Checks preference data is consistent with the table data
    */
   private checkPreferenceData() {
-    this.currentPreference.columns = this.currentPreference.columns.filter(column => this.initialColumnsData.findIndex(columnData => columnData.id === column.id) > -1);
-    this.currentPreference.groups = Object.values(this.currentPreference.groups).filter(column => this.initialColumnsToGroupData.findIndex(columnData => columnData === column) > -1);
-    this.currentPreference.functions = this.currentPreference.functions.filter(column => this.initialFunctionsData.findIndex(columnData => columnData.columnName === column.columnName) > -1);
-    this.currentPreference.orderBy = this.currentPreference.orderBy.filter(column => this.columnsOrderBy.findIndex(columnData => columnData.columnId === column.columnId) > -1);
+    this.currentPreference.columns = this.currentPreference.columns.filter(
+      (column) =>
+        this.initialColumnsData.findIndex(
+          (columnData) => columnData.id === column.id,
+        ) > -1,
+    );
+    this.currentPreference.groups = Object.values(
+      this.currentPreference.groups,
+    ).filter(
+      (column) =>
+        this.initialColumnsToGroupData.findIndex(
+          (columnData) => columnData === column,
+        ) > -1,
+    );
+    this.currentPreference.functions = this.currentPreference.functions.filter(
+      (column) =>
+        this.initialFunctionsData.findIndex(
+          (columnData) => columnData.columnName === column.columnName,
+        ) > -1,
+    );
+    this.currentPreference.orderBy = this.currentPreference.orderBy.filter(
+      (column) =>
+        this.columnsOrderBy.findIndex(
+          (columnData) => columnData.columnId === column.columnId,
+        ) > -1,
+    );
   }
 
   applyConfiguration(configuration: any) {
     this.clearCurrentPreferences();
     this.currentConfiguration = configuration;
     if (FactoryUtil.isJsonApiService(this.injector)) {
-      this.currentPreference = JSON.parse(atob(this.currentConfiguration.PREFERENCEPREFERENCES));
+      this.currentPreference = JSON.parse(
+        atob(this.currentConfiguration.PREFERENCEPREFERENCES),
+      );
     } else {
-      this.currentPreference = JSON.parse(this.currentConfiguration.PREFERENCEPREFERENCES);
+      this.currentPreference = JSON.parse(
+        this.currentConfiguration.PREFERENCEPREFERENCES,
+      );
     }
-    this.currentPreference.columns.forEach((column: OReportColumn) => this.updateColumnsOrderByData(column.id, column.name));
+    this.currentPreference.columns.forEach((column: OReportColumn) =>
+      this.updateColumnsOrderByData(column.id, column.name),
+    );
 
     this.checkPreferenceData();
     // Set the functionsData with the data that is loaded from the configuration because it changes
-    this.functionsData = this.functionsData.map((functionData: OReportFunction) => {
-      const index = this.currentPreference.functions.findIndex(x => x.columnName === functionData.columnName);
-      if (index > -1) {
-        functionData.type = this.currentPreference.functions[index].type;
-      }
-      return functionData
-    });
+    this.functionsData = this.functionsData.map(
+      (functionData: OReportFunction) => {
+        const index = this.currentPreference.functions.findIndex(
+          (x) => x.columnName === functionData.columnName,
+        );
+        if (index > -1) {
+          functionData.type = this.currentPreference.functions[index].type;
+        }
+        return functionData;
+      },
+    );
 
     this.columnsData.sort((a: OReportColumn, b: OReportColumn) => {
-      let indexA = this.currentPreference.columns.findIndex(x => x.id === a.id);
-      let indexB = this.currentPreference.columns.findIndex(x => x.id === b.id);
+      let indexA = this.currentPreference.columns.findIndex(
+        (x) => x.id === a.id,
+      );
+      let indexB = this.currentPreference.columns.findIndex(
+        (x) => x.id === b.id,
+      );
       return this.getSortIndex(indexA, indexB);
-
     });
     this.columnsOrderBy.sort((a: OReportOrderBy, b: OReportOrderBy) => {
-      let indexA = this.currentPreference.orderBy.findIndex(x => x.columnId === a.columnId);
-      let indexB = this.currentPreference.orderBy.findIndex(x => x.columnId === b.columnId);
+      let indexA = this.currentPreference.orderBy.findIndex(
+        (x) => x.columnId === a.columnId,
+      );
+      let indexB = this.currentPreference.orderBy.findIndex(
+        (x) => x.columnId === b.columnId,
+      );
       return this.getSortIndex(indexA, indexB);
-
     });
     this.columnsToGroupData.sort((a: string, b: string) => {
-      let indexA = this.currentPreference.groups.findIndex(x => x === a);
-      let indexB = this.currentPreference.groups.findIndex(x => x === b);
+      let indexA = this.currentPreference.groups.findIndex((x) => x === a);
+      let indexB = this.currentPreference.groups.findIndex((x) => x === b);
       return this.getSortIndex(indexA, indexB);
     });
-
   }
 
   private getSortIndex(indexA: number, indexB: number): number {
@@ -341,17 +458,19 @@ export class ReportOnDemandComponent implements OnInit {
     } else {
       return indexA - indexB;
     }
-
   }
 
   showColumnStyleDialog(event: Event, id: string): void {
     event.stopPropagation();
-    const columnData: OReportColumn = Object.assign({}, this.currentPreference.columns.find((x: OReportColumn) => x.id === id));
+    const columnData: OReportColumn = Object.assign(
+      {},
+      this.currentPreference.columns.find((x: OReportColumn) => x.id === id),
+    );
     if (Util.isDefined(columnData)) {
       this.dialog
         .open(StyleDialogComponent, {
           data: columnData,
-          panelClass: ['o-dialog-class', 'o-table-dialog']
+          panelClass: ["o-dialog-class", "o-table-dialog"],
         })
         .afterClosed()
         .subscribe((data: OReportColumn) => {
@@ -364,31 +483,27 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   updateColumnStyleConfigurationData(data: OReportColumn) {
-
-
     let columns = Utils.cloneObject(this.currentPreference.columns);
     this.currentPreference.columns = [];
-    const indexColumnData = this.columnsData.findIndex(x => x.id === data.id);
+    const indexColumnData = this.columnsData.findIndex((x) => x.id === data.id);
     if (indexColumnData > -1) {
       this.columnsData[indexColumnData] = data;
     }
-    const indexColumnStyleData = columns.findIndex(x => x.id === data.id);
+    const indexColumnStyleData = columns.findIndex((x) => x.id === data.id);
     if (indexColumnStyleData > -1) {
       columns[indexColumnStyleData] = data;
     }
 
     this.currentPreference.columns = columns;
-
   }
-
 
   selectFunction(event, reportFunction: OReportFunction): void {
     event.stopPropagation();
-    if (reportFunction.columnName != 'TOTAL') {
+    if (reportFunction.columnName != "TOTAL") {
       this.dialog
         .open(SelectFunctionDialogComponent, {
           data: reportFunction,
-          panelClass: ['o-dialog-class', 'o-table-dialog']
+          panelClass: ["o-dialog-class", "o-table-dialog"],
         })
         .afterClosed()
         .subscribe((data: any) => {
@@ -402,7 +517,9 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   private updatedFunctionData(data: OReportFunction) {
-    const index = this.functionsData.findIndex(x => x.columnName === data.columnName);
+    const index = this.functionsData.findIndex(
+      (x) => x.columnName === data.columnName,
+    );
     if (index === -1) {
       this.functionsData.push(data);
     } else {
@@ -415,21 +532,20 @@ export class ReportOnDemandComponent implements OnInit {
       if (data.columnName === selectedFunction.columnName) {
         this.currentPreference.functions[i] = data;
       }
-    })
+    });
   }
 
   openSaveAsPreferences(): void {
     this.dialog
       .open(SavePreferencesDialogComponent, {
-        panelClass: ['o-dialog-class', 'o-table-dialog']
+        panelClass: ["o-dialog-class", "o-table-dialog"],
       })
       .afterClosed()
-      .subscribe((data: { name: string, description: string }) => {
+      .subscribe((data: { name: string; description: string }) => {
         if (Util.isDefined(data) && data) {
           this.savePreferences(data);
         }
       });
-
   }
 
   dropColumns(event: CdkDragDrop<any[]>) {
@@ -438,113 +554,150 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   dropGroups(event: CdkDragDrop<any[]>) {
-    moveItemInArray(this.columnsToGroupData, event.previousIndex, event.currentIndex)
+    moveItemInArray(
+      this.columnsToGroupData,
+      event.previousIndex,
+      event.currentIndex,
+    );
     this.updateColumnToGroupSort();
   }
 
   dropColumnsOrderBy(event: CdkDragDrop<any[]>) {
-    moveItemInArray(this.columnsOrderBy, event.previousIndex, event.currentIndex);
+    moveItemInArray(
+      this.columnsOrderBy,
+      event.previousIndex,
+      event.currentIndex,
+    );
     this.updateColumnGroupBySort();
   }
 
   updateColumnsSort() {
-    this.currentPreference.columns.sort((a: OReportColumn, b: OReportColumn) => {
-      let indexA = this.columnsData.findIndex(x => x.id === a.id);
-      let indexB = this.columnsData.findIndex(x => x.id === b.id);
-      return indexA - indexB;
-    });
+    this.currentPreference.columns.sort(
+      (a: OReportColumn, b: OReportColumn) => {
+        let indexA = this.columnsData.findIndex((x) => x.id === a.id);
+        let indexB = this.columnsData.findIndex((x) => x.id === b.id);
+        return indexA - indexB;
+      },
+    );
   }
 
   updateColumnGroupBySort() {
-    this.currentPreference.orderBy.sort((a: OReportOrderBy, b: OReportOrderBy) => {
-      let indexA = this.columnsOrderBy.findIndex(x => x.columnId === a.columnId);
-      let indexB = this.columnsOrderBy.findIndex(x => x.columnId === b.columnId);
-      return indexA - indexB;
-    });
+    this.currentPreference.orderBy.sort(
+      (a: OReportOrderBy, b: OReportOrderBy) => {
+        let indexA = this.columnsOrderBy.findIndex(
+          (x) => x.columnId === a.columnId,
+        );
+        let indexB = this.columnsOrderBy.findIndex(
+          (x) => x.columnId === b.columnId,
+        );
+        return indexA - indexB;
+      },
+    );
   }
 
   updateColumnToGroupSort() {
     this.currentPreference.groups.sort((a: string, b: string) => {
-      let indexA = this.columnsToGroupData.findIndex(x => x === a);
-      let indexB = this.columnsToGroupData.findIndex(x => x === b);
+      let indexA = this.columnsToGroupData.findIndex((x) => x === a);
+      let indexB = this.columnsToGroupData.findIndex((x) => x === b);
       return indexA - indexB;
     });
   }
 
   public onApplyConfigurationClicked(): void {
-    this.dialog.open(ApplyConfigurationDialogComponent, {
-      width: 'calc((75em - 100%) * 1000)',
-      maxWidth: '65vw',
-      minWidth: '30vw',
-      disableClose: true,
-      panelClass: ['o-dialog-class', 'o-table-dialog'],
-      data: { entity: this.currentPreference.entity, service: this.currentPreference.service },
-    }).afterClosed()
-      .subscribe((data: OPreference) => {
-        if (Util.isDefined(data) && data) {
-          this.applyConfiguration(data);
-          this.appliedConfiguration = true;
-          this.checkEnabledReport();
-        }
-      }, _error => {
-        this.appliedConfiguration = false;
-      });
+    this.dialog
+      .open(ApplyConfigurationDialogComponent, {
+        width: "calc((75em - 100%) * 1000)",
+        maxWidth: "65vw",
+        minWidth: "30vw",
+        disableClose: true,
+        panelClass: ["o-dialog-class", "o-table-dialog"],
+        data: {
+          entity: this.currentPreference.entity,
+          service: this.currentPreference.service,
+        },
+      })
+      .afterClosed()
+      .subscribe(
+        (data: OPreference) => {
+          if (Util.isDefined(data) && data) {
+            this.applyConfiguration(data);
+            this.appliedConfiguration = true;
+            this.checkEnabledReport();
+          }
+        },
+        (_error) => {
+          this.appliedConfiguration = false;
+        },
+      );
   }
 
   openSavePreferences(): void {
     if (Util.isDefined(this.currentConfiguration.PREFERENCEID)) {
-      this.savePreferences({ name: this.currentConfiguration.PREFERENCENAME, description: this.currentConfiguration.PREFERENCEDESCRIPTION }, true);
+      this.savePreferences(
+        {
+          name: this.currentConfiguration.PREFERENCENAME,
+          description: this.currentConfiguration.PREFERENCEDESCRIPTION,
+        },
+        true,
+      );
     } else {
       this.dialog
         .open(SavePreferencesDialogComponent, {
-          panelClass: ['o-dialog-class', 'o-table-dialog']
+          panelClass: ["o-dialog-class", "o-table-dialog"],
         })
         .afterClosed()
-        .subscribe((data: { name: string, description: string }) => {
+        .subscribe((data: { name: string; description: string }) => {
           if (Util.isDefined(data) && data) {
             this.savePreferences(data, true);
           }
         });
     }
-
   }
 
   savePreferences(data: any, update?: boolean) {
     let preference: { [key: string]: any } = {
-      "preferencename": data.name,
-      "preferencedescription": data.description,
-      "preferenceentity": this.currentPreference.entity,
-      "preferenceservice": this.currentPreference.service,
-      "preferencetype": "REPORT",
-      "preferenceparameters": {
-        "title": this.currentPreference.title, "groups": this.currentPreference.groups,
-        "vertical": this.currentPreference.vertical, "functions": this.currentPreference.functions, "style": this.currentPreference.style,
-        "subtitle": this.currentPreference.subtitle,
-        "columns": this.currentPreference.columns,
-        "orderBy": this.currentPreference.orderBy,
-        "entity": this.currentPreference.entity,
-        "service": this.currentPreference.service
-      }
-    }
+      preferencename: data.name,
+      preferencedescription: data.description,
+      preferenceentity: this.currentPreference.entity,
+      preferenceservice: this.currentPreference.service,
+      preferencetype: "REPORT",
+      preferenceparameters: {
+        title: this.currentPreference.title,
+        groups: this.currentPreference.groups,
+        vertical: this.currentPreference.vertical,
+        functions: this.currentPreference.functions,
+        style: this.currentPreference.style,
+        subtitle: this.currentPreference.subtitle,
+        columns: this.currentPreference.columns,
+        orderBy: this.currentPreference.orderBy,
+        entity: this.currentPreference.entity,
+        service: this.currentPreference.service,
+      },
+    };
 
     if (update) {
-      this.preferenceService.savePreferences(this.currentConfiguration.PREFERENCEID, preference).subscribe(res => {
-        this.showConfirmOperatinInSnackBar(res);
-      });
-    } else {
-      this.preferenceService.saveAsPreferences(preference).subscribe( res => {
-        if (res && res.code === 0) {
+      this.preferenceService
+        .savePreferences(this.currentConfiguration.PREFERENCEID, preference)
+        .subscribe((res) => {
           this.showConfirmOperatinInSnackBar(res);
-        }
-      }, error => {
-        this.dialogService.alert('ERROR', error);
-      });
+        });
+    } else {
+      this.preferenceService.saveAsPreferences(preference).subscribe(
+        (res) => {
+          if (res && res.code === 0) {
+            this.showConfirmOperatinInSnackBar(res);
+          }
+        },
+        (error) => {
+          this.dialogService.alert("ERROR", error);
+        },
+      );
     }
   }
 
   private showConfirmOperatinInSnackBar(res: any) {
     if (res && res.code === 0) {
-      this.snackBarService.open('MESSAGES.SAVED', { icon: 'check_circle' });
+      this.snackBarService.open("MESSAGES.SAVED", { icon: "check_circle" });
     }
   }
 
@@ -559,7 +712,6 @@ export class ReportOnDemandComponent implements OnInit {
     const selectColumnName = selectedColumn.name;
     this.updateColumnsOrderByData(selectColumnId, selectColumnName, event);
     this.checkEnabledReport();
-
   }
 
   checkEnabledReport() {
@@ -568,11 +720,19 @@ export class ReportOnDemandComponent implements OnInit {
   onSelectionChangeGroups(event: MatSelectionListChange) {
     if (!event.options[0].selected) return;
     let groupSelected: string = event.options[0].value;
-    let groupSelectedName = this.columnsData.find(x => x.id === groupSelected).name;
+    let groupSelectedName = this.columnsData.find(
+      (x) => x.id === groupSelected,
+    ).name;
     this.updateColumnsOrderByData(groupSelected, groupSelectedName, event);
-    if (event.options[0].selected &&
-      this.currentPreference.columns.findIndex(x => x.id === groupSelected) === -1) {
-      const columnStyleSelected: OReportColumn[] = this.columnsData.filter((x: OReportColumn) => x.id === groupSelected)
+    if (
+      event.options[0].selected &&
+      this.currentPreference.columns.findIndex(
+        (x) => x.id === groupSelected,
+      ) === -1
+    ) {
+      const columnStyleSelected: OReportColumn[] = this.columnsData.filter(
+        (x: OReportColumn) => x.id === groupSelected,
+      );
       if (columnStyleSelected.length > 0) {
         this.addColumnData(columnStyleSelected[0]);
       }
@@ -580,30 +740,39 @@ export class ReportOnDemandComponent implements OnInit {
     this.checkEnabledReport();
   }
 
-
-  updateColumnsOrderByData(columnId: string, columnName: string, event?: MatSelectionListChange) {
-
+  updateColumnsOrderByData(
+    columnId: string,
+    columnName: string,
+    event?: MatSelectionListChange,
+  ) {
     if (!event) {
-      const existColumn = this.columnsArray.findIndex(col => col === columnId);
+      const existColumn = this.columnsArray.findIndex(
+        (col) => col === columnId,
+      );
       if (existColumn === -1) {
-        console.warn('The loaded configuration has the column ' + columnId + ' configured but this column does not exist as a table column');
+        console.warn(
+          "The loaded configuration has the column " +
+            columnId +
+            " configured but this column does not exist as a table column",
+        );
         return;
       }
     }
 
-    const columnGroupBySelected: OReportOrderBy = { columnId: columnId, columnName: columnName, ascendent: true }
-    let index = this.columnsOrderBy.findIndex(x => x.columnId === columnId);
-    if ((!event) || (event && event.options[0].selected)) {
+    const columnGroupBySelected: OReportOrderBy = {
+      columnId: columnId,
+      columnName: columnName,
+      ascendent: true,
+    };
+    let index = this.columnsOrderBy.findIndex((x) => x.columnId === columnId);
+    if (!event || (event && event.options[0].selected)) {
       if (index === -1) {
         this.columnsOrderBy.push(columnGroupBySelected);
       }
-    }
-    else if (index > -1) {
+    } else if (index > -1) {
       this.columnsOrderBy.splice(index);
     }
-
   }
-
 
   addColumnData(columnSelected) {
     //Object Deep Cloning
@@ -614,20 +783,31 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   onSelectionChangeFunctions(event: MatSelectionListChange) {
-    if (!event.options[0].selected || event.options[0].value.columnName === 'TOTAL') return;
+    if (
+      !event.options[0].selected ||
+      event.options[0].value.columnName === "TOTAL"
+    )
+      return;
     const functionSelect = event.options[0].value;
     const columnSelectedToGroup = functionSelect.columnName;
 
-    if (event.options[0].selected &&
-      this.currentPreference.columns.findIndex(x => x.id === columnSelectedToGroup) === -1) {
-      const column = this.columnsData.find(x => x.id === columnSelectedToGroup);
+    if (
+      event.options[0].selected &&
+      this.currentPreference.columns.findIndex(
+        (x) => x.id === columnSelectedToGroup,
+      ) === -1
+    ) {
+      const column = this.columnsData.find(
+        (x) => x.id === columnSelectedToGroup,
+      );
       this.addColumnData(column);
     }
   }
 
-
   changeOrder(column: OReportOrderBy, event) {
-    const columnSelectedToOrder = this.columnsOrderBy.find(x => x.columnId === column.columnId);
+    const columnSelectedToOrder = this.columnsOrderBy.find(
+      (x) => x.columnId === column.columnId,
+    );
     if (columnSelectedToOrder) {
       columnSelectedToOrder.ascendent = !columnSelectedToOrder.ascendent;
     }
@@ -635,11 +815,21 @@ export class ReportOnDemandComponent implements OnInit {
   }
 
   isCheckedColumn(column: OReportColumn) {
-    return this.currentPreference.columns.length > 0 ? this.currentPreference.columns.filter(x => x.id === column.id).length > 0 : false;
+    return this.currentPreference.columns.length > 0
+      ? this.currentPreference.columns.filter((x) => x.id === column.id)
+          .length > 0
+      : false;
   }
 
   isCheckedFunction(column: OReportFunction) {
-    return this.currentPreference.functions.length > 0 ? this.currentPreference.functions.filter(x => (x.columnName === column.columnName && x.type === column.type) && x.type !== 'TOTAL').length > 0 : false;
+    return this.currentPreference.functions.length > 0
+      ? this.currentPreference.functions.filter(
+          (x) =>
+            x.columnName === column.columnName &&
+            x.type === column.type &&
+            x.type !== "TOTAL",
+        ).length > 0
+      : false;
   }
 
   columnsOrderByCompareFunction(co1: OReportOrderBy, co2: OReportOrderBy) {
@@ -662,53 +852,67 @@ export class ReportOnDemandComponent implements OnInit {
     return co1.columnName === co2.columnName;
   }
 
-
-
   protected createRenderer(column: string): any {
-    let oColumn: OColumn = this.table.oTableOptions.columns.find(x => x.attr === column);
+    let oColumn: OColumn = this.table.oTableOptions.columns.find(
+      (x) => x.attr === column,
+    );
     let newRenderer: any;
-    if (Util.isDefined(oColumn) && Util.isDefined(oColumn.type) && oColumn.type !== 'string') {
+    if (
+      Util.isDefined(oColumn) &&
+      Util.isDefined(oColumn.type) &&
+      oColumn.type !== "string"
+    ) {
       const type = oColumn.type;
       newRenderer = {};
 
       let columnRenderer: any = oColumn.renderer;
       switch (type) {
-        case 'boolean':
+        case "boolean":
           newRenderer.type = type;
-          newRenderer.renderType = 'string';
-          newRenderer.trueValue = this.translateService.get('REPORT.COLUMN.TRUEVALUE');
-          newRenderer.falseValue = this.translateService.get('REPORT.COLUMN.FALSEVALUE');
+          newRenderer.renderType = "string";
+          newRenderer.trueValue = this.translateService.get(
+            "REPORT.COLUMN.TRUEVALUE",
+          );
+          newRenderer.falseValue = this.translateService.get(
+            "REPORT.COLUMN.FALSEVALUE",
+          );
           break;
-        case 'currency':
-          newRenderer.type = type
+        case "currency":
+          newRenderer.type = type;
           newRenderer.currencySymbol = columnRenderer.currencySymbol;
-          newRenderer.currencySymbolPosition = columnRenderer.currencySymbolPosition;
+          newRenderer.currencySymbolPosition =
+            columnRenderer.currencySymbolPosition;
           break;
-        case 'date':
-          newRenderer.type = type
+        case "date":
+          newRenderer.type = type;
           newRenderer.format = columnRenderer.format;
           break;
-        case 'integer':
-          newRenderer.type = type
+        case "integer":
+          newRenderer.type = type;
           newRenderer.grouping = columnRenderer.grouping;
           newRenderer.thousandSeparator = columnRenderer.thousandSeparator;
           break;
-        case 'real':
-          newRenderer.type = type
+        case "real":
+          newRenderer.type = type;
           newRenderer.decimalSeparator = columnRenderer.decimalSeparator;
           newRenderer.grouping = columnRenderer.grouping;
           newRenderer.thousandSeparator = columnRenderer.thousandSeparator;
           break;
-        case 'service':
-          newRenderer.type = type
+        case "service":
+          newRenderer.type = type;
           newRenderer.entity = columnRenderer.entity;
           newRenderer.service = columnRenderer.service;
           newRenderer.keyColumn = oColumn.attr;
           newRenderer.columns = Util.parseArray(columnRenderer.columns);
           newRenderer.valueColumn = columnRenderer.valueColumn;
           newRenderer.parentKeys = Util.parseArray(columnRenderer.parentKeys);
-          const serviceConfiguration = this.getDefaultServiceConfiguration(columnRenderer.service);
-          if (Util.isObject(serviceConfiguration) && Object.hasOwnProperty(serviceConfiguration.path)) {
+          const serviceConfiguration = this.getDefaultServiceConfiguration(
+            columnRenderer.service,
+          );
+          if (
+            Util.isObject(serviceConfiguration) &&
+            Object.hasOwnProperty(serviceConfiguration.path)
+          ) {
             newRenderer.path = serviceConfiguration.path;
           }
           break;
@@ -717,4 +921,3 @@ export class ReportOnDemandComponent implements OnInit {
     return newRenderer;
   }
 }
-

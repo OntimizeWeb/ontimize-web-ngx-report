@@ -224,7 +224,7 @@
           <div id="toolbarViewer">
             <div id="toolbarViewerLeft">
               @if (!openedSidenav) {
-              <o-button (click)="openedSidenav=!openedSidenav" icon="menu" type="ICON" label=""
+              <o-button (onClick)="openedSidenav=!openedSidenav" icon="menu" type="ICON" label=""
                         [matTooltip]="(sidenav.opened?'HIDE_FILTERS':'SHOW_FILTERS') | oTranslate">
               </o-button>
               }
